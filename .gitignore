@@ -1,0 +1,5 @@
+dotemacs.d/auto-save-list
+dotemacs.d/session.*
+notes.org
+*.o
+*.hi
