@@ -177,6 +177,7 @@ setWorkspaceDirs layout =
   onWorkspace "mylib" (workspaceDir "~/code/sml/mylib" layout) $
   onWorkspace "preml" (workspaceDir "~/code/sml/preml" layout) $
   onWorkspace "speciale" (workspaceDir "~/study/speciale" layout) $
+  onWorkspace "study" (workspaceDir "~/study" layout) $
   onWorkspace "iptest" (workspaceDir "~/study/ip2011/test" layout) $
   onWorkspace "bitcoin" (workspaceDir "~/code/python/mtgox" layout) $
   onWorkspace "ip" (workspaceDir "~/study/ip2011" layout) $

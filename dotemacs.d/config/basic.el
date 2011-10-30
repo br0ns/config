@@ -1,6 +1,8 @@
 ; Uniquify
 (require 'uniquify)
 
+(require 'tramp)
+
 (require 'whitespace)
 (setq whitespace-line-column '80
       whitespace-style '(lines-tail))
@@ -43,7 +45,7 @@
 
 ;; Line High lighting
 (global-hl-line-mode t)
-;; (set-face-background 'hl-line "#002035")
+(set-face-background 'hl-line "Light Green")
 
 (set-variable 'scroll-conservaly 5)
 
@@ -57,7 +59,7 @@
 
 (tooltip-mode 1)
 
-;(menu-bar-mode -1)
+(menu-bar-mode -1)
 
 (blink-cursor-mode -1)
 

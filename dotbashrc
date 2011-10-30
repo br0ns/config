@@ -78,9 +78,9 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # some more ls aliases
-#alias ll='ls -l'
-#alias la='ls -A'
-#alias l='ls -CF'
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -98,7 +98,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\!>\[\e[m\] \[\e[1;37m\]'
+PS1='\[\e[1;34m\]\w\[\e[m\]>\[\e[m\] '
 HISTFILESIZE=50000
 
 alias ..='cd ..'
@@ -108,7 +108,7 @@ alias here='nautilus . &'
 alias flatten='find . -type f -name "*" -print0 | xargs -0 -I "{}" cp -v "{}" .'
 alias ,='pushd'
 alias .='pushd .'
-alias :='popd +1'
+alias :='popd'
 alias gdb='gdb -n -x ~/.gdbinit'
 alias mosml='rlwrap mosml'
 alias sml='rlwrap sml'

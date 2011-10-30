@@ -24,4 +24,5 @@ fi
 PATH=/home/mortenbp/.ghc/bin:$PATH
 PATH=/home/mortenbp/.cabal/bin:$PATH
 PATH=/home/mortenbp/.prism/run:$PATH
+PATH=/home/mortenbp/.smackage/bin:$PATH
 # PATH=/home/mortenbp/.mosml/bin:$PATH

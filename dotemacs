@@ -1,7 +1,7 @@
 ;;;; Morten Brøns-Pedersens emacs initialization file (.emacs)
 
 ;; Enable a backtrace when errors occur
-(setq debug-on-error t)
+;; (setq debug-on-error t)
 
 ;; Set Emacs configuration directory (eg. where you keep your .el-files)
 (let ((default-directory "/home/mortenbp/.emacs.d/"))

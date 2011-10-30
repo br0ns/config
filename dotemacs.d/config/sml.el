@@ -15,6 +15,7 @@
        "val fileo = filei ^ \".preml\" "
        "val _ = OS.Process.system (\"preml \\\"\" ^ filei ^ \"\\\"\") "
        "val _ = use fileo "
+       "val _ = OS.FileSys.remove fileo "
        "in end")
       )
 
