@@ -3,6 +3,8 @@
 
 (require 'tramp)
 
+(require 'evil-numbers)
+
 (require 'whitespace)
 (setq whitespace-line-column '80
       whitespace-style '(lines-tail))

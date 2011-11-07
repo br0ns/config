@@ -48,3 +48,6 @@
 (global-set-key (kbd "C-x C-t")
                 '(lambda () (interactive)
                    (find-file "/home/mortenbp/notes/tasks.org")))
+
+(global-set-key (kbd "C-M-+")            'evil-numbers/inc-at-pt)
+(global-set-key (kbd "C-M--")            'evil-numbers/dec-at-pt)
