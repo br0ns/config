@@ -208,35 +208,6 @@ main = do
   checkTopicConfig myTopics myTopicConfig
   xmonad $ br0nsConfig
 
-myKeys' conf@(XConfig {modMask = modm}) =
-  []
-
-myRemoveKeys =
-  [ ((mod4Mask .|. shiftMask), n) | n <- [xK_1 .. xK_9]] ++
-  [ (mod4Mask, n)                 | n <- [xK_1 .. xK_9]] ++
-  []
-
--- myKeys conf@(XConfig {modMask = modm}) =
---   fromList
---   -- CycleWindows
---   [ ((modm, xK_s), cycleRecentWindows [xK_Super_L] xK_s xK_w)
---   , ((modm, xK_g), goToSelected myGSConfig)
---   , ((modm, xK_c), changeDir myXPConfig)
---   -- Workspace navigation
---   , ((modm .|. shiftMask, xK_z), shiftToSelectedWS False myGSConfig)
---   , ((modm, xK_z), goToSelectedWS False myGSConfig)
---   , ((modm .|. shiftMask, xK_a), shiftToSelectedWS True myGSConfig)
---   , ((modm, xK_a), goToSelectedWS True myGSConfig)
---   -- Dynamic workspaces
---   , ((modm .|. shiftMask, xK_n), addWorkspacePrompt myXPConfig >>
---                                  shell)
---   , ((modm .|. shiftMask, xK_BackSpace), killAll >> myRemoveWorkspace)
---   , ((modm .|. shiftMask, xK_r), renameWorkspace myXPConfig)
---   , ((modm .|. shiftMask, xK_s), newScratchpad)
---   , ((modm .|. shiftMask, xK_7), submap . mySearchMap $ myPromptSearch)
---   , ((modm .|. shiftMask, xK_g), submap . mySearchMap $ mySelectSearch)
---   ]
-
 myKeys =
   -- CycleWindows
   [ ("M-s", cycleRecentWindows [xK_Super_L] xK_s xK_w)
