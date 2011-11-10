@@ -1,3 +1,5 @@
+# Mostly auto-generated -- my additions are at the bottom
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -101,6 +103,7 @@ fi
 PS1='\[\e[1;34m\]\w\[\e[m\]>\[\e[m\] '
 HISTFILESIZE=50000
 
+function mkdircd () { mkdir -p "$@" && eval cd "\"\$$#\""; }
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -112,4 +115,7 @@ alias :='popd'
 alias gdb='gdb -n -x ~/.gdbinit'
 alias mosml='rlwrap mosml'
 alias sml='rlwrap sml'
+alias emacs='emacs -nw'
 . > /dev/null
+
+shopt -s cdspell
