@@ -4,3 +4,4 @@ dotemacs.d/session.*
 notes.org
 *.o
 *.hi
+*.elc

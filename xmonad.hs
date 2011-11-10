@@ -1,6 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 -- Main inspiration:
 -- http://www.haskell.org/haskellwiki/Xmonad/Config_archive/Brent_Yorgey's_darcs_xmonad.hs
@@ -13,68 +14,62 @@ import Data.List (isPrefixOf, partition, (\\))
 import Control.Monad (liftM2, when)
 
 -- Chats a bit on dbus and sets {terminal = gnome-terminal}
-import XMonad.Config.Gnome
-import XMonad.Config.Desktop
+import XMonad.Config.Gnome (gnomeConfig)
+-- import XMonad.Config.Desktop
 
 ----- Hooks
--- Note: use Hooks.EwmhDesktops for gnome-panel integration
-import XMonad.Hooks.DynamicLog    -- For dzen
-import XMonad.Hooks.FadeInactive  -- Transparent windows, yay
-import XMonad.Hooks.UrgencyHook   -- For Ubuntu updates, Pidgin, XChat
-import XMonad.Hooks.ManageHelpers -- {doCenterFloat} puts floating windows in
-                                  -- the middle of the screen
-import XMonad.Hooks.ManageDocks   -- Avoid struts
--- import XMonad.ManageHook
+-- Transparent windows
+import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
+-- {doCenterFloat} puts floating windows in the middle of the screen
+import XMonad.Hooks.ManageHelpers
 
 
 ----- Layout
-import XMonad.Layout.Tabbed
-import XMonad.Layout.Grid
-import XMonad.Layout.TwoPane
--- For the "gimp" and "im" workspace
-import XMonad.Layout.IM
-import XMonad.Layout.Reflect
--- Meta layouts
-import XMonad.Layout.MultiToggle
-import XMonad.Layout.MultiToggle.Instances
-import XMonad.Layout.PerWorkspace
-import XMonad.Layout.WorkspaceDir
-import XMonad.Layout.NoBorders
-import XMonad.Layout.ShowWName
+import qualified XMonad.Layout.Tabbed as Tabbed
+import XMonad.Layout.PerWorkspace (onWorkspace)
+import XMonad.Layout.WorkspaceDir (workspaceDir, changeDir)
+import XMonad.Layout.NoBorders (smartBorders)
 
 
 ----- Actions
-import XMonad.Actions.CycleWS
-import XMonad.Actions.CycleRecentWS
-import XMonad.Actions.CycleWindows
+-- Window stack
+import XMonad.Actions.CycleWindows (cycleRecentWindows)
 import XMonad.Actions.GridSelect
-import XMonad.Actions.Submap        -- For different kind of searches
-import XMonad.Actions.Search
-import XMonad.Actions.WithAll       -- {withAll'} can be used to migrate to
-                                    -- another workspace
-import XMonad.Actions.SpawnOn       -- Send stuff to the right place
-import XMonad.Actions.WindowGo      -- Go to window, if already running
-                                    -- (eg. XChat, Sonata, etc.)
-import XMonad.Actions.UpdatePointer -- Move the pointer with the focus
+-- For different kind of searches
+import XMonad.Actions.Submap (submap)
+import qualified XMonad.Actions.Search as Search
+import XMonad.Actions.WithAll (killAll)
 import XMonad.Actions.TopicSpace
+  (TopicConfig (..), checkTopicConfig, switchTopic)
 import XMonad.Actions.DynamicWorkspaces
+  (addWorkspacePrompt, renameWorkspace, removeWorkspace, addWorkspace)
 
 
 ----- Prompt
-import XMonad.Prompt
-import XMonad.Prompt.Man
-import XMonad.Prompt.AppendFile
-import XMonad.Prompt.Ssh
-import XMonad.Prompt.Workspace
-import XMonad.Prompt.Input
+import XMonad.Prompt (defaultXPConfig, fgColor, bgColor)
+import XMonad.Prompt.Input (inputPrompt, (?+))
 
 
 ----- Util
-import XMonad.Util.Run
-import XMonad.Util.Loggers
-import XMonad.Util.EZConfig         -- "M-C-x" style keybindings
+-- "M-C-x" style keybindings
+import XMonad.Util.EZConfig (additionalKeysP)
 
-myLayout = Tall 1 (3/100) (5/7) ||| simpleTabbedBottom
+myLayout = Tall 1 (3/100) (5/7) |||
+           Tabbed.tabbedBottom Tabbed.CustomShrink myTabbedTheme
+
+-- Don't show text in tabs.
+instance Tabbed.Shrinker Tabbed.CustomShrink where
+  shrinkIt _ _ = []
+
+myTabbedTheme =
+  Tabbed.defaultTheme
+  { Tabbed.inactiveBorderColor = "#000000"
+  , Tabbed.inactiveColor       = "#000000"
+  , Tabbed.activeColor         = "#BB0000"
+  , Tabbed.activeBorderColor   = "#BB0000"
+  , Tabbed.urgentBorderColor   = "#FF0000"
+  , Tabbed.decoHeight          = 3
+  }
 
 myManageHook =
   [ className =? "Do" --> doIgnore
@@ -163,41 +158,40 @@ myTopicConfig = TopicConfig
                      shell >>
                      newBrowser "eclipsemc.com mtgox.com \
                                 \blockexplorer.com/q/estimate")
-       , ("absalon", browser "punkt.ku.dk")
+       , ("absalon", newBrowser "punkt.ku.dk")
        , ("ip", edit "timer.txt")
        ]
   , defaultTopicAction = const $ shell
   , defaultTopic = "web"
+  , maxTopicHistory = 10
   }
 
 setWorkspaceDirs layout =
-  onWorkspace "organise" (workspaceDir "~/notes" layout) $
-  onWorkspace "pwnies" (workspaceDir "~/zomg-pwnies" layout) $
-  onWorkspace "download" (workspaceDir "~/downloads" layout) $
-  onWorkspace "mylib" (workspaceDir "~/code/sml/mylib" layout) $
-  onWorkspace "preml" (workspaceDir "~/code/sml/preml" layout) $
-  onWorkspace "speciale" (workspaceDir "~/study/speciale" layout) $
-  onWorkspace "study" (workspaceDir "~/study" layout) $
-  onWorkspace "iptest" (workspaceDir "~/study/ip2011/test" layout) $
-  onWorkspace "bitcoin" (workspaceDir "~/code/python/mtgox" layout) $
-  onWorkspace "sml" (workspaceDir "~/code/sml" layout) $
-  onWorkspace "haskell" (workspaceDir "~/code/haskell" layout) $
-  onWorkspace "python" (workspaceDir "~/code/python" layout) $
-  onWorkspace "ip" (workspaceDir "~/study/ip2011" layout) $
-  workspaceDir "~" layout
+--   onWorkspace "organise" (workspaceDir "~/notes"             layout) $
+  -- onWorkspace "pwnies"   (workspaceDir "~/zomg-pwnies"       layout) $
+--   onWorkspace "download" (workspaceDir "~/downloads"         layout) $
+  -- onWorkspace "mylib"    (workspaceDir "~/code/sml/mylib"    layout) $
+  -- onWorkspace "preml"    (workspaceDir "~/code/sml/preml"    layout) $
+--   onWorkspace "speciale" (workspaceDir "~/study/speciale"    layout) $
+--   onWorkspace "study"    (workspaceDir "~/study"             layout) $
+--   onWorkspace "iptest"   (workspaceDir "~/study/ip2011/test" layout) $
+--   onWorkspace "bitcoin"  (workspaceDir "~/code/python/mtgox" layout) $
+--   onWorkspace "sml"      (workspaceDir "~/code/sml"          layout) $
+--   onWorkspace "haskell"  (workspaceDir "~/code/haskell"      layout) $
+--   onWorkspace "python"   (workspaceDir "~/code/python"       layout) $
+--   onWorkspace "ip"       (workspaceDir "~/study/ip2011"      layout) $
+  workspaceDir "~"                                           layout
 
 
 br0nsConfig =
   gnomeConfig
        { modMask = mod4Mask
        , manageHook = manageHook gnomeConfig <+>
-                      manageDocks <+>
+                      -- doCenterFloat <+>
                       composeAll myManageHook
-       , layoutHook = avoidStrutsOn [U] $
-                      smartBorders $
+       , layoutHook = smartBorders $
                       setWorkspaceDirs myLayout
        , borderWidth = 0
-       -- , keys = myKeys
        , focusFollowsMouse = False
        , logHook = do fadeInactiveLogHook 0.7
        , XMonad.workspaces = myTopics
@@ -229,30 +223,30 @@ myKeys =
 
 -- from XMonad.Actions.Search
 mySearchMap method = fromList $
-        [ ((0, xK_g), method google)
-        , ((0, xK_w), method wikipedia)
-        , ((0, xK_h), method hoogle)
-        , ((shiftMask, xK_h), method hackage)
-        , ((0, xK_s), method scholar)
-        , ((0, xK_m), method mathworld)
-        , ((0, xK_p), method maps)
-        , ((0, xK_d), method dictionary)
-        , ((0, xK_a), method alpha)
-        , ((0, xK_l), method lucky)
-        , ((0, xK_i), method images)
-        , ((shiftMask, xK_i), method imdb)
-        , ((0, xK_y), method youtube)
+        [ ((0, xK_g), method Search.google)
+        , ((0, xK_w), method Search.wikipedia)
+        , ((0, xK_h), method Search.hoogle)
+        , ((shiftMask, xK_h), method Search.hackage)
+        , ((0, xK_s), method Search.scholar)
+        , ((0, xK_m), method Search.mathworld)
+        , ((0, xK_p), method Search.maps)
+        , ((0, xK_d), method Search.dictionary)
+        , ((0, xK_a), method Search.alpha)
+        , ((0, xK_l), method Search.lucky)
+        , ((0, xK_i), method Search.images)
+        , ((shiftMask, xK_i), method Search.imdb)
+        , ((0, xK_y), method Search.youtube)
         ]
           where hackage =
-                  searchEngine "hackage" "http://www.google.dk/search?btnI&q=site%3Ahackage.haskell.org+"
+                  Search.searchEngine "hackage" "http://www.google.dk/search?btnI&q=site%3Ahackage.haskell.org+"
 
 -- Prompt search: get input from the user via a prompt, then run the search in
 -- `myBrowser` and automatically switch to the "web" workspace
-myPromptSearch (SearchEngine _ site)
-  = inputPrompt myXPConfig "Search" ?+ search myBrowser site
+myPromptSearch (Search.SearchEngine _ site)
+  = inputPrompt myXPConfig "Search" ?+ Search.search myBrowser site
 
 -- Select search: do a search based on the X selection
-mySelectSearch eng = selectSearch eng
+mySelectSearch eng = Search.selectSearchBrowser myBrowser eng
 
 -- Switch to the "web" workspace
 viewWeb = windows (W.view "web")
@@ -285,6 +279,7 @@ newScratchpad = withWindowSet $ \w -> do
 -- Nizzle colours
 myXPConfig = defaultXPConfig
   { fgColor = "#a8a3f7"
+  -- , bgColor = "#ff3c6d"}
   , bgColor = "#3f3c6d"}
 
 ----- Extension on GridSelect
