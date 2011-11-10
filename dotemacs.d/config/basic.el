@@ -1,7 +1,7 @@
 ; Uniquify
 (require 'uniquify)
 
-(require 'tramp)
+;; (require 'tramp)
 
 (require 'evil-numbers)
 

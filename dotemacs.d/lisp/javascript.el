@@ -38,18 +38,18 @@
 ;; Put this file in a directory where Emacs can find it (`C-h v
 ;; load-path' for more info). Then add the following lines to your
 ;; Emacs initialization file:
-;; 
+;;
 ;;    (add-to-list 'auto-mode-alist '("\\.js\\'" . javascript-mode))
 ;;    (autoload 'javascript-mode "javascript" nil t)
-;;    
+;;
 ;; General Remarks:
-;; 
+;;
 ;; This mode assumes that block comments are not nested inside block
 ;; comments and that strings do not contain line breaks.
-;; 
+;;
 ;; Exported names start with "javascript-" whereas private names start
 ;; with "js-".
-;; 
+;;
 ;; Changes:
 ;;
 ;; See javascript.el.changelog.
@@ -60,7 +60,7 @@
 (require 'font-lock)
 (require 'newcomment)
 
-(defgroup javascript nil 
+(defgroup javascript nil
   "Customization variables for `javascript-mode'."
   :tag "JavaScript"
   :group 'languages)
@@ -79,14 +79,14 @@ current line is indented when certain punctuations are inserted."
 
 ;; --- Keymap ---
 
-(defvar javascript-mode-map nil 
+(defvar javascript-mode-map nil
   "Keymap used in JavaScript mode.")
 
-(unless javascript-mode-map 
+(unless javascript-mode-map
   (setq javascript-mode-map (make-sparse-keymap)))
 
 (when javascript-auto-indent-flag
-  (mapc (lambda (key) 
+  (mapc (lambda (key)
 	  (define-key javascript-mode-map key 'javascript-insert-and-indent))
 	'("{" "}" "(" ")" ":" ";" ",")))
 
@@ -122,8 +122,8 @@ bound to KEY in the global keymap and indents the current line."
       (re-search-forward regexp bound)
       (setq parse (parse-partial-sexp saved-point (point)))
       (cond ((nth 3 parse)
-             (re-search-forward 
-              (concat "\\([^\\]\\|^\\)" (string (nth 3 parse))) 
+             (re-search-forward
+              (concat "\\([^\\]\\|^\\)" (string (nth 3 parse)))
               (save-excursion (end-of-line) (point)) t))
             ((nth 7 parse)
              (forward-line))
@@ -141,7 +141,7 @@ bound to KEY in the global keymap and indents the current line."
 `re-search-forward' but treats the buffer as if strings and
 comments have been removed."
   (let ((saved-point (point))
-        (search-expr 
+        (search-expr
          (cond ((null count)
                 '(js-re-search-forward-inner regexp bound 1))
                ((< count 0)
@@ -168,9 +168,9 @@ comments have been removed."
       (setq parse (parse-partial-sexp saved-point (point)))
       (cond ((nth 3 parse)
              (re-search-backward
-              (concat "\\([^\\]\\|^\\)" (string (nth 3 parse))) 
+              (concat "\\([^\\]\\|^\\)" (string (nth 3 parse)))
               (save-excursion (beginning-of-line) (point)) t))
-            ((nth 7 parse) 
+            ((nth 7 parse)
              (goto-char (nth 8 parse)))
             ((or (nth 4 parse)
                  (and (eq (char-before) ?/) (eq (char-after) ?*)))
@@ -185,7 +185,7 @@ comments have been removed."
 `re-search-backward' but treats the buffer as if strings and
 comments have been removed."
   (let ((saved-point (point))
-        (search-expr 
+        (search-expr
          (cond ((null count)
                 '(js-re-search-backward-inner regexp bound 1))
                ((< count 0)
@@ -207,8 +207,8 @@ list."
   (let ((start (save-excursion (js-re-search-backward "\\<var\\>" nil t))))
     (and start
 	 (save-excursion (re-search-backward "\n" start t))
-	 (not (save-excursion 
-		(js-re-search-backward 
+	 (not (save-excursion
+		(js-re-search-backward
 		 ";\\|[^, \t][ \t]*\\(/[/*]\\|$\\)" start t))))))
 
 
@@ -226,24 +226,24 @@ list."
     (error nil)))
 
 
-(defconst js-function-heading-1-re 
+(defconst js-function-heading-1-re
   "^[ \t]*function[ \t]+\\(\\w+\\)"
   "Regular expression matching the start of a function header.")
 
-(defconst js-function-heading-2-re 
+(defconst js-function-heading-2-re
   "^[ \t]*\\(\\w+\\)[ \t]*:[ \t]*function\\>"
   "Regular expression matching the start of a function entry in
   an associative array.")
 
 (defconst js-keyword-re
   (regexp-opt '("abstract" "break" "case" "catch" "class" "const"
-                "continue" "debugger" "default" "delete" "do" "else" 
-                "enum" "export" "extends" "final" "finally" "for" 
-                "function" "goto" "if" "implements" "import" "in" 
-                "instanceof" "interface" "native" "new" "package" 
-                "private" "protected" "public" "return" "static" 
-                "super" "switch" "synchronized" "this" "throw" 
-                "throws" "transient" "try" "typeof" "var" "void" 
+                "continue" "debugger" "default" "delete" "do" "else"
+                "enum" "export" "extends" "final" "finally" "for"
+                "function" "goto" "if" "implements" "import" "in"
+                "instanceof" "interface" "native" "new" "package"
+                "private" "protected" "public" "return" "static"
+                "super" "switch" "synchronized" "this" "throw"
+                "throws" "transient" "try" "typeof" "var" "void"
                 "volatile" "while" "with") 'words)
   "Regular expression matching any JavaScript keyword.")
 
@@ -258,8 +258,8 @@ list."
 
 
 (defconst js-font-lock-keywords-1
-  (list 
-   "\\<import\\>" 
+  (list
+   "\\<import\\>"
    (list js-function-heading-1-re 1 font-lock-function-name-face)
    (list js-function-heading-2-re 1 font-lock-function-name-face)
    (list "[=(][ \t]*\\(/.*?[^\\]/\\w*\\)" 1 font-lock-string-face))
@@ -282,9 +282,9 @@ list."
 ;; z will not be highlighted.
 
 (defconst js-font-lock-keywords-3
-  (append 
+  (append
    js-font-lock-keywords-2
-   (list 
+   (list
 
     ;; variable declarations
     (list
@@ -299,7 +299,7 @@ list."
      (concat "^[ \t]*\\w+[ \t]*\\([,;=]\\|/[/*]\\|$\\)")
      (list "\\(\\w+\\)[ \t]*\\([=;].*\\|,\\|/[/*]\\|$\\)"
 	   '(if (save-excursion (backward-char) (js-continued-var-decl-list-p))
-		(backward-word 1) 
+		(backward-word 1)
 	      (end-of-line))
 	   '(end-of-line)
 	   '(1 font-lock-variable-name-face)))
@@ -311,13 +311,13 @@ list."
 	   '(backward-char)
 	   '(end-of-line)
 	   '(1 font-lock-variable-name-face)))
-    
+
     ;; continued formal parameter list
     (list
      (concat "^[ \t]*\\w+[ \t]*[,)]")
      (list "\\w+"
 	   '(if (save-excursion (backward-char) (js-inside-param-list-p))
-		(backward-word 1) 
+		(backward-word 1)
 	      (end-of-line))
 	   '(end-of-line)
 	   '(0 font-lock-variable-name-face)))))
@@ -362,7 +362,7 @@ a comma)."
     (back-to-indentation)
     (or (js-looking-at-operator-p)
         (and (js-re-search-backward "\n" nil t)
-	     (progn 
+	     (progn
 	       (skip-chars-backward " \t")
 	       (backward-char)
 	       (and (> (point) (point-min))
@@ -381,10 +381,10 @@ indented to the same column as the current line."
   (save-excursion
     (save-match-data
       (when (looking-at "\\s-*\\<while\\>")
-	(if (save-excursion 
+	(if (save-excursion
 	      (skip-chars-backward "[ \t\n]*}")
 	      (looking-at "[ \t\n]*}"))
-	    (save-excursion 
+	    (save-excursion
 	      (backward-list) (backward-word 1) (looking-at "\\<do\\>"))
 	  (js-re-search-backward "\\<do\\>" (point-at-bol) t)
 	  (or (looking-at "\\<do\\>")
@@ -392,7 +392,7 @@ indented to the same column as the current line."
 		(while (and (js-re-search-backward "^[ \t]*\\<" nil t)
 			    (/= (current-indentation) saved-indent)))
 		(and (looking-at "[ \t]*\\<do\\>")
-		     (not (js-re-search-forward 
+		     (not (js-re-search-forward
 			   "\\<while\\>" (point-at-eol) t))
 		     (= (current-indentation) saved-indent)))))))))
 
@@ -453,7 +453,7 @@ returns nil."
 (defun javascript-indent-line ()
   "Indent the current line as JavaScript source text."
   (interactive)
-  (let ((parse-status 
+  (let ((parse-status
          (save-excursion (parse-partial-sexp (point-min) (point-at-bol))))
         (offset (- (current-column) (current-indentation))))
     (when (not (nth 8 parse-status))
@@ -485,27 +485,27 @@ end of buffer or the next line contains only whitespace."
   (while (not (or (eobp) (looking-at "^[ \t]*$")))
     (forward-line 1))
   (when (not (eobp)) (backward-char 1)))
- 
+
 
 (defun js-fill-block-comment-paragraph (parse-status justify)
   "Fill current paragraph as a block comment. PARSE-STATUS is the
 result of `parse-partial-regexp' from beginning of buffer to
 point. JUSTIFY has the same meaning as in `fill-paragraph'."
-  (let ((offset (save-excursion 
+  (let ((offset (save-excursion
                   (goto-char (nth 8 parse-status)) (current-indentation))))
     (save-excursion
       (save-restriction
-        (narrow-to-region (save-excursion 
+        (narrow-to-region (save-excursion
                             (goto-char (nth 8 parse-status)) (point-at-bol))
-                          (save-excursion 
+                          (save-excursion
 			    (goto-char (nth 8 parse-status))
 			    (re-search-forward "*/")))
-        (narrow-to-region (save-excursion 
+        (narrow-to-region (save-excursion
                             (js-backward-paragraph)
                             (when (looking-at "^[ \t]*$") (forward-line 1))
                             (point))
-                          (save-excursion 
-                            (js-forward-paragraph) 
+                          (save-excursion
+                            (js-forward-paragraph)
                             (when (looking-at "^[ \t]*$") (backward-char))
                             (point)))
         (goto-char (point-min))
@@ -533,7 +533,7 @@ point. JUSTIFY has the same meaning as in `fill-paragraph'."
 single-line comment paragraph starts."
   (save-excursion
     (beginning-of-line)
-    (while (and (not (bobp)) 
+    (while (and (not (bobp))
                 (looking-at "^[ \t]*//[ \t]*[[:graph:]]"))
       (forward-line -1))
     (unless (bobp) (forward-line 1))
@@ -544,7 +544,7 @@ single-line comment paragraph starts."
   "Return point at end of current single-line comment paragraph."
   (save-excursion
     (beginning-of-line)
-    (while (and (not (eobp)) 
+    (while (and (not (eobp))
                 (looking-at "^[ \t]*//[ \t]*[[:graph:]]"))
       (forward-line 1))
     (unless (bobp) (backward-char))
@@ -554,7 +554,7 @@ single-line comment paragraph starts."
 (defun js-sline-comment-offset (line)
   "Return the column at the start of the current single-line
 comment paragraph."
-  (save-excursion 
+  (save-excursion
     (goto-line line)
     (re-search-forward "//" (point-at-eol))
     (goto-char (match-beginning 0))
@@ -578,7 +578,7 @@ single-line comment paragraph."
        (save-excursion
          (re-search-backward "//" (point-at-bol) t))))
 
-         
+
 (defun js-fill-sline-comments (parse-status justify)
   "Fill current paragraph as a sequence of single-line comments.
 PARSE-STATUS is the result of `parse-partial-regexp' from
@@ -613,13 +613,13 @@ beginning of buffer to point. JUSTIFY has the same meaning as in
             (insert "//")
             (indent-to text-offset)
             (forward-line 1)))))))
-  
+
 
 (defun js-trailing-comment-p (parse-status)
   "Return non-nil if inside a trailing comment. PARSE-STATUS is
 the result of `parse-partial-regexp' from beginning of buffer to
 point."
-  (save-excursion 
+  (save-excursion
     (when (nth 4 parse-status)
       (goto-char (nth 8 parse-status))
       (skip-chars-backward " \t")
@@ -630,7 +630,7 @@ point."
   "Return non-nil if inside a block comment. PARSE-STATUS is the
 result of `parse-partial-regexp' from beginning of buffer to
 point."
-  (save-excursion 
+  (save-excursion
     (save-match-data
       (when (nth 4 parse-status)
         (goto-char (nth 8 parse-status))
@@ -642,7 +642,7 @@ point."
 Trailing comments are ignored."
   (interactive)
   (let ((parse-status (parse-partial-sexp (point-min) (point))))
-    (when (and (nth 4 parse-status) 
+    (when (and (nth 4 parse-status)
                (not (js-trailing-comment-p parse-status)))
       (if (js-block-comment-p parse-status)
           (js-fill-block-comment-paragraph parse-status justify)
@@ -652,10 +652,10 @@ Trailing comments are ignored."
 
 ;; --- Imenu ---
 
-(defconst js-imenu-generic-expression 
+(defconst js-imenu-generic-expression
   (list
    (list
-    nil 
+    nil
     "function\\s-+\\(\\w+\\)\\s-*("
     1))
   "Regular expression matching top level procedures. Used by imenu.")
@@ -678,12 +678,12 @@ Key bindings:
   (set (make-local-variable 'indent-line-function) 'javascript-indent-line)
   (set (make-local-variable 'font-lock-defaults) (list js-font-lock-keywords))
 
-  (set (make-local-variable 'parse-sexp-ignore-comments) t) 
+  (set (make-local-variable 'parse-sexp-ignore-comments) t)
 
   ;; Comments
   (setq comment-start "// ")
   (setq comment-end "")
-  (set (make-local-variable 'fill-paragraph-function) 
+  (set (make-local-variable 'fill-paragraph-function)
        'javascript-fill-paragraph)
 
   ;; Imenu

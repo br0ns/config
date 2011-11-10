@@ -25,7 +25,6 @@
           "fix-pgup-pgdn"
           "hippie-expand"
           "match-beginning"
-          "winring"
           )
          )
   (load (expand-file-name (concat "config/" file)))
