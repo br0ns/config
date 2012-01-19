@@ -8,7 +8,7 @@
 
 import XMonad
 import XMonad.StackSet as W
-import Data.Map (unions, fromList)
+import qualified Data.Map as M
 import Data.Maybe (isNothing, isJust, catMaybes)
 import Data.List (isPrefixOf, partition, (\\))
 import Control.Monad (liftM2, when)
@@ -19,9 +19,8 @@ import XMonad.Config.Gnome (gnomeConfig)
 
 ----- Hooks
 -- Transparent windows
-import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
--- {doCenterFloat} puts floating windows in the middle of the screen
-import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.FadeInactive (fadeIf, fadeOutLogHook)
+import XMonad.Hooks.ManageHelpers (doCenterFloat)
 
 
 ----- Layout
@@ -34,6 +33,8 @@ import XMonad.Layout.NoBorders (smartBorders)
 ----- Actions
 -- Window stack
 import XMonad.Actions.CycleWindows (cycleRecentWindows)
+import XMonad.Actions.CycleWS
+  (prevScreen, nextScreen, swapPrevScreen, swapNextScreen)
 import XMonad.Actions.GridSelect
 -- For different kind of searches
 import XMonad.Actions.Submap (submap)
@@ -52,7 +53,7 @@ import XMonad.Prompt.Input (inputPrompt, (?+))
 
 ----- Util
 -- "M-C-x" style keybindings
-import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 
 myLayout = Tall 1 (3/100) (5/7) |||
            Tabbed.tabbedBottom Tabbed.CustomShrink myTabbedTheme
@@ -81,6 +82,7 @@ myManageHook =
   , className =? "Gimp" --> viewShift "gimp"
   , className =? "Sonata" --> doShift "multimedia"
   , className =? "Rhythmbox" --> doShift "multimedia"
+  , title =? "Calculator" --> doCenterFloat
   ]
     where
       viewShift = doF . liftM2 (.) W.greedyView W.shift
@@ -125,9 +127,9 @@ browser s = spawn ("chromium-browser " ++ s)
 newBrowser s = spawn ("chromium-browser --new-window " ++ s)
 
 myTopicConfig = TopicConfig
-  { topicDirs = fromList []
+  { topicDirs = M.fromList []
   , topicActions =
-       fromList $
+       M.fromList $
        [ ("web", browser "")
        , ("im", spawn "pidgin" >>
                 spawn "xchat")
@@ -135,7 +137,8 @@ myTopicConfig = TopicConfig
                       spawn "gcal")
        , ("multimedia", spawn "sonata")
        , ("procrastination", newBrowser
-                             "facebook.com \
+                             "fitocracy.com \
+                             \facebook.com \
                              \xkcd.com \
                              \smbc-comics.com \
                              \phdcomics.com/comics.php")
@@ -147,9 +150,9 @@ myTopicConfig = TopicConfig
                     newBrowser
                     "http://xmonad.org/xmonad-docs/xmonad-contrib/index.html")
        , ("install", shell)
-       , ("mylib", edit "MyLib.mlb" >>
+       , ("mylib", edit "~/code/sml/mylib/notes.org" >>
                    shell)
-       , ("preml", edit "src/PreML.mlb" >>
+       , ("preml", edit "~/code/sml/preml/notes.org" >>
                    shell)
        , ("iptest", edit "main.sml")
        , ("bitcoin", edit "mtgox.py newscalper.py" >>
@@ -167,35 +170,42 @@ myTopicConfig = TopicConfig
   }
 
 setWorkspaceDirs layout =
---   onWorkspace "organise" (workspaceDir "~/notes"             layout) $
-  -- onWorkspace "pwnies"   (workspaceDir "~/zomg-pwnies"       layout) $
---   onWorkspace "download" (workspaceDir "~/downloads"         layout) $
-  -- onWorkspace "mylib"    (workspaceDir "~/code/sml/mylib"    layout) $
-  -- onWorkspace "preml"    (workspaceDir "~/code/sml/preml"    layout) $
---   onWorkspace "speciale" (workspaceDir "~/study/speciale"    layout) $
---   onWorkspace "study"    (workspaceDir "~/study"             layout) $
---   onWorkspace "iptest"   (workspaceDir "~/study/ip2011/test" layout) $
---   onWorkspace "bitcoin"  (workspaceDir "~/code/python/mtgox" layout) $
---   onWorkspace "sml"      (workspaceDir "~/code/sml"          layout) $
---   onWorkspace "haskell"  (workspaceDir "~/code/haskell"      layout) $
---   onWorkspace "python"   (workspaceDir "~/code/python"       layout) $
---   onWorkspace "ip"       (workspaceDir "~/study/ip2011"      layout) $
+  onWorkspace "organise" (workspaceDir "~/notes"             layout) $
+  onWorkspace "pwnies"   (workspaceDir "~/zomg-pwnies"       layout) $
+  onWorkspace "download" (workspaceDir "~/downloads"         layout) $
+  onWorkspace "mylib"    (workspaceDir "~/code/sml/mylib"    layout) $
+  onWorkspace "preml"    (workspaceDir "~/code/sml/preml"    layout) $
+  onWorkspace "speciale" (workspaceDir "~/study/speciale"    layout) $
+  onWorkspace "study"    (workspaceDir "~/study"             layout) $
+  onWorkspace "iptest"   (workspaceDir "~/study/ip2011/test" layout) $
+  onWorkspace "bitcoin"  (workspaceDir "~/code/python/mtgox" layout) $
+  onWorkspace "sml"      (workspaceDir "~/code/sml"          layout) $
+  onWorkspace "haskell"  (workspaceDir "~/code/haskell"      layout) $
+  onWorkspace "python"   (workspaceDir "~/code/python"       layout) $
+  onWorkspace "ip"       (workspaceDir "~/study/ip2011"      layout) $
   workspaceDir "~"                                           layout
 
+isUnfocusedOnCurrentWS :: Query Bool
+isUnfocusedOnCurrentWS = do
+  w <- ask
+  ws <- liftX $ gets windowset
+  let thisWS = w `elem` W.index ws
+      unfocused = maybe True (w /=) $ W.peek ws
+  return $ thisWS && unfocused
 
 br0nsConfig =
   gnomeConfig
        { modMask = mod4Mask
        , manageHook = manageHook gnomeConfig <+>
-                      -- doCenterFloat <+>
                       composeAll myManageHook
        , layoutHook = smartBorders $
                       setWorkspaceDirs myLayout
        , borderWidth = 0
        , focusFollowsMouse = False
-       , logHook = do fadeInactiveLogHook 0.7
+       , logHook = fadeOutLogHook $ fadeIf isUnfocusedOnCurrentWS 0.7
        , XMonad.workspaces = myTopics
        }
+       `removeKeysP` ["M-q"]
        `additionalKeysP` myKeys
 
 main = do
@@ -205,24 +215,33 @@ main = do
 myKeys =
   -- CycleWindows
   [ ("M-s", cycleRecentWindows [xK_Super_L] xK_s xK_w)
+  -- Rebind mod-q
+  , ("M-S-<Esc>", spawn "xmonad --recompile ; xmonad --restart")
+  -- GSSelect
   , ("M-g", goToSelected myGSConfig)
-  , ("M-c", changeDir myXPConfig)
   -- Workspace navigation
-  , ("M-S-z", shiftToSelectedWS False myGSConfig)
-  , ("M-z", goToSelectedWS False myGSConfig)
-  , ("M-S-a", shiftToSelectedWS True myGSConfig)
-  , ("M-a", goToSelectedWS True myGSConfig)
+  , ("M-S-a", shiftToSelectedWS False myGSConfig)
+  , ("M-a", goToSelectedWS False myGSConfig)
+  , ("M-S-z", shiftToSelectedWS True myGSConfig)
+  , ("M-z", goToSelectedWS True myGSConfig)
+  -- Screen navigation
+  , ("M-<Left>", prevScreen)
+  , ("M-<Right>", nextScreen)
+  , ("M-S-<Left>", swapPrevScreen)
+  , ("M-S-<Right>", swapNextScreen)
   -- Dynamic workspaces
+  , ("M-S-d", changeDir myXPConfig)
   , ("M-S-n", addWorkspacePrompt myXPConfig >> shell)
   , ("M-S-<Backspace>", killAll >> myRemoveWorkspace)
   , ("M-S-r", renameWorkspace myXPConfig)
   , ("M-S-s", newScratchpad)
+  -- Search
   , ("M-'", submap . mySearchMap $ myPromptSearch)
   , ("M-C-'", submap . mySearchMap $ mySelectSearch)
   ]
 
 -- from XMonad.Actions.Search
-mySearchMap method = fromList $
+mySearchMap method = M.fromList $
         [ ((0, xK_g), method Search.google)
         , ((0, xK_w), method Search.wikipedia)
         , ((0, xK_h), method Search.hoogle)
