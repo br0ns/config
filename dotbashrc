@@ -109,13 +109,15 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias here='nautilus . &'
 alias flatten='find . -type f -name "*" -print0 | xargs -0 -I "{}" cp -v "{}" .'
-alias ,='pushd'
-alias .='pushd .'
-alias :='popd'
+alias s='pushd'
+alias m='pushd .'
+alias p='popd'
 alias gdb='gdb -n -x ~/.gdbinit'
 alias mosml='rlwrap mosml'
 alias sml='rlwrap sml'
 alias emacs='emacs -nw'
-. > /dev/null
+m > /dev/null
 
 shopt -s cdspell
+shopt -s globstar
+source /usr/share/autojump/autojump.bash
