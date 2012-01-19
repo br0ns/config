@@ -1,7 +1,7 @@
 ;; Navigation
 (global-set-key [(meta control up)]      'pager-half-page-down)
 (global-set-key [(meta control down)]    'pager-half-page-up)
-(global-set-key [(meta shift up)]        'scroll-down-one)
+(global-set-key [(meta shift up)] 'scroll-down-one)
 (global-set-key [(meta shift down)]      'scroll-up-one)
 (global-set-key [(meta up)]              'scroll-previous-line)
 (global-set-key [(meta down)]            'scroll-next-line)
@@ -49,5 +49,7 @@
                 '(lambda () (interactive)
                    (find-file "/home/mortenbp/notes/tasks.org")))
 
-(global-set-key (kbd "C-M-+")            'evil-numbers/inc-at-pt)
-(global-set-key (kbd "C-M--")            'evil-numbers/dec-at-pt)
+(global-set-key [(meta control right)]   'evil-numbers/inc-at-pt)
+(global-set-key [(meta control left)]    'evil-numbers/dec-at-pt)
+
+(global-set-key (kbd "M-/")              'flyspell-auto-correct-previous-word)

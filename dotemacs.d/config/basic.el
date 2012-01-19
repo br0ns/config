@@ -3,12 +3,24 @@
 
 ;; (require 'tramp)
 
+(require 'mic-paren)
+
+;; Unbind Pesky Sleep Button
+(global-unset-key [(control z)])
+(global-unset-key [(control x)(control z)])
+
 (require 'evil-numbers)
 
 (require 'whitespace)
 (setq whitespace-line-column '80
-      whitespace-style '(lines-tail))
-(global-whitespace-mode t)
+      whitespace-style '(trailing))
+(add-hook 'after-change-major-mode-hook 'whitespace-mode)
+;; (global-whitespace-mode t)
+
+(require 'fill-column-indicator)
+(add-hook 'after-change-major-mode-hook 'fci-mode)
+
+(defun whitespace-post-command-hook() nil)
 
 ;; Display time in mode line
 (display-time)
@@ -39,7 +51,7 @@
                        " (and removed trailing whitespace)"))))
 
 ;; Show trailing whitespace
-(setq-default show-trailing-whitespace t)
+;; (setq-default show-trailing-whitespace t)
 
 ;; Color theme - Use color-theme-select to show themes
 ;; (color-theme-initialize)
@@ -98,3 +110,4 @@
 ;; Load filladapt
 (require 'filladapt)
 (setq-default filladapt-mode t) ; Always use this
+
