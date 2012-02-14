@@ -11,16 +11,11 @@
 
 (require 'evil-numbers)
 
-(require 'whitespace)
-(setq whitespace-line-column '80
-      whitespace-style '(trailing))
-(add-hook 'after-change-major-mode-hook 'whitespace-mode)
-;; (global-whitespace-mode t)
+(require 'show-wspace)
+(add-hook 'font-lock-mode-hook 'show-ws-highlight-trailing-whitespace)
 
 (require 'fill-column-indicator)
 (add-hook 'after-change-major-mode-hook 'fci-mode)
-
-(defun whitespace-post-command-hook() nil)
 
 ;; Display time in mode line
 (display-time)
@@ -49,9 +44,6 @@
                        "Wrote "
                        (buffer-file-name)
                        " (and removed trailing whitespace)"))))
-
-;; Show trailing whitespace
-(setq-default show-trailing-whitespace t)
 
 ;; Color theme - Use color-theme-select to show themes
 ;; (color-theme-initialize)
