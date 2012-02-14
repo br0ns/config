@@ -51,7 +51,7 @@
                        " (and removed trailing whitespace)"))))
 
 ;; Show trailing whitespace
-;; (setq-default show-trailing-whitespace t)
+(setq-default show-trailing-whitespace t)
 
 ;; Color theme - Use color-theme-select to show themes
 ;; (color-theme-initialize)
