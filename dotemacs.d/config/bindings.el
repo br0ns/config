@@ -5,8 +5,6 @@
 (global-set-key [(meta shift down)]      'scroll-up-one)
 (global-set-key [(meta up)]              'scroll-previous-line)
 (global-set-key [(meta down)]            'scroll-next-line)
-(global-set-key [(meta shift left)]      'winring-prev-configuration)
-(global-set-key [(meta shift right)]     'winring-next-configuration)
 (global-set-key "\M-p"                   'backward-paragraph)
 (global-set-key "\M-n"                   'forward-paragraph)
 (global-set-key (kbd "<XF86Back>")       'backward-word)
@@ -51,5 +49,3 @@
 
 (global-set-key [(meta control right)]   'evil-numbers/inc-at-pt)
 (global-set-key [(meta control left)]    'evil-numbers/dec-at-pt)
-
-(global-set-key (kbd "M-/")              'flyspell-auto-correct-previous-word)

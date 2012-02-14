@@ -49,6 +49,12 @@
 ;; (color-theme-initialize)
 ;; (color-theme-taming-mr-arneson)
 
+;; navigate by visual lines
+(visual-line-mode)
+
+;; Remove fringes
+(set-fringe-mode 0)
+
 ;; Line High lighting
 (global-hl-line-mode t)
 (set-face-background 'hl-line "Light Green")
