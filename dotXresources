@@ -1,1 +1,3 @@
 Emacs.Font: Liberation Mono-7
+Emacs*background:                 black
+Emacs*foreground:                 white

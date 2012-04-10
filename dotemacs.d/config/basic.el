@@ -9,6 +9,9 @@
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
 
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
 (require 'evil-numbers)
 
 (require 'show-wspace)
@@ -45,10 +48,6 @@
                        (buffer-file-name)
                        " (and removed trailing whitespace)"))))
 
-;; Color theme - Use color-theme-select to show themes
-;; (color-theme-initialize)
-;; (color-theme-taming-mr-arneson)
-
 ;; navigate by visual lines
 (visual-line-mode)
 
@@ -57,7 +56,6 @@
 
 ;; Line High lighting
 (global-hl-line-mode t)
-(set-face-background 'hl-line "Light Green")
 
 (set-variable 'scroll-conservaly 5)
 

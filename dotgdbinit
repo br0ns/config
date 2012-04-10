@@ -12,6 +12,6 @@ set history expansion
 set output-radix 0x10
 
 # Start the binary
-start
-display/30i $eip
+#start
+#display/30i $eip
 

@@ -44,7 +44,8 @@ import XMonad.Actions.TopicSpace
   (TopicConfig (..), checkTopicConfig, switchTopic)
 import XMonad.Actions.DynamicWorkspaces
   (addWorkspacePrompt, renameWorkspace, removeWorkspace, addWorkspace)
-
+import XMonad.Actions.CopyWindow
+  (copyToAll, killAllOtherCopies, wsContainingCopies)
 
 ----- Prompt
 import XMonad.Prompt (defaultXPConfig, fgColor, bgColor)
@@ -54,6 +55,9 @@ import XMonad.Prompt.Input (inputPrompt, (?+))
 ----- Util
 -- "M-C-x" style keybindings
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
+import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom,
+                               scratchpadManageHook,
+                               scratchpadFilterOutWorkspace)
 
 myLayout = Tall 1 (3/100) (5/7) |||
            Tabbed.tabbedBottom Tabbed.CustomShrink myTabbedTheme
@@ -113,6 +117,8 @@ myTopics =
   , "mylib"
   , "preml"
   , "speciale"
+  , "hindsight"
+  , "treasure-hunt"
   , "iptest"
   , "bitcoin"
     -- Work
@@ -125,6 +131,7 @@ edit s = spawn ("emacs " ++ s)
 shell = spawn myShell
 browser s = spawn ("chromium-browser " ++ s)
 newBrowser s = spawn ("chromium-browser --new-window " ++ s)
+appBrowser s = spawn ("chromium-browser --app=\"" ++ s ++ "\"")
 
 myTopicConfig = TopicConfig
   { topicDirs = M.fromList []
@@ -133,8 +140,8 @@ myTopicConfig = TopicConfig
        [ ("web", browser "")
        , ("im", spawn "pidgin" >>
                 spawn "xchat")
-       , ("organise", spawn "gmail" >>
-                      spawn "gcal")
+       , ("organise", appBrowser "http://gmail.com" >>
+                      appBrowser "http://calendar.google.com")
        , ("multimedia", spawn "sonata")
        , ("procrastination", newBrowser
                              "fitocracy.com \
@@ -154,6 +161,11 @@ myTopicConfig = TopicConfig
                    shell)
        , ("preml", edit "~/code/sml/preml/notes.org" >>
                    shell)
+       , ("treasure-hunt", edit "~/study/pcs12/treasure-hunt/chal" >>
+                           shell)
+       , ("hindsight", edit "~/code/hindsight/src/TODO.org" >>
+                       shell)
+       , ("haskell", newBrowser "www.haskell.org/hoogle/")
        , ("iptest", edit "main.sml")
        , ("bitcoin", edit "mtgox.py newscalper.py" >>
                      -- spawn "bitcoin" >>
@@ -163,6 +175,8 @@ myTopicConfig = TopicConfig
                                 \blockexplorer.com/q/estimate")
        , ("absalon", newBrowser "punkt.ku.dk")
        , ("ip", edit "timer.txt")
+       , ("inkscape", spawn "inkscape")
+       , ("gimp", spawn "gimp")
        ]
   , defaultTopicAction = const $ shell
   , defaultTopic = "web"
@@ -197,7 +211,8 @@ br0nsConfig =
   gnomeConfig
        { modMask = mod4Mask
        , manageHook = manageHook gnomeConfig <+>
-                      composeAll myManageHook
+                      composeAll myManageHook <+>
+                      scratchpadManageHook (W.RationalRect 0.2 0.2 0.6 0.6)
        , layoutHook = smartBorders $
                       setWorkspaceDirs myLayout
        , borderWidth = 0
@@ -238,6 +253,10 @@ myKeys =
   -- Search
   , ("M-'", submap . mySearchMap $ myPromptSearch)
   , ("M-C-'", submap . mySearchMap $ mySelectSearch)
+  -- Scratchpad
+  , ("M-S-<Space>", scratchpadSpawnActionCustom "gnome-terminal --disable-factory --name scratchpad")
+  -- Global window
+  , ("M-S-g", toggleGlobal)
   ]
 
 -- from XMonad.Actions.Search
@@ -295,6 +314,13 @@ newScratchpad = withWindowSet $ \w -> do
                        [(r,_)] -> Just r
                        _       -> Nothing
 
+-- Toggle 'global' windows
+toggleGlobal = do
+  ws <- wsContainingCopies
+  if (null ws)
+    then windows copyToAll
+    else killAllOtherCopies
+
 -- Nizzle colours
 myXPConfig = defaultXPConfig
   { fgColor = "#a8a3f7"
@@ -325,7 +351,7 @@ gridselectWS inclEmpty conf =
   withWindowSet $ \ws -> do
     let hid = W.hidden ws
         vis = map W.workspace $ W.visible ws
-        all = hid ++ vis
+        all = scratchpadFilterOutWorkspace $ hid ++ vis
         wss = if inclEmpty
               then let (nonEmp, emp) = partition nonEmptyWS all
                    in nonEmp ++ emp

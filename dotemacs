@@ -26,6 +26,7 @@
           "hippie-expand"
           "match-beginning"
           "org"
+          "colours"
           )
          )
   (load (expand-file-name (concat "config/" file)))
@@ -43,17 +44,7 @@
  '(bm-priority 10)
  '(haskell-program-name "ghci")
  '(org-log-done (quote time))
+ '(reftex-fref-is-default t)
  '(safe-local-variable-values (quote ((TeX-master . t))))
  '(uniquify-buffer-name-style (quote post-forward) nil (uniquify))
  '(user-mail-address "f@ntast.dk"))
-
-(put 'upcase-region 'disabled nil)
-
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(bm-persistent-face ((((class color) (background light)) (:background "Light Blue"))))
- '(show-paren-match ((((class color) (background light)) (:background "Green")))))
-(put 'downcase-region 'disabled nil)
