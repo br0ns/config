@@ -6,7 +6,7 @@
 (ido-mode 1)
 (ido-everywhere 1)
 (setq ido-enable-flex-matching t)
-(setq ido-create-new-buffer 'always)
+;; (setq ido-create-new-buffer 'always)
 (setq ido-enable-tramp-completion nil)
 ;; (setq ido-enable-last-directory-history nil)
 ;; (setq ido-confirm-unique-completion nil) ;; wait for RET, even for unique?
@@ -15,6 +15,11 @@
 
 ;; disable auto searching for files unless called explicitly
 (setq ido-auto-merge-delay-time 99999)
+
+(setq ido-file-extensions-order '(".tex" ".org" ".txt" ".sml" ".hs" ".emacs"))
+;; Enable ido to use the ignore-extensions variable
+(setq ido-ignore-extensions t)
+(setq completion-ignored-extensions '(".hi" ".so" ".o" ".aux" ".snm" ".nav" ".toc" ".vrb"))
 
 
 (define-key ido-file-dir-completion-map (kbd "C-c C-s")

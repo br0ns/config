@@ -89,12 +89,6 @@
     )
   )
 
-;; TODO: Change this to {tabulator}
-(defun ten-spaces ()
-  (interactive)
-  (insert "          ")
-  )
-
 (defun yank-as-rectangle ()
   (interactive)
   (insert-rectangle

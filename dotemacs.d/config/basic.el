@@ -1,6 +1,22 @@
 ; Uniquify
 (require 'uniquify)
 
+; rect-mark
+(require 'rect-mark)
+(global-set-key (kbd "C-x r C-SPC") 'rm-set-mark)
+(global-set-key (kbd "C-w")
+  '(lambda(b e) (interactive "r")
+     (if rm-mark-active
+       (rm-kill-region b e) (kill-region b e))))
+(global-set-key (kbd "M-w")
+  '(lambda(b e) (interactive "r")
+     (if rm-mark-active
+       (rm-kill-ring-save b e) (kill-ring-save b e))))
+(global-set-key (kbd "C-x C-x")
+  '(lambda(&optional p) (interactive "p")
+     (if rm-mark-active
+       (rm-exchange-point-and-mark p) (exchange-point-and-mark p))))
+
 ;; (require 'tramp)
 
 (require 'mic-paren)

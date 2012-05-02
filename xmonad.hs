@@ -28,7 +28,9 @@ import qualified XMonad.Layout.Tabbed as Tabbed
 import XMonad.Layout.PerWorkspace (onWorkspace)
 import XMonad.Layout.WorkspaceDir (workspaceDir, changeDir)
 import XMonad.Layout.NoBorders (smartBorders)
-
+import XMonad.Layout.Simplest
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.ThreeColumns
 
 ----- Actions
 -- Window stack
@@ -59,7 +61,8 @@ import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom,
                                scratchpadManageHook,
                                scratchpadFilterOutWorkspace)
 
-myLayout = Tall 1 (3/100) (5/7) |||
+myLayout = ResizableTall 1 (3/100) (5/7) [] |||
+           ThreeColMid 1 (3/100) (4/7) |||
            Tabbed.tabbedBottom Tabbed.CustomShrink myTabbedTheme
 
 -- Don't show text in tabs.
@@ -116,7 +119,6 @@ myTopics =
     -- Projects
   , "mylib"
   , "preml"
-  , "speciale"
   , "hindsight"
   , "treasure-hunt"
   , "iptest"
@@ -178,7 +180,8 @@ myTopicConfig = TopicConfig
        , ("inkscape", spawn "inkscape")
        , ("gimp", spawn "gimp")
        ]
-  , defaultTopicAction = const $ shell
+  -- , defaultTopicAction = const $ shell
+  , defaultTopicAction = const $ return ()
   , defaultTopic = "web"
   , maxTopicHistory = 10
   }
@@ -189,7 +192,6 @@ setWorkspaceDirs layout =
   onWorkspace "download" (workspaceDir "~/downloads"         layout) $
   onWorkspace "mylib"    (workspaceDir "~/code/sml/mylib"    layout) $
   onWorkspace "preml"    (workspaceDir "~/code/sml/preml"    layout) $
-  onWorkspace "speciale" (workspaceDir "~/study/speciale"    layout) $
   onWorkspace "study"    (workspaceDir "~/study"             layout) $
   onWorkspace "iptest"   (workspaceDir "~/study/ip2011/test" layout) $
   onWorkspace "bitcoin"  (workspaceDir "~/code/python/mtgox" layout) $
@@ -217,7 +219,7 @@ br0nsConfig =
                       setWorkspaceDirs myLayout
        , borderWidth = 0
        , focusFollowsMouse = False
-       , logHook = fadeOutLogHook $ fadeIf isUnfocusedOnCurrentWS 0.7
+       , logHook = fadeOutLogHook $ fadeIf isUnfocusedOnCurrentWS 0.8
        , XMonad.workspaces = myTopics
        }
        `removeKeysP` ["M-q"]
@@ -231,12 +233,10 @@ myKeys =
   -- CycleWindows
   [ ("M-s", cycleRecentWindows [xK_Super_L] xK_s xK_w)
   -- Rebind mod-q
-  , ("M-S-<Esc>", spawn "xmonad --recompile ; xmonad --restart")
+  , ("M-S-<Esc>", spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi")
   -- GSSelect
   , ("M-g", goToSelected myGSConfig)
   -- Workspace navigation
-  , ("M-S-a", shiftToSelectedWS False myGSConfig)
-  , ("M-a", goToSelectedWS False myGSConfig)
   , ("M-S-z", shiftToSelectedWS True myGSConfig)
   , ("M-z", goToSelectedWS True myGSConfig)
   -- Screen navigation
@@ -244,9 +244,12 @@ myKeys =
   , ("M-<Right>", nextScreen)
   , ("M-S-<Left>", swapPrevScreen)
   , ("M-S-<Right>", swapNextScreen)
+  -- Window resizing
+  , ("M-S-h", sendMessage MirrorExpand)
+  , ("M-S-l", sendMessage MirrorShrink)
   -- Dynamic workspaces
   , ("M-S-d", changeDir myXPConfig)
-  , ("M-S-n", addWorkspacePrompt myXPConfig >> shell)
+  , ("M-S-n", addWorkspacePrompt myXPConfig)
   , ("M-S-<Backspace>", killAll >> myRemoveWorkspace)
   , ("M-S-r", renameWorkspace myXPConfig)
   , ("M-S-s", newScratchpad)
@@ -309,7 +312,6 @@ newScratchpad = withWindowSet $ \w -> do
       new = "scratchpad" ++ show num
   when (new `notElem` (map W.tag wss)) $ addWorkspace new
   windows $ W.view new
-  shell
  where readMaybe s = case reads s of
                        [(r,_)] -> Just r
                        _       -> Nothing
