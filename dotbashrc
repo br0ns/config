@@ -116,6 +116,17 @@ alias gdb='gdb -n -x ~/.gdbinit'
 alias mosml='rlwrap mosml'
 alias sml='rlwrap sml'
 alias emacs='emacs -nw'
+function odl () { objdump -dMintel "$1" | less; }
+function oDl () { objdump -DMintel "$1" | less; }
+function hdl () { hexdump -C "$1" | less; }
+function RM () {
+  if [ -d "$1" ]; then
+    find "$1" -type f -exec shred -v "{}" \;
+  else
+    shred -v "$1"
+  fi
+  rm -rfv "$1"
+}
 m > /dev/null
 
 shopt -s cdspell
