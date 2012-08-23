@@ -61,9 +61,11 @@ import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom,
                                scratchpadManageHook,
                                scratchpadFilterOutWorkspace)
 
+-- myLayout = ResizableTall 1 (3/100) (5/7) [] |||
+--            ThreeColMid 1 (3/100) (4/7) |||
+--            Tabbed.tabbedBottom Tabbed.CustomShrink myTabbedTheme
 myLayout = ResizableTall 1 (3/100) (5/7) [] |||
-           ThreeColMid 1 (3/100) (4/7) |||
-           Tabbed.tabbedBottom Tabbed.CustomShrink myTabbedTheme
+           Full
 
 -- Don't show text in tabs.
 instance Tabbed.Shrinker Tabbed.CustomShrink where
@@ -103,7 +105,7 @@ myTopics =
   , "gimp"
   , "multimedia"
   , "procrastination"
-  , "absalon"
+  , "wireshark"
   , "pwnies"
   , "idapro"
   , "virtualbox"
@@ -121,10 +123,9 @@ myTopics =
   , "preml"
   , "hindsight"
   , "treasure-hunt"
-  , "iptest"
   , "bitcoin"
-    -- Work
-  , "ip"
+    -- Misc
+  , "background"
   ]
 
 myShell = "gnome-terminal"
@@ -168,15 +169,12 @@ myTopicConfig = TopicConfig
        , ("hindsight", edit "~/code/hindsight/src/TODO.org" >>
                        shell)
        , ("haskell", newBrowser "www.haskell.org/hoogle/")
-       , ("iptest", edit "main.sml")
        , ("bitcoin", edit "mtgox.py newscalper.py" >>
                      -- spawn "bitcoin" >>
                      spawn "gnome-terminal -x python ticker.py" >>
                      shell >>
                      newBrowser "eclipsemc.com mtgox.com \
                                 \blockexplorer.com/q/estimate")
-       , ("absalon", newBrowser "punkt.ku.dk")
-       , ("ip", edit "timer.txt")
        , ("inkscape", spawn "inkscape")
        , ("gimp", spawn "gimp")
        ]
