@@ -8,10 +8,12 @@
     (progn
       (kill-ring-save
        (line-beginning-position)
-       (line-beginning-position 2)
+       (line-end-position)
        )
-      (beginning-of-line)
+      (end-of-line)
+      (insert-char ?\n 1)
       (yank)
+      (beginning-of-line)
       (forward-char c)
       )
     )

@@ -52,3 +52,5 @@
 
 (global-set-key [(meta control right)]   'evil-numbers/inc-at-pt)
 (global-set-key [(meta control left)]    'evil-numbers/dec-at-pt)
+(global-set-key (kbd "<f7>")             'clipboard-kill-ring-save)
+(global-set-key (kbd "<f8>")             'clipboard-yank)
