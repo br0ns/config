@@ -33,8 +33,6 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.ThreeColumns
 
 ----- Actions
--- Window stack
-import XMonad.Actions.CycleWindows (cycleRecentWindows)
 import XMonad.Actions.CycleWS
   (prevScreen, nextScreen, swapPrevScreen, swapNextScreen)
 import XMonad.Actions.GridSelect
@@ -45,13 +43,14 @@ import XMonad.Actions.WithAll (killAll)
 import XMonad.Actions.TopicSpace
   (TopicConfig (..), checkTopicConfig, switchTopic)
 import XMonad.Actions.DynamicWorkspaces
-  (addWorkspacePrompt, renameWorkspace, removeWorkspace, addWorkspace)
+  (addWorkspacePrompt, addHiddenWorkspace, renameWorkspace, removeWorkspace, addWorkspace)
 import XMonad.Actions.CopyWindow
   (copyToAll, killAllOtherCopies, wsContainingCopies)
 
 ----- Prompt
-import XMonad.Prompt (defaultXPConfig, fgColor, bgColor)
+import XMonad.Prompt (defaultXPConfig, fgColor, bgColor, mkXPrompt, XPConfig)
 import XMonad.Prompt.Input (inputPrompt, (?+))
+import XMonad.Prompt.Workspace (Wor(Wor))
 
 
 ----- Util
@@ -228,14 +227,12 @@ main = do
   xmonad $ br0nsConfig
 
 myKeys =
-  -- CycleWindows
-  [ ("M-s", cycleRecentWindows [xK_Super_L] xK_s xK_w)
   -- Rebind mod-q
-  , ("M-S-<Esc>", spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi")
+  [ ("M-S-<Esc>", spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi")
   -- GSSelect
   , ("M-g", goToSelected myGSConfig)
   -- Workspace navigation
-  , ("M-S-z", shiftToSelectedWS True myGSConfig)
+  , ("M-a", shiftToSelectedWS True myGSConfig)
   , ("M-z", goToSelectedWS True myGSConfig)
   -- Screen navigation
   , ("M-<Left>", prevScreen)
@@ -246,11 +243,12 @@ myKeys =
   , ("M-S-h", sendMessage MirrorExpand)
   , ("M-S-l", sendMessage MirrorShrink)
   -- Dynamic workspaces
-  , ("M-S-d", changeDir myXPConfig)
-  , ("M-S-n", addWorkspacePrompt myXPConfig)
-  , ("M-S-<Backspace>", killAll >> myRemoveWorkspace)
-  , ("M-S-r", renameWorkspace myXPConfig)
-  , ("M-S-s", newScratchpad)
+  , ("M-d", changeDir myXPConfig)
+  , ("M-n", addWorkspacePrompt myXPConfig)
+  , ("M-m", addWorkspaceMoveWindowPrompt myXPConfig)
+  , ("M-<Backspace>", killAll >> myRemoveWorkspace)
+  , ("M-r", renameWorkspace myXPConfig)
+  , ("M-s", newScratchpad)
   -- Search
   , ("M-'", submap . mySearchMap $ myPromptSearch)
   , ("M-C-'", submap . mySearchMap $ mySelectSearch)
@@ -297,6 +295,17 @@ myRemoveWorkspace = do
   case s of
     StackSet {current = W.Screen { workspace = Workspace { tag = this } } } ->
       when (this `notElem`myTopics) removeWorkspace
+
+addWorkspaceMoveWindow :: String -> X ()
+addWorkspaceMoveWindow newtag =
+  do addHiddenWorkspace newtag
+     windows (W.greedyView newtag . W.shift newtag)
+
+-- | Prompt for the name of a new workspace, add it if it does not
+--   already exist, and switch to it.
+addWorkspaceMoveWindowPrompt :: XPConfig -> X ()
+addWorkspaceMoveWindowPrompt conf =
+  mkXPrompt (Wor "New workspace name: ") conf (const (return [])) addWorkspaceMoveWindow
 
 -- Create a new workspace named "scratchpadX"
 newScratchpad :: X ()
