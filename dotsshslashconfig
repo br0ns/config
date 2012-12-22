@@ -1,0 +1,51 @@
+Host fantast
+  Hostname fa.ntast.dk
+
+Host ask
+  Hostname ask.diku.dk
+
+Host brok
+  Hostname brok.diku.dk
+
+Host pcs
+  Hostname pcs-adm.diku.dk
+  ProxyCommand ssh ask.diku.dk nc -w 1 %h %p
+
+Host hades
+  HostName hades.olympus.freaken.dk
+  Port 2222
+  CheckHostIP no
+
+Host proxy-hades
+  HostName hades.olympus.freaken.dk
+  Port 2222
+  ProxyCommand ssh ask.diku.dk nc -w 1 %h %p
+
+Host git.pwnies.dk
+  Hostname cloud.pwnies.dk
+  User git
+  Port 2225
+
+Host git-proxy.pwnies.dk
+  Hostname cloud.pwnies.dk
+  User git
+  Port 2225
+  ProxyCommand ssh ask.diku.dk nc -w 1 %h %p
+
+Host rain.pwnies.dk
+  HostKeyAlias pwnies_rain
+  Hostname 2.111.29.58
+  Port 22
+  CheckHostIP no
+
+Host lightning.pwnies.dk
+  HostKeyAlias pwnies_lightning
+  Hostname 2.111.29.58
+  Port 2222
+  CheckHostIP no
+
+Host thunder.pwnies.dk
+  HostKeyAlias pwnies_thunder
+  Hostname 2.111.29.58
+  Port 2223
+  CheckHostIP no

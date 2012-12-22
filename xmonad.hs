@@ -13,15 +13,18 @@ import Data.Maybe (isNothing, isJust, catMaybes)
 import Data.List (isPrefixOf, partition, (\\))
 import Control.Monad (liftM2, when)
 
--- Chats a bit on dbus and sets {terminal = gnome-terminal}
-import XMonad.Config.Gnome (gnomeConfig)
--- import XMonad.Config.Desktop
+import XMonad.Config.Desktop (desktopConfig)
 
 ----- Hooks
 -- Transparent windows
 import XMonad.Hooks.FadeInactive (fadeIf, fadeOutLogHook)
 import XMonad.Hooks.ManageHelpers (doCenterFloat)
-
+import XMonad.Hooks.UrgencyHook (UrgencyHook (..),
+                                 RemindWhen (..),
+                                 UrgencyConfig (..),
+                                 withUrgencyHookC,
+                                 focusUrgent,
+                                 urgencyConfig)
 
 ----- Layout
 import qualified XMonad.Layout.Tabbed as Tabbed
@@ -59,6 +62,8 @@ import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom,
                                scratchpadManageHook,
                                scratchpadFilterOutWorkspace)
+import XMonad.Util.Run (safeSpawn)
+import XMonad.Util.NamedWindows (getName)
 
 -- myLayout = ResizableTall 1 (3/100) (5/7) [] |||
 --            ThreeColMid 1 (3/100) (4/7) |||
@@ -81,23 +86,23 @@ myTabbedTheme =
   }
 
 myManageHook =
-  [ className =? "Do" --> doIgnore
-  , className =? "Pidgin" --> doShift "im"
-  , className =? "XChat" --> doShift "im"
-  , className =? "Bitcoin" --> doShift "bitcoin"
-  , title =? "Calendar" --> doShift "organise"
-  , title =? "GMail" --> doShift "organise"
-  , className =? "Gimp" --> viewShift "gimp"
-  , className =? "Sonata" --> doShift "multimedia"
-  , className =? "Rhythmbox" --> doShift "multimedia"
-  , title =? "Calculator" --> doCenterFloat
+  [ className =? "Do"         --> doIgnore
+  , className =? "Pidgin"     --> doShift "im"
+  , className =? "XChat"      --> doShift "im"
+  , className =? "Bitcoin"    --> doShift "bitcoin"
+  , title     =? "Calendar"   --> doShift "organise"
+  , title     =? "GMail"      --> doShift "organise"
+  , className =? "Gimp"       --> viewShift "gimp"
+  , className =? "Sonata"     --> doShift "multimedia"
+  , className =? "Rhythmbox"  --> doShift "multimedia"
+  , title     =? "Calculator" --> doCenterFloat
   ]
     where
       viewShift = doF . liftM2 (.) W.greedyView W.shift
 
 myTopics =
-  [ "web"
-  , "im"
+  [ "im"
+  , "web"
   , "organise"
   , "reading"
   , "inkscape"
@@ -127,10 +132,10 @@ myTopics =
   , "background"
   ]
 
-myShell = "gnome-terminal"
+myTerminal = "terminator"
 myBrowser = "chromium-browser"
 edit s = spawn ("emacs " ++ s)
-shell = spawn myShell
+term = spawn myTerminal
 browser s = spawn ("chromium-browser " ++ s)
 newBrowser s = spawn ("chromium-browser --new-window " ++ s)
 appBrowser s = spawn ("chromium-browser --app=\"" ++ s ++ "\"")
@@ -139,9 +144,9 @@ myTopicConfig = TopicConfig
   { topicDirs = M.fromList []
   , topicActions =
        M.fromList $
-       [ ("web", browser "")
-       , ("im", spawn "pidgin" >>
-                spawn "xchat")
+       [ ("im", safeSpawn myTerminal ["-x", "ssh", "fa.ntast.dk", "-t", "screen", "-dr", "irc"])
+       -- [ ("im", term)
+       , ("web", browser "")
        , ("organise", appBrowser "http://gmail.com" >>
                       appBrowser "http://calendar.google.com")
        , ("multimedia", spawn "sonata")
@@ -151,33 +156,27 @@ myTopicConfig = TopicConfig
                              \xkcd.com \
                              \smbc-comics.com \
                              \phdcomics.com/comics.php")
-       , ("idapro", spawn "idaq")
+       -- , ("idapro", spawn "idaq")
        , ("virtualbox", spawn "virtualbox")
        , ("reading", spawn "evince")
        , ("emacs", edit "~/.emacs.d/config/bindings.el")
        , ("xmonad", edit "~/config/xmonad.hs" >>
                     newBrowser
                     "http://xmonad.org/xmonad-docs/xmonad-contrib/index.html")
-       , ("install", shell)
+       , ("install", term)
        , ("mylib", edit "~/code/sml/mylib/notes.org" >>
-                   shell)
+                   term)
        , ("preml", edit "~/code/sml/preml/notes.org" >>
-                   shell)
+                   term)
        , ("treasure-hunt", edit "~/study/pcs12/treasure-hunt/chal" >>
-                           shell)
+                           term)
        , ("hindsight", edit "~/code/hindsight/src/TODO.org" >>
-                       shell)
+                       term)
        , ("haskell", newBrowser "www.haskell.org/hoogle/")
-       , ("bitcoin", edit "mtgox.py newscalper.py" >>
-                     -- spawn "bitcoin" >>
-                     spawn "gnome-terminal -x python ticker.py" >>
-                     shell >>
-                     newBrowser "eclipsemc.com mtgox.com \
-                                \blockexplorer.com/q/estimate")
        , ("inkscape", spawn "inkscape")
        , ("gimp", spawn "gimp")
        ]
-  -- , defaultTopicAction = const $ shell
+  -- , defaultTopicAction = const $ term
   , defaultTopicAction = const $ return ()
   , defaultTopic = "web"
   , maxTopicHistory = 10
@@ -206,10 +205,23 @@ isUnfocusedOnCurrentWS = do
       unfocused = maybe True (w /=) $ W.peek ws
   return $ thisWS && unfocused
 
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+instance UrgencyHook LibNotifyUrgencyHook where
+  urgencyHook LibNotifyUrgencyHook w = do
+    name <- getName w
+    ws <- gets windowset
+    whenJust (W.findTag w ws) (flash name)
+      where flash name index =
+              if index == "im"
+              then spawn "~/.xmonad/blink"
+              else safeSpawn "notify-send" [index ++ ": " ++ show name]
+
 br0nsConfig =
-  gnomeConfig
+  withUrgencyHookC LibNotifyUrgencyHook urgencyConfig { remindWhen = Every 10 } $
+  desktopConfig
        { modMask = mod4Mask
-       , manageHook = manageHook gnomeConfig <+>
+       , manageHook = manageHook desktopConfig <+>
                       composeAll myManageHook <+>
                       scratchpadManageHook (W.RationalRect 0.2 0.2 0.6 0.6)
        , layoutHook = smartBorders $
@@ -218,6 +230,7 @@ br0nsConfig =
        , focusFollowsMouse = False
        , logHook = fadeOutLogHook $ fadeIf isUnfocusedOnCurrentWS 0.8
        , XMonad.workspaces = myTopics
+       , terminal = myTerminal
        }
        `removeKeysP` ["M-q"]
        `additionalKeysP` myKeys
@@ -232,7 +245,7 @@ myKeys =
   -- GSSelect
   , ("M-g", goToSelected myGSConfig)
   -- Workspace navigation
-  , ("M-a", shiftToSelectedWS True myGSConfig)
+  , ("M-S-z", shiftToSelectedWS True myGSConfig)
   , ("M-z", goToSelectedWS True myGSConfig)
   -- Screen navigation
   , ("M-<Left>", prevScreen)
@@ -256,6 +269,8 @@ myKeys =
   , ("M-S-<Space>", scratchpadSpawnActionCustom "gnome-terminal --disable-factory --name scratchpad")
   -- Global window
   , ("M-S-g", toggleGlobal)
+  -- Focus urgent
+  , ("M-C-<Space>", focusUrgent)
   ]
 
 -- from XMonad.Actions.Search

@@ -130,6 +130,28 @@
     )
   )
 
+(defun increase-indentation ()
+  "Increase identation of region if mark is active"
+  (interactive)
+  (if mark-active
+      (let ((deactivate-mark nil))
+        (increase-left-margin)
+        )
+    (increase-left-margin (line-beginning-position) (line-end-position))
+    )
+  )
+
+(defun decrease-indentation ()
+  "Increase identation of region if mark is active"
+  (interactive)
+  (if mark-active
+      (let ((deactivate-mark nil))
+        (increase-left-margin)
+        )
+    (increase-left-margin (line-beginning-position) (line-end-position))
+    )
+  )
+
 (defun hyper-tab ()
   (interactive)
   (if (minibufferp)

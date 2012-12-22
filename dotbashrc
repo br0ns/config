@@ -116,6 +116,8 @@ alias gdb='gdb -n -x ~/.gdbinit'
 alias mosml='rlwrap mosml'
 alias sml='rlwrap sml'
 alias emacs='emacs -nw'
+alias strings='strings -a'
+alias nasm='nasm -I $HOME/zomg_pwnies/tools/pwn/include/nasm/'
 function odl () { objdump -dMintel "$1" | less; }
 function oDl () { objdump -DMintel "$1" | less; }
 function hdl () { hexdump -C "$1" | less; }

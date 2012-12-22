@@ -54,3 +54,8 @@
 (global-set-key [(meta control left)]    'evil-numbers/dec-at-pt)
 (global-set-key (kbd "<f7>")             'clipboard-kill-ring-save)
 (global-set-key (kbd "<f8>")             'clipboard-yank)
+(global-set-key (kbd "C-<")              'decrease-indentation)
+(global-set-key (kbd "C->")              'increase-indentation)
+(global-set-key (kbd "C-<")              'decrease-left-margin)
+(global-set-key (kbd "C->")              'increase-left-margin)
+(global-set-key (kbd "C-S-d")            'kill-word)
