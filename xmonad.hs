@@ -130,6 +130,8 @@ myTopics =
   , "bitcoin"
     -- Misc
   , "background"
+  , "windows"
+  , "anon"
   ]
 
 myTerminal = "terminator"
@@ -144,7 +146,7 @@ myTopicConfig = TopicConfig
   { topicDirs = M.fromList []
   , topicActions =
        M.fromList $
-       [ ("im", safeSpawn myTerminal ["-x", "ssh", "fa.ntast.dk", "-t", "screen", "-dr", "irc"])
+       [ ("im", safeSpawn myTerminal ["-x", "ssh", "fantast", "-t", "screen", "-dr", "irc"])
        -- [ ("im", term)
        , ("web", browser "")
        , ("organise", appBrowser "http://gmail.com" >>

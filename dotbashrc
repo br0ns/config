@@ -83,6 +83,7 @@ fi
 alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CF'
+alias lla='ls -lA'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -102,22 +103,25 @@ fi
 
 PS1='\[\e[1;34m\]\w\[\e[m\]>\[\e[m\] '
 HISTFILESIZE=50000
+HISTSIZE=50000
+MANSECT=2:3:1:4:5:6:7:8:9
 
 function mkdircd () { mkdir -p "$@" && eval cd "\"\$$#\""; }
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-alias here='nautilus . &'
-alias flatten='find . -type f -name "*" -print0 | xargs -0 -I "{}" cp -v "{}" .'
 alias s='pushd'
 alias m='pushd .'
 alias p='popd'
 alias gdb='gdb -n -x ~/.gdbinit'
 alias mosml='rlwrap mosml'
 alias sml='rlwrap sml'
-alias emacs='emacs -nw'
 alias strings='strings -a'
-alias nasm='nasm -I $HOME/zomg_pwnies/tools/pwn/include/nasm/'
+alias nasm='nasm -I $HOME/pwnies/tools/pwn/include/nasm/'
+alias emacsnw='/usr/bin/emacs -nw'
+function emacs () {
+  /usr/bin/emacs </dev/null >/dev/null 2>/dev/null $@ &
+}
 function odl () { objdump -dMintel "$1" | less; }
 function oDl () { objdump -DMintel "$1" | less; }
 function hdl () { hexdump -C "$1" | less; }
@@ -134,3 +138,10 @@ m > /dev/null
 shopt -s cdspell
 shopt -s globstar
 source /usr/share/autojump/autojump.bash
+
+PATH=$HOME/.ghc/bin:$PATH
+PATH=$HOME/.cabal/bin:$PATH
+PATH=$HOME/pwnies/tools/bin:$PATH
+PATH=/opt/ida-6.2:$PATH
+
+export PYTHONPATH=$HOME/pwnies/tools/lib

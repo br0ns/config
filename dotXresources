@@ -1,2 +1,2 @@
-Emacs.Font: Liberation Mono-7
+emacs.font: Liberation Mono-7
 XTerm*bellIsUrgent: true

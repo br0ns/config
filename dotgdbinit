@@ -14,4 +14,4 @@ set output-radix 0x10
 
 # Start the binary
 #start
-display/10i $eip
+display/10i $pc

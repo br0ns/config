@@ -1,25 +1,31 @@
 Host fantast
   Hostname fa.ntast.dk
+  User mortenbp
 
 Host ask
   Hostname ask.diku.dk
+  User mortenbp
 
 Host brok
   Hostname brok.diku.dk
+  User mortenbp
 
 Host pcs
   Hostname pcs-adm.diku.dk
-  ProxyCommand ssh ask.diku.dk nc -w 1 %h %p
+  ProxyCommand ssh ask nc -w 1 %h %p
+  User mortenbp
 
 Host hades
   HostName hades.olympus.freaken.dk
   Port 2222
   CheckHostIP no
+  User mortenbp
 
 Host proxy-hades
   HostName hades.olympus.freaken.dk
   Port 2222
-  ProxyCommand ssh ask.diku.dk nc -w 1 %h %p
+  ProxyCommand ssh ask nc -w 1 %h %p
+  User mortenbp
 
 Host git.pwnies.dk
   Hostname cloud.pwnies.dk
@@ -30,22 +36,25 @@ Host git-proxy.pwnies.dk
   Hostname cloud.pwnies.dk
   User git
   Port 2225
-  ProxyCommand ssh ask.diku.dk nc -w 1 %h %p
+  ProxyCommand ssh ask nc -w 1 %h %p
 
 Host rain.pwnies.dk
   HostKeyAlias pwnies_rain
   Hostname 2.111.29.58
   Port 22
   CheckHostIP no
+  User mortenbp
 
 Host lightning.pwnies.dk
   HostKeyAlias pwnies_lightning
   Hostname 2.111.29.58
   Port 2222
   CheckHostIP no
+  User mortenbp
 
 Host thunder.pwnies.dk
   HostKeyAlias pwnies_thunder
   Hostname 2.111.29.58
   Port 2223
   CheckHostIP no
+  User mortenbp

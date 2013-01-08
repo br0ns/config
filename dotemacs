@@ -4,7 +4,7 @@
 ;; (setq debug-on-error t)
 
 ;; Set Emacs configuration directory (eg. where you keep your .el-files)
-(let ((default-directory "/home/mortenbp/.emacs.d/"))
+(let ((default-directory "/home/br0ns/.emacs.d/"))
 
 ;; Add these to path
 (load (expand-file-name "lisp/my-funs"))
