@@ -11,6 +11,7 @@ xrdb .Xresources
 mkdir -vp .ssh .xmonad .hindsight/conf
 ln -vs $PWD/config/dotsshslashconfig .ssh/config
 ln -vs $PWD/config/xmonad.hs .xmonad/xmonad.hs
+ln -vs $PWD/config/blink .xmonad/blink
 cp -v config/secret/id_rsa .ssh/
 cp -va config/secret/dotgnupg .gnupg
 cp -v config/secret/hindsight-key .hindsight/conf/key

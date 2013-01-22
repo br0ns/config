@@ -13,6 +13,8 @@
 (global-set-key (kbd "<XF86Back>")       'backward-word)
 (global-set-key (kbd "<XF86Forward>")    'forward-word)
 
+(global-set-key (kbd "C-c e")            'fc-eval-and-replace)
+
 (global-set-key (kbd "C--")              'text-scale-decrease)
 (global-set-key (kbd "C-+")              'text-scale-increase)
 

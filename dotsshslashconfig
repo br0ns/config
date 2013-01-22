@@ -27,34 +27,17 @@ Host proxy-hades
   ProxyCommand ssh ask nc -w 1 %h %p
   User mortenbp
 
-Host git.pwnies.dk
-  Hostname cloud.pwnies.dk
-  User git
-  Port 2225
+Host cloud.pwnies.dk
+   ProxyCommand none
+   ForwardAgent yes
 
-Host git-proxy.pwnies.dk
-  Hostname cloud.pwnies.dk
-  User git
-  Port 2225
-  ProxyCommand ssh ask nc -w 1 %h %p
+Host *.pwnies.dk
+   ProxyCommand ssh cloud.pwnies.dk nc -w 1 %h %p
+   ForwardAgent yes
 
 Host rain.pwnies.dk
-  HostKeyAlias pwnies_rain
-  Hostname 2.111.29.58
-  Port 22
-  CheckHostIP no
-  User mortenbp
-
-Host lightning.pwnies.dk
-  HostKeyAlias pwnies_lightning
-  Hostname 2.111.29.58
-  Port 2222
-  CheckHostIP no
-  User mortenbp
-
 Host thunder.pwnies.dk
-  HostKeyAlias pwnies_thunder
-  Hostname 2.111.29.58
-  Port 2223
-  CheckHostIP no
-  User mortenbp
+Host lightning.pwnies.dk
+
+Host git.pwnies.dk
+   User git
