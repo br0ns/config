@@ -1,10 +1,90 @@
-1. Install tor and privoxy
-2. Add these lines to rc.local:
-     /sbin/iptables-restore < PATH_TO_IPTABLES_RULES
-     sysctl -w net.ipv6.conf.all.disable_ipv6=1
-3. Copy iptables rules (iptables-tor-only) to chosen location
-4. Configure browser to use privoxy as HTTP proxy and tor as SOCKS proxy
-5. Add these lines to .ssh/config:
+          HOW TO BE ANONYMOUS OUT THERE ON THE INTERWEBZ
+
+      ** COMPLETE ALL STEPS BEFORE CONNECTING TO INTERNET **
+
+== Preface
+   This document will walk you through setting up a system that you can use
+   anonymously.  I'm assuming you will be using Ubuntu Linux for the physical
+   machine and VirtualBox for virtualization.  In particular virtual machines
+   have IP's in 192.168.56.0/24 and the host has an interface named vboxnet0
+   with IP 192.168.56.1.
+
+== Hardware
+   Do I even have to tell you to cover you camera and cut the wire to your
+   microphone?  Alternatively disable in BIOS.
+
+== Installing Ubuntu using full disk encryption
+   Comming...
+
+== Software
+   Download the .deb packages for privoxy and tor.  You can get privoxy from
+   Ubuntus package repository, and tor from torproject.org.  Don't use the
+   Ubuntus tor package!
+
+   Burn the packages to a CD and copy them to your secure machine.  Install both.
+
+== Configuration
+   Remember to change IP's and interfaces if you're using something else than
+   VirtualBox.
+
+ = privoxy (/etc/privoxy/config)
+   1. To handle requests from your virtual machines include
+        listen-address 0.0.0.0:8118
+      Don't worry about incoming connections as we will block those.
+   2. We need privoxy to forward traffic to the tor proxy.  Include
+        forward-socks5 / 127.0.0.1:9050
+
+ = tor (/etc/tor/torrc)
+   To get tor to accept conncetions from your virtual machines include
+     SocksPort 0.0.0.0:9050
+   This will make tor complain, but don't worry, we'll block incoming traffic.
+
+ = iptables
+   Save the following in a file somewhere (fx. /root/iptables.save):
+     *filter
+     :INPUT DROP
+     :OUTPUT DROP
+     :FORWARD DROP
+     -A INPUT  -m state --state ESTABLISHED,RELATED -j ACCEPT
+     -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+     -A INPUT  -i lo -j ACCEPT
+     -A OUTPUT -o lo -j ACCEPT
+     -A OUTPUT -m owner --uid-owner debian-tor -j ACCEPT
+     -A OUTPUT -o vboxnet0 -p tcp -j ACCEPT
+     -A INPUT -i vboxnet0 -p tcp --dport 9050 -j ACCEPT
+   Add the following lines to /etc/rc.local:
+     /sbin/iptables-restore < /root/iptables.save
+     sysctl -w net.ipv6.conf.all.disable_ipv6
+
+ = ssh (~/.ssh/config)
+   NB. You will need to install connect-proxy once your system is bootstrapped.
+   Add the following lines:
      Host *
        ProxyCommand /usr/bin/connect-proxy -S 127.0.0.1:9050 %h %p
-6. Don't do stupid things
+
+ = Proxy settings
+   In Ubuntu go to 'System Settings' and click on 'Network'.  Choose 'Network
+   proxy'.  Set 127.0.0.1:8118 as the HTTP proxy and 127.0.0.1:9050 as the SOCKS
+   proxy.  Click 'Apply system wide'.
+
+   Your browser might have it's own proxy settings.
+
+ = Virtual machines
+   Virtual machines should work out of the box, except their SOCKS proxy should
+   be 192.168.56.1:9050 and their HTTP proxy should be 192.168.56.1:8118.
+
+== That's it
+   Connect your machine to the internet and go to check.torproject.org to ensure
+   that you are secure.
+
+   Then update Ubuntu and install connect-proxy:
+     apt-get update && apt-get upgrade && apt-get install connect-proxy
+
+== Don't do stupid things
+   1. Don't use your usual username.
+   2. Don't use your usual password.
+   3. Don't check you e-mail/facebook/twitter/what-not.
+   4. Don't ever let personal data come in contact with the system.
+   5. Don't accumulate browser log.
+   6. Don't accumulate chat log.
+   ... probably lot's more - don't do stupid things.
