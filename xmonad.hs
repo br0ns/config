@@ -6,17 +6,28 @@
 -- Main inspiration:
 -- http://www.haskell.org/haskellwiki/Xmonad/Config_archive/Brent_Yorgey's_darcs_xmonad.hs
 
+-- Misc
 import XMonad
 import XMonad.StackSet as W
 import qualified Data.Map as M
 import Data.Maybe (isNothing, isJust, catMaybes)
 import Data.List (isPrefixOf, partition, (\\))
 import Control.Monad (liftM2, when)
+import System.Directory
+import System.Locale
+import System.Time
+import Data.Monoid(mempty, mappend, All(..))
+import Text.Regex.PCRE((=~))
 
 import XMonad.Config.Desktop (desktopConfig)
 
+----- Own packages
+import XMonad.Hooks.UrgencyExtra
+import XMonad.Layout.TopicExtra as TE
+import XMonad.Layout.WorkspaceDirAlt
+import XMonad.Util.ScratchpadExtra
+
 ----- Hooks
--- Transparent windows
 import XMonad.Hooks.FadeInactive (fadeIf, fadeOutLogHook)
 import XMonad.Hooks.ManageHelpers (doCenterFloat)
 import XMonad.Hooks.UrgencyHook (UrgencyHook (..),
@@ -29,7 +40,6 @@ import XMonad.Hooks.UrgencyHook (UrgencyHook (..),
 ----- Layout
 import qualified XMonad.Layout.Tabbed as Tabbed
 import XMonad.Layout.PerWorkspace (onWorkspace)
-import XMonad.Layout.WorkspaceDir (workspaceDir, changeDir)
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Simplest
 import XMonad.Layout.ResizableTile
@@ -39,7 +49,6 @@ import XMonad.Layout.ThreeColumns
 import XMonad.Actions.CycleWS
   (prevScreen, nextScreen, swapPrevScreen, swapNextScreen)
 import XMonad.Actions.GridSelect
--- For different kind of searches
 import XMonad.Actions.Submap (submap)
 import qualified XMonad.Actions.Search as Search
 import XMonad.Actions.WithAll (killAll)
@@ -52,12 +61,12 @@ import XMonad.Actions.CopyWindow
 
 ----- Prompt
 import XMonad.Prompt (defaultXPConfig, fgColor, bgColor, mkXPrompt, XPConfig)
+import XMonad.Prompt.Shell
 import XMonad.Prompt.Input (inputPrompt, (?+))
 import XMonad.Prompt.Workspace (Wor(Wor))
 
 
 ----- Util
--- "M-C-x" style keybindings
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom,
                                scratchpadManageHook,
@@ -65,9 +74,6 @@ import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom,
 import XMonad.Util.Run (safeSpawn)
 import XMonad.Util.NamedWindows (getName)
 
--- myLayout = ResizableTall 1 (3/100) (5/7) [] |||
---            ThreeColMid 1 (3/100) (4/7) |||
---            Tabbed.tabbedBottom Tabbed.CustomShrink myTabbedTheme
 myLayout = ResizableTall 1 (3/100) (5/7) [] |||
            Full
 
@@ -96,6 +102,12 @@ myManageHook =
   , className =? "Sonata"     --> doShift "multimedia"
   , className =? "Rhythmbox"  --> doShift "multimedia"
   , title     =? "Calculator" --> doCenterFloat
+  , className =? "VirtualBox"      --> do name <- title
+                                          case (name =~ "( \\(.*\\))?( \\[[^\\]]+\\])? - Oracle VM VirtualBox$") :: (String,String,String) of
+                                            (_,"",_) -> return mempty
+                                            (n,_,_)  -> do let ws = "vm-" ++ n
+                                                           liftX $ addHiddenWorkspace ws
+                                                           doShift ws
   ]
     where
       viewShift = doF . liftM2 (.) W.greedyView W.shift
@@ -185,37 +197,18 @@ myTopicConfig = TopicConfig
   }
 
 setWorkspaceDirs layout =
-  onWorkspace "pwnies"   (workspaceDir "~/pwnies"            layout) $
-  onWorkspace "download" (workspaceDir "~/downloads"         layout) $
-  onWorkspace "mylib"    (workspaceDir "~/code/sml/mylib"    layout) $
-  onWorkspace "preml"    (workspaceDir "~/code/sml/preml"    layout) $
-  onWorkspace "study"    (workspaceDir "~/study"             layout) $
-  onWorkspace "bitcoin"  (workspaceDir "~/code/python/mtgox" layout) $
-  onWorkspace "sml"      (workspaceDir "~/code/sml"          layout) $
-  onWorkspace "haskell"  (workspaceDir "~/code/haskell"      layout) $
-  onWorkspace "python"   (workspaceDir "~/code/python"       layout) $
-  onWorkspace "config"   (workspaceDir "~/config"            layout) $
-  workspaceDir "~"                                           layout
-
-isUnfocusedOnCurrentWS :: Query Bool
-isUnfocusedOnCurrentWS = do
-  w <- ask
-  ws <- liftX $ gets windowset
-  let thisWS = w `elem` W.index ws
-      unfocused = maybe True (w /=) $ W.peek ws
-  return $ thisWS && unfocused
-
-data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
-
-instance UrgencyHook LibNotifyUrgencyHook where
-  urgencyHook LibNotifyUrgencyHook w = do
-    name <- getName w
-    ws <- gets windowset
-    whenJust (W.findTag w ws) (flash name)
-      where flash name index =
-              if index == "im"
-              then spawn "~/.xmonad/blink"
-              else safeSpawn "notify-send" [index ++ ": " ++ show name]
+  set "pwnies"   "~/pwnies"            $
+  set "download" "~/downloads"         $
+  set "mylib"    "~/code/sml/mylib"    $
+  set "preml"    "~/code/sml/preml"    $
+  set "study"    "~/study"             $
+  set "bitcoin"  "~/code/python/mtgox" $
+  set "sml"      "~/code/sml"          $
+  set "haskell"  "~/code/haskell"      $
+  set "python"   "~/code/python"       $
+  set "config"   "~/config"            $
+  workspaceDir "~" layout
+  where set ws dir = onWorkspace ws (workspaceDir dir layout)
 
 br0nsConfig =
   withUrgencyHookC LibNotifyUrgencyHook urgencyConfig { remindWhen = Every 10 } $
@@ -231,9 +224,26 @@ br0nsConfig =
        , logHook = fadeOutLogHook $ fadeIf isUnfocusedOnCurrentWS 0.8
        , XMonad.workspaces = myTopics
        , terminal = myTerminal
+       , handleEventHook = myEventHook
        }
-       `removeKeysP` ["M-q"]
+       `removeKeysP` (["M-q"] ++ ["M-" ++ m ++ k | m <- ["", "S-"], k <- map show [1..9 :: Int]])
        `additionalKeysP` myKeys
+
+-- myEventHook event = do liftIO $ putStrLn $ show event
+--                        return (All True)
+
+myEventHook :: Event -> X All
+myEventHook = deleteUnimportant (=~ "^(scratchpad|vm)-") callback
+  -- where callback dead = withDir $ \tag dir ->
+  --         do liftIO $ putStrLn tag
+  --            liftIO $ putStrLn dir
+
+  where callback dead = withDir $ \tag dir ->
+                  when (tag `elem` dead && tag =~ "^scratchpad-" && dir =~ ('^' : myScratchpadDir)) $ io $ deleteIfEmpty dir
+        deleteIfEmpty dir = do contents <- getDirectoryContents dir
+                               liftIO $ putStrLn dir
+                               when (null $ contents \\ [".", ".."]) $ removeDirectory dir
+                            `catch` \(_e :: IOError) -> return ()
 
 main = do
   checkTopicConfig myTopics myTopicConfig
@@ -246,7 +256,7 @@ myKeys =
   , ("M-g", goToSelected myGSConfig)
   -- Workspace navigation
   , ("M-S-z", shiftToSelectedWS True myGSConfig)
-  , ("M-z", goToSelectedWS True myGSConfig)
+  , ("M-z", goToSelectedWS  myTopicConfig True myGSConfig)
   -- Screen navigation
   , ("M-<Left>", prevScreen)
   , ("M-<Right>", nextScreen)
@@ -261,7 +271,11 @@ myKeys =
   , ("M-m", addWorkspaceMoveWindowPrompt myXPConfig)
   , ("M-<Backspace>", killAll >> myRemoveWorkspace)
   , ("M-r", renameWorkspace myXPConfig)
-  , ("M-s", newScratchpad)
+  , ("M-s", do dir <- liftIO $ formatCalendarTime defaultTimeLocale (myScratchpadDir ++ "/%Y-%m-%d-%H:%M:%S")  `fmap` (getClockTime >>= toCalendarTime)
+               liftIO $ createDirectory dir
+               newScratchpad
+               changeDir_ dir
+               term)
   -- Search
   , ("M-'", submap . mySearchMap $ myPromptSearch)
   , ("M-C-'", submap . mySearchMap $ mySelectSearch)
@@ -271,6 +285,10 @@ myKeys =
   , ("M-S-g", toggleGlobal)
   -- Focus urgent
   , ("M-C-<Space>", focusUrgent)
+  -- Notifications
+  , ("M-8", spawn "notify-send -t 4000 Network \"$(ip -4 -o addr show | cut -d' ' -f2,7)\" --icon=dialog-information")
+  , ("M-9", spawn "notify-send -t 2000 Battery \"$(acpi)\" --icon=dialog-information")
+  , ("M-0", spawn "notify-send -t 1500 Date \"$(date)\" --icon=dialog-information")
   ]
 
 -- from XMonad.Actions.Search
@@ -300,9 +318,6 @@ myPromptSearch (Search.SearchEngine _ site)
 -- Select search: do a search based on the X selection
 mySelectSearch eng = Search.selectSearchBrowser myBrowser eng
 
--- Switch to the "web" workspace
-viewWeb = windows (W.view "web")
-
 -- Remove workspace unless it's a topic
 myRemoveWorkspace :: X ()
 myRemoveWorkspace = do
@@ -311,56 +326,15 @@ myRemoveWorkspace = do
     StackSet {current = W.Screen { workspace = Workspace { tag = this } } } ->
       when (this `notElem`myTopics) removeWorkspace
 
-addWorkspaceMoveWindow :: String -> X ()
-addWorkspaceMoveWindow newtag =
-  do addHiddenWorkspace newtag
-     windows (W.greedyView newtag . W.shift newtag)
-
--- | Prompt for the name of a new workspace, add it if it does not
---   already exist, and switch to it.
-addWorkspaceMoveWindowPrompt :: XPConfig -> X ()
-addWorkspaceMoveWindowPrompt conf =
-  mkXPrompt (Wor "New workspace name: ") conf (const (return [])) addWorkspaceMoveWindow
-
--- Create a new workspace named "scratchpadX"
-newScratchpad :: X ()
-newScratchpad = withWindowSet $ \w -> do
-  let wss = W.workspaces w
-      cws = map W.tag $ Prelude.filter
-            (\ws -> "scratchpad" `isPrefixOf`
-                    W.tag ws && isJust (W.stack ws)) wss
-      num = head $ [0..] \\
-            catMaybes (map (readMaybe . drop (length "scratchpad")) cws)
-      new = "scratchpad" ++ show num
-  when (new `notElem` (map W.tag wss)) $ addWorkspace new
-  windows $ W.view new
- where readMaybe s = case reads s of
-                       [(r,_)] -> Just r
-                       _       -> Nothing
-
--- Toggle 'global' windows
-toggleGlobal = do
-  ws <- wsContainingCopies
-  if (null ws)
-    then windows copyToAll
-    else killAllOtherCopies
-
--- Nizzle colours
+myXPConfig :: XPConfig
 myXPConfig = defaultXPConfig
   { fgColor = "#a8a3f7"
   -- , bgColor = "#ff3c6d"}
-  , bgColor = "#3f3c6d"}
+  , bgColor = "#3f3c6d"
+  }
 
------ Extension on GridSelect
+myGSConfig :: HasColorizer a => GSConfig a
 myGSConfig = defaultGSConfig {gs_navigate = navNSearch}
-goToSelectedWS :: Bool -> GSConfig WindowSpace -> X ()
-goToSelectedWS =
-  withSelectedWS $ switchTopic myTopicConfig . W.tag
-  -- withSelectedWS $ windows . W.greedyView . W.tag
-
-shiftToSelectedWS :: Bool -> GSConfig WindowSpace -> X ()
-shiftToSelectedWS =
-  withSelectedWS $ windows . (\ws -> W.greedyView ws . W.shift ws) . W.tag
 
 withSelectedWS :: (WindowSpace -> X ()) -> Bool -> GSConfig WindowSpace -> X ()
 withSelectedWS callback inclEmpty conf = do
@@ -383,8 +357,8 @@ gridselectWS inclEmpty conf =
         ids = map W.tag wss
     gridselect conf $ zip ids wss
 
-nonEmptyWS :: WindowSpace -> Bool
-nonEmptyWS = (/= Nothing) . W.stack
+myScratchpadDir :: String
+myScratchpadDir = "/home/br0ns/scratchpads"
 
 instance HasColorizer WindowSpace where
   defaultColorizer ws isFg =
