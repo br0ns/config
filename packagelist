@@ -1,3 +1,4 @@
+acpi
 apache2
 apcalc
 arc
@@ -26,6 +27,7 @@ figlet
 foremost
 fuse
 gcc-multilib
+gconf-editor
 gimp
 git
 gnome-do
