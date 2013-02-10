@@ -52,6 +52,7 @@
      -A OUTPUT -m owner --uid-owner debian-tor -j ACCEPT
      -A OUTPUT -o vboxnet0 -p tcp -j ACCEPT
      -A INPUT -i vboxnet0 -p tcp --dport 9050 -j ACCEPT
+     -A INPUT -p udp --dport 67:68 --sport 67:68 -j ACCEPT
    Add the following lines to /etc/rc.local:
      /sbin/iptables-restore < /root/iptables.save
      sysctl -w net.ipv6.conf.all.disable_ipv6
