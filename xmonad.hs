@@ -229,21 +229,15 @@ br0nsConfig =
        `removeKeysP` (["M-q"] ++ ["M-" ++ m ++ k | m <- ["", "S-"], k <- map show [1..9 :: Int]])
        `additionalKeysP` myKeys
 
--- myEventHook event = do liftIO $ putStrLn $ show event
---                        return (All True)
-
 myEventHook :: Event -> X All
 myEventHook = deleteUnimportant (=~ "^(scratchpad|vm)-") callback
-  -- where callback dead = withDir $ \tag dir ->
-  --         do liftIO $ putStrLn tag
-  --            liftIO $ putStrLn dir
-
   where callback dead = withDir $ \tag dir ->
                   when (tag `elem` dead && tag =~ "^scratchpad-" && dir =~ ('^' : myScratchpadDir)) $ io $ deleteIfEmpty dir
-        deleteIfEmpty dir = do contents <- getDirectoryContents dir
-                               liftIO $ putStrLn dir
-                               when (null $ contents \\ [".", ".."]) $ removeDirectory dir
-                            `catch` \(_e :: IOError) -> return ()
+
+deleteIfEmpty dir = do contents <- getDirectoryContents dir
+                       liftIO $ putStrLn dir
+                       when (null $ contents \\ [".", ".."]) $ removeDirectory dir
+                    `catch` \(_e :: IOError) -> return ()
 
 main = do
   checkTopicConfig myTopics myTopicConfig
@@ -323,8 +317,9 @@ myRemoveWorkspace :: X ()
 myRemoveWorkspace = do
   s <- gets windowset
   case s of
-    StackSet {current = W.Screen { workspace = Workspace { tag = this } } } ->
-      when (this `notElem`myTopics) removeWorkspace
+    StackSet {current = W.Screen { workspace = Workspace { tag = this } } } -> do
+      withDir $ \tag dir -> when (tag == this && tag =~ "^scratchpad-" && dir =~ ('^' : myScratchpadDir)) $ io $ deleteIfEmpty dir
+      when (this `notElem` myTopics) removeWorkspace
 
 myXPConfig :: XPConfig
 myXPConfig = defaultXPConfig
