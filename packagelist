@@ -49,6 +49,7 @@ libdistorm64-dev
 libgmp3c2
 libmysqlclient-dev
 libnacl-dev
+libpcre3-dev
 libsnappy-dev
 libssl-dev
 libx11-dev
