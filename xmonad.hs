@@ -118,6 +118,7 @@ myTopics =
   , "emacs"
   , "xmonad"
   , "install"
+  , "config"
     -- Coding
   , "sml"
   , "haskell"
@@ -146,7 +147,7 @@ myTopicConfig = TopicConfig
   { topicDirs = M.fromList []
   , topicActions =
        M.fromList $
-       [ ("im", safeSpawn myTerminal ["-x", "ssh", "fantast", "-t", "screen", "-dr", "irc"])
+       [ ("im", safeSpawn myTerminal ["-x", "ssh", "lolbox.pwnies.dk", "-t", "screen", "-dr", "irc"])
        -- [ ("im", term)
        , ("web", browser "")
        , ("organise", appBrowser "http://gmail.com" >>
@@ -158,7 +159,6 @@ myTopicConfig = TopicConfig
                              \xkcd.com \
                              \smbc-comics.com \
                              \phdcomics.com/comics.php")
-       -- , ("idapro", spawn "idaq")
        , ("virtualbox", spawn "virtualbox")
        , ("reading", spawn "evince")
        , ("emacs", edit "~/.emacs.d/config/bindings.el")
@@ -177,26 +177,24 @@ myTopicConfig = TopicConfig
        , ("haskell", newBrowser "www.haskell.org/hoogle/")
        , ("inkscape", spawn "inkscape")
        , ("gimp", spawn "gimp")
+       , ("config", edit "~/config/install.sh ~/config/packagelist")
        ]
-  -- , defaultTopicAction = const $ term
   , defaultTopicAction = const $ return ()
   , defaultTopic = "web"
   , maxTopicHistory = 10
   }
 
 setWorkspaceDirs layout =
-  onWorkspace "organise" (workspaceDir "~/notes"             layout) $
-  onWorkspace "pwnies"   (workspaceDir "~/zomg-pwnies"       layout) $
+  onWorkspace "pwnies"   (workspaceDir "~/pwnies"            layout) $
   onWorkspace "download" (workspaceDir "~/downloads"         layout) $
   onWorkspace "mylib"    (workspaceDir "~/code/sml/mylib"    layout) $
   onWorkspace "preml"    (workspaceDir "~/code/sml/preml"    layout) $
   onWorkspace "study"    (workspaceDir "~/study"             layout) $
-  onWorkspace "iptest"   (workspaceDir "~/study/ip2011/test" layout) $
   onWorkspace "bitcoin"  (workspaceDir "~/code/python/mtgox" layout) $
   onWorkspace "sml"      (workspaceDir "~/code/sml"          layout) $
   onWorkspace "haskell"  (workspaceDir "~/code/haskell"      layout) $
   onWorkspace "python"   (workspaceDir "~/code/python"       layout) $
-  onWorkspace "ip"       (workspaceDir "~/study/ip2011"      layout) $
+  onWorkspace "config"   (workspaceDir "~/config"            layout) $
   workspaceDir "~"                                           layout
 
 isUnfocusedOnCurrentWS :: Query Bool
