@@ -11,15 +11,16 @@ sudo apt-get install $(cat $CONF/packagelist)
 rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh .hindsight
 
 # install links
+mkdir -vp .ssh .xmonad .hindsight/conf .config/terminator
 ln -vs $CONF/dotbashrc .bashrc
 ln -vs $CONF/dotemacs .emacs
 ln -vs $CONF/dotemacs.d .emacs.d
 ln -vs $CONF/dotgdbinit .gdbinit
 ln -vs $CONF/dotXresources .Xresources
-mkdir -vp .ssh .xmonad .hindsight/conf
 ln -vs $CONF/dotsshslashconfig .ssh/config
 ln -vs $CONF/xmonad.hs .xmonad/xmonad.hs
 ln -vs $CONF/blink .xmonad/blink
+ln -vs $CONF/terminator.conf .config/terminator/config
 
 xrdb .Xresources
 
