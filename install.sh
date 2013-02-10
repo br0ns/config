@@ -34,4 +34,7 @@ cp -v $CONF/secret/hindsight-key .hindsight/conf/key
 sudo cp -rv $CONF/xmonad/usr /
 sudo ln -fsv $PWD/.cabal/bin/xmonad /usr/bin/xmonad
 
+# install hindsight
+cp -rv $CONF/hindsight-modules .hindsight/modules
+
 echo 'ALL DONE!'
