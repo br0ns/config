@@ -17,7 +17,7 @@ ln -vs $CONF/dotemacs .emacs
 ln -vs $CONF/dotemacs.d .emacs.d
 ln -vs $CONF/dotgdbinit .gdbinit
 ln -vs $CONF/dotXresources .Xresources
-ln -vs $CONF/dotsshslashconfig .ssh/config
+ln -vs $CONF/ssh.conf .ssh/config
 ln -vs $CONF/xmonad.hs .xmonad/xmonad.hs
 ln -vs $CONF/blink .xmonad/blink
 ln -vs $CONF/terminator.conf .config/terminator/config
