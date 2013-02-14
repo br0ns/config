@@ -179,7 +179,7 @@ alias strings='strings -a'
 alias nasm='nasm -I $HOME/pwnies/tools/pwn/include/nasm/'
 alias emacsnw='/usr/bin/emacs -nw'
 function emacs () {
-  /usr/bin/emacs </dev/null >/dev/null 2>/dev/null $@ &
+  /usr/bin/emacs -bg black -D $@ </dev/null >/dev/null 2>/dev/null &
 }
 function odl () { objdump -dMintel "$1" | less; }
 function oDl () { objdump -DMintel "$1" | less; }
