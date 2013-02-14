@@ -1,50 +1,34 @@
-;;;; Morten Brøns-Pedersens emacs initialization file (.emacs)
+;;;; br0ns' emacs configuration
 
-;; Enable a backtrace when errors occur
+;; Turn off mouse interface early in startup to avoid momentary display
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+;; Enable backtrace when errors occur
 ;; (setq debug-on-error t)
 
-;; Set Emacs configuration directory (eg. where you keep your .el-files)
-(let ((default-directory "/home/br0ns/.emacs.d/"))
-
-;; Add these to path
-(load (expand-file-name "lisp/my-funs"))
-(add-to-list 'load-path (expand-file-name "lisp/"))
+;; Add to load path
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
 
 ;; Load config
 (dolist (file
-         (list
-          "ido"
-          "javascript"
-          "latex"
-          "sml"
-          "matlab"
-          "backup"
-          "basic"
-          "bindings"
-          "bm"
-          "fix-pgup-pgdn"
-          "hippie-expand"
-          "match-beginning"
-          "org"
-          "colours"
-          )
-         )
-  (load (expand-file-name (concat "config/" file)))
+   (list
+    ;; general
+    "misc"
+    "lisp"
+    "bindings"
+    "ido"
+    "backup"
+    "bm"
+    ;; modes
+;;    "javascript"
+;;    "php"
+;;    "latex"
+;;    "sml"
+;;    "matlab"
+;;    "org"
+    )
+   )
+  (load (expand-file-name (concat "~/.emacs.d/conf/" file)))
   )
-)
-
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(TeX-view-program-selection (quote (((output-dvi style-pstricks) "dvips and gv") (output-dvi "xdvi") (output-pdf "Evince") (output-html "xdg-open"))))
- '(bm-annotate-on-create nil)
- '(bm-buffer-persistence t)
- '(bm-priority 10)
- '(haskell-program-name "ghci")
- '(org-log-done (quote time))
- '(reftex-fref-is-default t)
- '(safe-local-variable-values (quote ((TeX-master . t))))
- '(uniquify-buffer-name-style (quote post-forward) nil (uniquify))
- '(user-mail-address "f@ntast.dk"))

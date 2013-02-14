@@ -5,7 +5,7 @@
 ;; URL: http://github.com/cofi/evil-numbers
 ;; Git-Repository: git://github.com/cofi/evil-numbers.git
 ;; Created: 2011-09-02
-;; Version: 0.2
+;; Version: 0.3
 ;; Keywords: numbers increment decrement octal hex binary
 
 ;; This file is not part of GNU Emacs.
@@ -39,8 +39,8 @@
 
 ;; and bind, for example:
 
-;; (global-define-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
-;; (global-define-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
+;; (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
+;; (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
 ;; or only in evil's normal state:
 
@@ -103,13 +103,10 @@ hexadecimal 0[xX][0-9a-fA-F]+, e.g. 0xBEEF or 0Xcafe
 decimal: [0-9]+, e.g. 42 or 23"
   (or
    ;; numbers or format specifier in front
-   (and
-    (looking-back (rx (or (+? digit)
-                          (and "0" (or (and (in "bB") (*? (in "01")))
-                                       (and (in "oO") (*? (in "0-7")))
-                                       (and (in "xX") (*? (in digit "A-Fa-f"))))))))
-    ;; being on a specifier is handled in progn
-    (not (looking-at "[bBoOxX]")))
+   (looking-back (rx (or (+? digit)
+                        (and "0" (or (and (in "bB") (*? (in "01")))
+                                  (and (in "oO") (*? (in "0-7")))
+                                  (and (in "xX") (*? (in digit "A-Fa-f"))))))))
    ;; search for number in rest of line
    ;; match 0 of specifier or digit, being in a literal and after specifier is
    ;; handled above
