@@ -5,4 +5,5 @@ notes.org
 *.o
 *.hi
 *.elc
+*-old
 secret/*
