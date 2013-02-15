@@ -4,6 +4,13 @@ CONF=$(dirname $(readlink -f $0))
 
 cd $HOME
 
+# update
+sudo apt-get update
+
+# set blink suid
+sudo chown root. $CONF/blink
+sudo chmod u+s $CONF/blink
+
 # install packages
 sudo apt-get install $(cat $CONF/packagelist)
 
@@ -36,5 +43,20 @@ sudo ln -fsv $PWD/.cabal/bin/xmonad /usr/bin/xmonad
 
 # install hindsight
 cp -rv $CONF/hindsight-modules .hindsight/modules
+
+# update cabal
+cabal update
+cabal install cabal-install
+
+# install xmonad
+cd $HOME/code/xmonad
+git pull
+cabal install
+cd $HOME/code/XMonadContrib
+git pull
+cabal install
+cd $HOME
+# packages needed for my xmonad configuration
+cabal install regex-pcre
 
 echo 'ALL DONE!'

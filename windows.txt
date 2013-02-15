@@ -1,0 +1,21 @@
+Windows XP
+  == Updates
+   Service Pack 3
+   .Net framework
+  == Programs
+   Visual Studio 2008
+   Emacs
+   Python
+   IDA
+   Immunity
+   OllyDbg
+   Masm
+   MinGW
+   WinSCP
+   Putty
+   PE Explorer
+   Cygwin
+  == To find
+   Hex editor
+   .Net decompiler
+

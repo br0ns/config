@@ -240,6 +240,7 @@ deleteIfEmpty dir = do contents <- getDirectoryContents dir
                     `catch` \(_e :: IOError) -> return ()
 
 main = do
+  spawn "xcompmgr"
   checkTopicConfig myTopics myTopicConfig
   xmonad $ br0nsConfig
 
