@@ -4,9 +4,31 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        abbrev-prefix-mark
+        indent-new-comment-line
         kill-region-or-line
+        mc/unmark-previous-like-this
+        nav-backward-line
+        nav-forward-line
+        nav-next-line
+        nav-previous-line
+        toggle-quotes
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        describe-key-briefly
+        go-to-next-window
+        ido-find-file
+        isearch-abort
+        isearch-forward-regexp
+        mc/mark-all-in-region
+        mc/mark-next-like-this-skip
+        mc/mark-next-lines
+        mc/mark-previous-lines
+        mc/unmark-next-like-this
+        nav-backward-paragraph
+        smex
+        text-scale-increase
+        undo-tree-visualize
         ))
