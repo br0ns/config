@@ -1,5 +1,5 @@
 ;; Remember temporary-goal-column even when scrolling and jumping by paragraphs
-;; Line scrolling is handled by pager.el
+;; Line scrolling is handled by nav.el
 ;; TODO: get to work with track-eol.el
 
 (defvar nav-temporary-goal-column 0)
@@ -48,7 +48,7 @@
   (< (window-end) (buffer-end 1))
   )
 
-;; Borrowed from pager.el
+;; Borrowed from nav.el
 (defun nav-scroll-screen (lines)
   "Scroll screen LINES, but keep the cursors position on screen."
   (nav-update-goal-column)
@@ -157,7 +157,7 @@
   "Moves buffer half a page, without moving point"
   (interactive)
   (nav-update-goal-column)
-  (pager-scroll-screen (- (/ (window-height) 2)))
+  (nav-scroll-screen (- (/ (window-height) 2)))
   (nav-move-to-goal-column)
   )
 
@@ -165,7 +165,7 @@
   "Moves buffer half a page, without moving point"
   (interactive)
   (nav-update-goal-column)
-  (pager-scroll-screen (/ (window-height) 2))
+  (nav-scroll-screen (/ (window-height) 2))
   (nav-move-to-goal-column)
   )
 
@@ -173,7 +173,7 @@
   "Moves buffer a page, without moving point"
   (interactive)
   (nav-update-goal-column)
-  (pager-scroll-screen (- (window-height)))
+  (nav-scroll-screen (- (window-height)))
   (nav-move-to-goal-column)
   )
 
@@ -181,7 +181,7 @@
   "Moves buffer a page, without moving point"
   (interactive)
   (nav-update-goal-column)
-  (pager-scroll-screen (window-height))
+  (nav-scroll-screen (window-height))
   (nav-move-to-goal-column)
   )
 
