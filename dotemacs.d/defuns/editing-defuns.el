@@ -45,6 +45,18 @@
     )
   )
 
+(defun kill-region-or-line ()
+  "Kills region or line, if mark is not active"
+  (interactive)
+  (if mark-active
+      (kill-region (mark) (point))
+    (kill-region
+     (line-beginning-position)
+     (line-beginning-position 2)
+     )
+    )
+  )
+
 (defun kill-ring-save-region-or-line ()
   "Saves region or line, if mark is not active"
   (interactive)
