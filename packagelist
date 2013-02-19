@@ -6,6 +6,7 @@ arj
 auctex
 audacity
 autojump
+binutils-arm-linux-gnueabi
 binwalk
 build-essential
 chkrootkit
@@ -21,6 +22,7 @@ dtrx
 emacs
 emacs-goodies-el
 erlang
+execstack
 exif
 ffmpeg
 figlet
@@ -53,6 +55,7 @@ libmysqlclient-dev
 libnacl-dev
 libpcre3-dev
 libsnappy-dev
+libssl0.9.8
 libssl-dev
 libx11-dev
 libxft-dev
@@ -71,6 +74,7 @@ nmap
 ocaml
 octave
 openjdk-7-jre
+openssh-server
 openssl
 p7zip
 password-gorilla
@@ -84,6 +88,7 @@ python-paramiko
 python-setuptools
 python-sqlalchemy
 rkhunter
+rlwrap
 rzip
 scalpel
 screen

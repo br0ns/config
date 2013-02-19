@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ $UID -ne 0 ] ; then
+    sudo $0 $@
+fi
+
 CONF=$(dirname $(readlink -f $0))
 
 cd $HOME
@@ -7,12 +11,15 @@ cd $HOME
 # update
 sudo apt-get update
 
-# set blink suid
-sudo chown root. $CONF/blink
-sudo chmod u+s $CONF/blink
+# install source headers
+sudo apt-get install linux-headers-$(uname -r)
 
 # install packages
 sudo apt-get install $(cat $CONF/packagelist)
+
+# set blink suid
+sudo chown root. $CONF/blink
+sudo chmod u+s $CONF/blink
 
 # clean slate
 rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh .hindsight
@@ -20,7 +27,7 @@ rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh .hindsi
 # install links
 mkdir -vp .ssh .xmonad .hindsight/conf .config/terminator scratchpads downloads
 ln -vs $CONF/dotbashrc .bashrc
-ln -vs $CONF/dotemacs .emacs
+ln -vs $CONF/dotemacs.d/init.el .emacs
 ln -vs $CONF/dotemacs.d .emacs.d
 ln -vs $CONF/dotgdbinit .gdbinit
 ln -vs $CONF/dotXresources .Xresources
