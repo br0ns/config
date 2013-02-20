@@ -1,69 +1,95 @@
 #!/bin/bash
 
 if [ $UID -ne 0 ] ; then
-    sudo $0 $@
+    sudo $0 $UID $@
+    exit
 fi
+
+# at this point we're running through sudo
+# commands that should run as the user must be prefixed with $DO
+DO="sudo -u #$1"
 
 CONF=$(dirname $(readlink -f $0))
 
 cd $HOME
 
 # update
-sudo apt-get update
+yes | apt-get update
 
 # install source headers
-sudo apt-get install linux-headers-$(uname -r)
+yes | apt-get install linux-headers-$(uname -r)
 
 # install packages
-sudo apt-get install $(cat $CONF/packagelist)
-
-# set blink suid
-sudo chown root. $CONF/blink
-sudo chmod u+s $CONF/blink
+yes | apt-get install $(cat $CONF/packagelist)
 
 # clean slate
-rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh .hindsight
+$DO rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh \
+    .hindsight
 
 # install links
-mkdir -vp .ssh .xmonad .hindsight/conf .config/terminator scratchpads downloads
-ln -vs $CONF/dotbashrc .bashrc
-ln -vs $CONF/dotemacs.d/init.el .emacs
-ln -vs $CONF/dotemacs.d .emacs.d
-ln -vs $CONF/dotgdbinit .gdbinit
-ln -vs $CONF/dotXresources .Xresources
-ln -vs $CONF/ssh.conf .ssh/config
-ln -vs $CONF/xmonad.hs .xmonad/xmonad.hs
-ln -vs $CONF/blink .xmonad/blink
-ln -vs $CONF/terminator.conf .config/terminator/config
-ln -vs $CONF/xmonad-lib .xmonad/lib
+$DO mkdir -vp .ssh .xmonad .hindsight/conf .config/terminator scratchpads \
+    downloads bin code
+$DO ln -vsTf $CONF/dotbashrc .bashrc
+$DO ln -vsTf $CONF/dotemacs.d/init.el .emacs
+$DO ln -vsTf $CONF/dotemacs.d .emacs.d
+$DO ln -vsTf $CONF/dotgdbinit .gdbinit
+$DO ln -vsTf $CONF/dotXresources .Xresources
+$DO ln -vsTf $CONF/ssh.conf .ssh/config
+$DO ln -vsTf $CONF/xmonad.hs .xmonad/xmonad.hs
+$DO ln -vsTf $CONF/terminator.conf .config/terminator/config
+$DO ln -vsTf $CONF/xmonad-lib .xmonad/lib
 
-xrdb .Xresources
+$DO xrdb .Xresources
 
 # install secret stuff
-cp -v $CONF/secret/id_rsa .ssh/
-cp -va $CONF/secret/dotgnupg .gnupg
-cp -v $CONF/secret/hindsight-key .hindsight/conf/key
-
-# install xmonad
-sudo cp -rv $CONF/xmonad/usr /
-sudo ln -fsv $PWD/.cabal/bin/xmonad /usr/bin/xmonad
+$DO cp -v $CONF/secret/id_rsa .ssh/
+$DO cp -va $CONF/secret/dotgnupg .gnupg
+$DO cp -v $CONF/secret/hindsight-key .hindsight/conf/key
 
 # install hindsight
-cp -rv $CONF/hindsight-modules .hindsight/modules
+$DO cp -rv $CONF/hindsight-modules .hindsight/modules
 
 # update cabal
-cabal update
-cabal install cabal-install
+$DO cabal update
+$DO cabal install cabal-install
 
 # install xmonad
-cd $HOME/code/xmonad
-git pull
-cabal install
-cd $HOME/code/XMonadContrib
-git pull
-cabal install
+cp -rv $CONF/xmonad/usr /
+ln -fsv $PWD/.cabal/bin/xmonad /usr/bin/xmonad
+$DO git clone https://github.com/reenberg/xmonad.git code/xmonad 2>/dev/null
+cd code/xmonad
+$DO git pull
+$DO cabal install
 cd $HOME
+
+# install XMonadContrib
+$DO git clone https://github.com/reenberg/XMonadContrib.git code/XMonadContrib \
+    2>/dev/null
+cd code/XMonadContrib
+$DO git pull
+$DO cabal install
+cd $HOME
+
 # packages needed for my xmonad configuration
-cabal install regex-pcre
+$DO cabal install regex-pcre
+
+# install blink for irc notifications
+gcc $CONF/blink.c -o .xmonad/blink
+chmod u+s .xmonad/blink
+
+# install preml
+# ...
+
+# install shackl
+# ...
+
+# byte compile Emacs' files
+$DO emacs --batch --eval '(byte-recompile-directory "~/.emacs.d" 0)'
+
+# make sure all submodules are pulled
+cd $CONF
+$DO git submodule init
+$DO git submodule update
+cd $HOME
 
 echo 'ALL DONE!'
