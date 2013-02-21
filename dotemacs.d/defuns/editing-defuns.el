@@ -57,6 +57,20 @@
     )
   )
 
+(defun go-to-next-window ()
+ "Go to next window"
+ (interactive)
+ (other-window 1)
+ (set-title)
+ )
+
+(defun go-to-prev-window ()
+  "Go to previous window"
+  (interactive)
+  (other-window -1)
+  (set-title)
+  )
+
 (defun kill-ring-save-region-or-line ()
   "Saves region or line, if mark is not active"
   (interactive)
