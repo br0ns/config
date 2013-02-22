@@ -6,8 +6,9 @@
       '(
         abbrev-prefix-mark
         indent-new-comment-line
+        isearch-backward-regexp
+        isearch-exit
         kill-region-or-line
-        mc/unmark-previous-like-this
         nav-backward-line
         nav-forward-line
         nav-next-line
@@ -21,11 +22,15 @@
         go-to-next-window
         ido-find-file
         isearch-abort
-        isearch-forward-regexp
+        isearch-delete-char
+        isearch-other-control-char
+        isearch-printing-char
         mc/mark-all-in-region
         mc/mark-next-like-this-skip
         mc/mark-next-lines
         mc/mark-previous-lines
+        mc/skip-and-mark-next-like-this
+        mc/skip-and-mark-previous-like-this
         mc/unmark-next-like-this
         nav-backward-paragraph
         smex

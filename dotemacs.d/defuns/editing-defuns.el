@@ -1,12 +1,21 @@
 ;; Basic text editing defuns
 
+(defun mc/skip-and-mark-previous-like-this (arg)
+  (interactive "p")
+  (mc/mark-previous-like-this 0)
+  )
+
+(defun mc/skip-and-mark-next-like-this (arg)
+  (interactive "p")
+  (mc/mark-next-like-this 0)
+  )
+
 (defun yank-as-rectangle ()
   (interactive)
   (insert-rectangle
    (split-string (current-kill 0) "\n")
    )
   )
-
 
 (defun prettify ()
   "Untabify and delete trailing whitespace"
