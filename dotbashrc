@@ -105,10 +105,10 @@ if [ $? -eq 0 ]; then \
     echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
   if [ "$?" -eq "0" ]; then \
     # Clean repository - nothing to commit
-    echo $(__git_ps1 "${Green}%s${NC}"); \
+    echo $(__git_ps1 "\[${Green}\]%s\[${NC}\]"); \
   else \
     # Changes to working tree
-    echo $(__git_ps1 "${Red}%s${NC}"); \
+    echo $(__git_ps1 "\[${Red}\]%s\[${NC}\]"); \
   fi):"; \
 # not in a git repo
 else \
