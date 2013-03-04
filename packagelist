@@ -9,6 +9,7 @@ autojump
 binutils-arm-linux-gnueabi
 binwalk
 build-essential
+bzr
 chkrootkit
 chromium-browser
 cloc
@@ -47,6 +48,7 @@ ipython
 john
 lcab
 lib32gcc1
+libboost-all-dev
 libbsd-dev
 libc6-dev-i386
 libdistorm64-dev
@@ -63,12 +65,14 @@ libxml2-dev
 libxrandr-dev
 linux-source
 lzop
+mercurial
 mlton
 moreutils
 mplayer
 mysql-client
 mysql-server
 nasm
+netcat-traditional
 network-manager-openvpn-gnome
 nmap
 ocaml
@@ -81,12 +85,18 @@ password-gorilla
 php5
 php5-dev
 pngcheck
+privoxy
 python-crypto
+python-ctypeslib
+python-gmpy
 python-matplotlib
 python-mode
 python-paramiko
+python-pyparsing
 python-setuptools
 python-sqlalchemy
+python-twisted
+qemu
 rkhunter
 rlwrap
 rzip
@@ -96,6 +106,7 @@ sharutils
 sleuthkit
 sml-mode
 smlnj
+socat
 steghide
 subversion
 surf
@@ -106,8 +117,10 @@ texlive-full
 tmux
 tor
 unison
+upx-ucl
 vbindiff
 vim
+virtualbox-guest-additions-iso
 virtualbox-ose
 virtualbox-ose-dkms
 vlc
@@ -115,4 +128,3 @@ whois
 wine
 wireshark
 xcompmgr
-mercurial

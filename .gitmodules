@@ -19,9 +19,6 @@
 [submodule "dotemacs.d/site-lisp/ace-jump-mode"]
 	path = dotemacs.d/site-lisp/ace-jump-mode
 	url = https://github.com/winterTTr/ace-jump-mode.git
-[submodule "dotemacs.d/site-lisp/fold-this"]
-	path = dotemacs.d/site-lisp/fold-this
-	url = https://github.com/magnars/fold-this.el.git
 [submodule "dotemacs.d/site-lisp/smart-forward"]
 	path = dotemacs.d/site-lisp/smart-forward
 	url = https://github.com/magnars/smart-forward.el.git

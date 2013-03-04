@@ -7,10 +7,17 @@ fi
 
 # at this point we're running through sudo
 # commands that should run as the user must be prefixed with $DO
-DO="sudo -u \"$SUDO_USER\""
+DO="sudo -u $SUDO_USER"
 
 CONF=$(dirname $(readlink -f $0))
 
+# decrypt secret stuff
+$DO gpg secret.tar.gpg || exit
+
+# make sure all submodules are pulled
+cd $CONF
+$DO git submodule init
+$DO git submodule update
 cd $HOME
 
 # update
@@ -41,11 +48,6 @@ $DO ln -vsTf $CONF/terminator.conf .config/terminator/config
 $DO ln -vsTf $CONF/xmonad-lib .xmonad/lib
 
 $DO xrdb .Xresources
-
-# install secret stuff
-$DO cp -v $CONF/secret/id_rsa .ssh/
-$DO cp -va $CONF/secret/dotgnupg .gnupg
-$DO cp -v $CONF/secret/hindsight-key .hindsight/conf/key
 
 # install hindsight
 $DO cp -rv $CONF/hindsight-modules .hindsight/modules
@@ -87,10 +89,15 @@ chmod u+s .xmonad/blink
 # byte compile Emacs' files
 $DO emacs --batch --eval '(byte-recompile-directory "~/.emacs.d" 0)'
 
-# make sure all submodules are pulled
-cd $CONF
-$DO git submodule init
-$DO git submodule update
-cd $HOME
+# make GDB work properly
+echo "kernel.yama.ptrace_scope = 0" > /etc/sysctl.d/10-ptrace.conf
+
+# install secret stuff
+$DO tar xfv secret.tar
+$DO rm secret.tar
+$DO cp -v $CONF/secret/id_rsa $HOME/.ssh/
+$DO ssh-keygen -f $HOME/.ssh/id_rsa -y > $HOME/.ssh/id_rsa.pub
+$DO cp -va $CONF/secret/dotgnupg $HOME/.gnupg
+$DO cp -v $CONF/secret/hindsight-key $HOME/.hindsight/conf/key
 
 echo 'ALL DONE!'

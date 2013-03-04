@@ -102,6 +102,13 @@
 (setq auto-save-list-file-prefix
       (expand-file-name "auto-save-list/.saves-" emacs-file-dir))
 
+;; Set title when window configuration changes
+(defun set-title ()
+  (setq frame-title-format (buffer-name))
+  )
+(add-hook 'window-configuration-change-hook 'set-title)
+(add-hook 'after-init-hook 'set-title)
+
 ;; Per window point
 (require 'winpoint)
 (winpoint-mode t)
@@ -136,8 +143,10 @@
 ;; Fill rules
 (require 'filladapt)
 (setq-default filladapt-mode t)
-(setq-default auto-fill-function 'do-auto-fill)
-(setq comment-auto-fill-only-comments t)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+;; Default major mode
+(setq major-mode 'text-mode)
 
 ;; Show matching parenthisis
 (require 'mic-paren)
@@ -253,6 +262,10 @@
 ;; Make zooming affect frame instead of buffers
 (require 'zoom-frm)
 
+;; Load viper for the viper-(forward|backward)-word functions
+(setq viper-mode nil)
+(require 'viper)
+
 ;; "Workspaces" for Emacs
 (require 'perspective)
 ;; Enable perspective mode
@@ -273,9 +286,6 @@
 
 ;; Quickly jump in buffers with ace-jump
 (require 'ace-jump-mode)
-
-;; Fold regions
-(require 'fold-this)
 
 ;; Move current line or region
 (require 'move-text)

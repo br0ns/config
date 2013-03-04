@@ -1,18 +1,55 @@
-;; Remember temporary-goal-column even when scrolling and jumping by paragraphs
-;; Line scrolling is handled by nav.el
+;; Remember temporary-goal-column even when scrolling and jumping by blank-lines
 ;; TODO: get to work with track-eol.el
 
 (defvar nav-temporary-goal-column 0)
 
+;; (defun forward-blank-line ()
+;;   (interactive)
+;;   (let ((inhibit-changing-match-data t))
+;;     (skip-syntax-forward " >")
+;;     (unless (search-forward-regexp "^\\s *$" nil t)
+;;       (goto-char (point-max)))))
+
+;; (defun backward-blank-line ()
+;;   (interactive)
+;;   (let ((inhibit-changing-match-data t))
+;;     (skip-syntax-backward " >")
+;;     (unless (search-backward-regexp "^\\s *$" nil t)
+;;       (goto-char (point-min)))))
+
+(defun forward-blank-line (&optional arg)
+  "Move cursor forward to the beginning of next text block.
+A text block is separated by 2 empty lines (or line with just whitespace).
+In most major modes, this is similar to `forward-paragraph', but this command's behavior is the same regardless of syntax table."
+  (interactive)
+  (if (search-forward-regexp "\n[[:blank:]\n]*\n+" nil "NOERROR")
+      (progn (backward-char))
+    (progn (goto-char (point-max)) )
+    )
+  )
+
+(defun backward-blank-line (&optional arg)
+  "Move cursor backward to previous text block.
+See: `ergoemacs-forward-block'"
+  (interactive)
+  (if (search-backward-regexp "\n[\t\n ]*\n+" nil "NOERROR")
+      (progn
+        (skip-chars-backward "\n\t ")
+        (forward-char 1)
+        )
+    (progn (goto-char (point-min)) )
+    )
+  )
+
 (defun nav-update-goal-column ()
   "Update `nav-temporary-goal-column' if necessary."
   (unless (memq last-command
-                '(nav-scroll-forward-paragraph
-                  nav-scroll-backward-paragraph
+                '(nav-scroll-forward-blank-line
+                  nav-scroll-backward-blank-line
                   nav-scroll-forward-line
                   nav-scroll-backward-line
-                  nav-forward-paragraph
-                  nav-backward-paragraph
+                  nav-forward-blank-line
+                  nav-backward-blank-line
                   nav-forward-line
                   nav-backward-line
                   nav-page-down
@@ -60,15 +97,15 @@
   (nav-move-to-goal-column)
   )
 
-(defun nav-scroll-forward-paragraph (&optional arg)
-  "Scroll down ARG paragraphs keeping point fixed."
+(defun nav-scroll-forward-blank-line (&optional arg)
+  "Scroll down ARG blank-lines keeping point fixed."
   (interactive "p")
   (or arg (setq arg 1))
   (if (nav-can-scroll-down)
       (let ((saved-point (point)))
         (progn
           (nav-update-goal-column)
-          (forward-paragraph arg)
+          (forward-blank-line arg)
           (scroll-up (count-screen-lines saved-point (point)))
           (nav-move-to-goal-column)
           )
@@ -76,15 +113,15 @@
     )
   )
 
-(defun nav-scroll-backward-paragraph (&optional arg)
-  "Scroll down ARG paragraphs keeping point fixed."
+(defun nav-scroll-backward-blank-line (&optional arg)
+  "Scroll down ARG blank-lines keeping point fixed."
   (interactive "p")
   (or arg (setq arg 1))
   (if (nav-can-scroll-up)
       (let ((saved-point (point)))
         (progn
           (nav-update-goal-column)
-          (backward-paragraph arg)
+          (backward-blank-line arg)
           (condition-case nil
               (scroll-down (count-screen-lines (point) saved-point))
             (beginning-of-buffer (goto-char (point)))
@@ -137,19 +174,19 @@
   (nav-move-to-goal-column)
   )
 
-(defun nav-backward-paragraph (&optional arg)
+(defun nav-backward-blank-line (&optional arg)
   (interactive "p")
   (or arg (setq arg 1))
   (nav-update-goal-column)
-  (backward-paragraph arg)
+  (backward-blank-line arg)
   (nav-move-to-goal-column)
   )
 
-(defun nav-forward-paragraph (&optional arg)
+(defun nav-forward-blank-line (&optional arg)
   (interactive "p")
   (or arg (setq arg 1))
   (nav-update-goal-column)
-  (forward-paragraph arg)
+  (forward-blank-line arg)
   (nav-move-to-goal-column)
   )
 

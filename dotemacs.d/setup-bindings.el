@@ -40,12 +40,12 @@
 ;; Navigation
 (global-set-key (kbd "<up>")             'nav-backward-line)
 (global-set-key (kbd "<down>")           'nav-forward-line)
-(global-set-key (kbd "C-<up>")           'nav-backward-paragraph)
-(global-set-key (kbd "C-<down>")         'nav-forward-paragraph)
+(global-set-key (kbd "C-<up>")           'nav-backward-blank-line)
+(global-set-key (kbd "C-<down>")         'nav-forward-blank-line)
 (global-set-key (kbd "M-<up>")           'nav-scroll-backward-line)
 (global-set-key (kbd "M-<down>")         'nav-scroll-forward-line)
-(global-set-key (kbd "C-M-<down>")       'nav-scroll-forward-paragraph)
-(global-set-key (kbd "C-M-<up>")         'nav-scroll-backward-paragraph)
+(global-set-key (kbd "C-M-<down>")       'nav-scroll-forward-blank-line)
+(global-set-key (kbd "C-M-<up>")         'nav-scroll-backward-blank-line)
 (global-set-key (kbd "M-S-<up>")         'scroll-down-one)
 (global-set-key (kbd "M-S-<down>")       'scroll-up-one)
 (global-set-key (kbd "<prior>")          'nav-page-up)
@@ -57,6 +57,8 @@
 (global-set-key (kbd "C-}")              'forward-sexp)
 (global-set-key (kbd "M-{")              'smart-backward)
 (global-set-key (kbd "M-}")              'smart-forward)
+(global-set-key (kbd "M-<left>")         'viper-backward-word)
+(global-set-key (kbd "M-<right>")        'viper-forward-word)
 
 ;; "Free" combinations
 ;; M-[
@@ -140,8 +142,8 @@
 (global-set-key (kbd "<f7>")             'clipboard-kill-ring-save)
 (global-set-key (kbd "<f8>")             'clipboard-yank)
 ;; TODO: Indent current line if mark not active
-(global-set-key (kbd "C-<")              'decrease-left-margin)
-(global-set-key (kbd "C->")              'increase-left-margin)
+(global-set-key (kbd "C->")              'increase-indentation)
+(global-set-key (kbd "C-<")              'decrease-indentation)
 (global-set-key (kbd "C-S-d")            'kill-word)
 
 ;; bm.el

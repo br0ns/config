@@ -46,4 +46,3 @@
 (require 'setup-hippie)
 (require 'setup-bindings)
 (require 'setup-shell)
-

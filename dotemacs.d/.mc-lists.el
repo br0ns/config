@@ -9,10 +9,14 @@
         isearch-backward-regexp
         isearch-exit
         kill-region-or-line
+        kill-ring-save-region-or-line
         nav-backward-line
         nav-forward-line
         nav-next-line
         nav-previous-line
+        py-electric-backspace
+        py-electric-delete
+        py-newline-and-indent
         toggle-quotes
         ))
 
