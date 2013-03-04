@@ -12,7 +12,7 @@ DO="sudo -u $SUDO_USER"
 CONF=$(dirname $(readlink -f $0))
 
 # decrypt secret stuff
-$DO gpg secret.tar.gpg || exit
+$DO gpg $CONF/secret.tar.gpg || exit
 
 # make sure all submodules are pulled
 cd $CONF
@@ -93,11 +93,13 @@ $DO emacs --batch --eval '(byte-recompile-directory "~/.emacs.d" 0)'
 echo "kernel.yama.ptrace_scope = 0" > /etc/sysctl.d/10-ptrace.conf
 
 # install secret stuff
+cd $CONF
 $DO tar xfv secret.tar
 $DO rm secret.tar
-$DO cp -v $CONF/secret/id_rsa $HOME/.ssh/
+$DO cp -v secret/id_rsa $HOME/.ssh/
 $DO ssh-keygen -f $HOME/.ssh/id_rsa -y > $HOME/.ssh/id_rsa.pub
-$DO cp -va $CONF/secret/dotgnupg $HOME/.gnupg
-$DO cp -v $CONF/secret/hindsight-key $HOME/.hindsight/conf/key
+$DO cp -va secret/dotgnupg $HOME/.gnupg
+$DO cp -v secret/hindsight-key $HOME/.hindsight/conf/key
+cd $HOME
 
 echo 'ALL DONE!'
