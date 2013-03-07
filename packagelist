@@ -29,10 +29,12 @@ ffmpeg
 figlet
 foremost
 fuse
+g++
 gcc-multilib
 gconf-editor
 gimp
 git
+g++-multilib
 gnome-do
 gnome-session-fallback
 gnome-tweak-tool
@@ -57,6 +59,7 @@ libmysqlclient-dev
 libnacl-dev
 libpcre3-dev
 libsnappy-dev
+libsqlite3-dev
 libssl0.9.8
 libssl-dev
 libx11-dev
