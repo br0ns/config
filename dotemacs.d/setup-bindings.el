@@ -193,6 +193,7 @@
 
 ;; expand-region.el
 (global-set-key (kbd "C-'")              'er/expand-region)
+(global-set-key (kbd "C-M-'")            'er/contract-region)
 
 ;; perspective.el
 (define-key persp-mode-map (kbd "C-x p -") 'custom-persp-last)
