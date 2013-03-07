@@ -31,7 +31,6 @@
   (indent-region (point-min) (point-max) nil)
   )
 
-
 (defun increase-indentation ()
   "Increase identation of region if mark is active"
   (interactive)
@@ -40,6 +39,17 @@
         (indent-rigidly (region-beginning) (region-end) tab-width)
         )
     (indent-rigidly (line-beginning-position) (line-end-position) tab-width)
+    )
+  )
+
+(defun decrease-indentation ()
+  "Decrease identation of region if mark is active"
+  (interactive)
+  (if mark-active
+      (let ((deactivate-mark nil))
+        (indent-rigidly (region-beginning) (region-end) (- tab-width))
+        )
+    (indent-rigidly (line-beginning-position) (line-end-position) (- tab-width))
     )
   )
 
