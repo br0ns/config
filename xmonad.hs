@@ -241,6 +241,7 @@ deleteIfEmpty dir = do contents <- getDirectoryContents dir
 
 main = do
   spawn "xcompmgr"
+  liftIO $ createDirectory myScratchpadDir
   checkTopicConfig myTopics myTopicConfig
   xmonad $ br0nsConfig
 
@@ -354,7 +355,7 @@ gridselectWS inclEmpty conf =
     gridselect conf $ zip ids wss
 
 myScratchpadDir :: String
-myScratchpadDir = "/home/br0ns/scratchpads"
+myScratchpadDir = "/tmp/scratchpads"
 
 instance HasColorizer WindowSpace where
   defaultColorizer ws isFg =
