@@ -99,6 +99,7 @@ python-pyparsing
 python-setuptools
 python-sqlalchemy
 python-twisted
+python-urwid
 qemu
 rkhunter
 rlwrap

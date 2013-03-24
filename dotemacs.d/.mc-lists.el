@@ -8,6 +8,8 @@
         indent-new-comment-line
         isearch-backward-regexp
         isearch-exit
+        isearch-forward-regexp
+        isearch-repeat-backward
         kill-region-or-line
         kill-ring-save-region-or-line
         nav-backward-line
