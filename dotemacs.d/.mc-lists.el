@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
         abbrev-prefix-mark
+        find-tag
         increase-indentation
         indent-new-comment-line
         isearch-backward-regexp
