@@ -28,3 +28,6 @@
 [submodule "dotemacs.d/site-lisp/ido-ubiquitous"]
 	path = dotemacs.d/site-lisp/ido-ubiquitous
 	url = https://github.com/technomancy/ido-ubiquitous.git
+[submodule "dotemacs.d/site-lisp/phi-search"]
+	path = dotemacs.d/site-lisp/phi-search
+	url = git://github.com/zk-phi/phi-search.git
