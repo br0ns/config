@@ -111,6 +111,13 @@ $DO echo "\$(SML_LIB)/basis/basis.mlb" > .shackl
 $DO echo "$HOME/code/sml/mylib/MyLib.mlb" >> .shackl
 echo 'DONE!'
 
+# modify sml-mode to work with do-notation
+cd /usr/share/emacs23/site-lisp/sml-mode
+mv sml-defs.el sml-defs.el.bak
+cp $HOME/code/sml/preml/sml-defs.el .
+emacs --batch --eval '(byte-compile-file "sml-defs.el")'
+cd $HOME
+
 # byte compile Emacs' files
 $DO emacs --batch --eval '(byte-recompile-directory "~/.emacs.d" 0)'
 
