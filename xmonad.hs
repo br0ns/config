@@ -173,7 +173,7 @@ myTopicConfig = TopicConfig
                              \phdcomics.com/comics.php")
        , ("virtualbox", spawn "virtualbox")
        , ("reading", spawn "evince")
-       , ("emacs", edit "~/.emacs.d/config/bindings.el")
+       , ("emacs", edit "~/config/dotemacs.d/setup-bindings.el")
        , ("xmonad", edit "~/config/xmonad.hs" >>
                     newBrowser
                     "http://xmonad.org/xmonad-docs/xmonad-contrib/index.html")
