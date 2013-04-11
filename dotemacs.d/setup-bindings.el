@@ -127,8 +127,8 @@
 ;; Misc
 (global-set-key (kbd "M-SPC")            'hippie-expand)
 (global-set-key (kbd "C-q")              'comment-or-uncomment-region-or-line)
-(global-set-key (kbd "C-s")              'isearch-forward-regexp)
-(global-set-key (kbd "C-r")              'isearch-backward-regexp)
+(global-set-key (kbd "C-s")              'phi-search)
+;; (global-set-key (kbd "M-%")              'phi-replace)
 (global-set-key (kbd "C-w")              'kill-region-or-line)
 (global-set-key (kbd "M-w")              'kill-ring-save-region-or-line)
 (global-set-key (kbd "C-z")              'ido-switch-buffer)

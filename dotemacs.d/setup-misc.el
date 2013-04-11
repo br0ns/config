@@ -165,6 +165,12 @@
   "Use with isearch hook to end search at first char of match."
   (when isearch-forward (goto-char isearch-other-end)))
 
+;; Phi-search
+(require 'phi-search)
+
+;; Phi-replace
+(require 'phi-replace)
+
 ;; Multiple cursers
 (require 'multiple-cursors)
 (add-hook 'before-save-hook 'mc/keyboard-quit)
