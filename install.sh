@@ -80,11 +80,36 @@ $DO cabal install regex-pcre
 gcc $CONF/blink.c -o .xmonad/blink
 chmod u+s .xmonad/blink
 
+# install SML dev env
+# install mylib
+echo 'Installing MyLib...'
+$DO git clone git@github.com:mortenbp/mylib.git code/sml/mylib 2>/dev/null
+cd code/sml/mylib
+$DO git pull origin master
+cd $HOME
+echo 'DONE!'
+
 # install preml
-# ...
+echo 'Installing Preml...'
+$DO git clone git@github.com:mortenbp/PreML.git code/sml/preml 2>/dev/null
+cd code/sml/preml
+$DO git pull origin master
+$DO make
+make install
+cd $HOME
+echo 'DONE!'
 
 # install shackl
-# ...
+echo 'Installing Shackl...'
+$DO git clone git@github.com:mortenbp/shackl.git code/sml/shackl 2>/dev/null
+cd code/sml/shackl
+$DO git pull origin master
+$DO make
+make install
+cd $HOME
+$DO echo "\$(SML_LIB)/basis/basis.mlb" > .shackl
+$DO echo "$HOME/code/sml/mylib/MyLib.mlb" >> .shackl
+echo 'DONE!'
 
 # byte compile Emacs' files
 $DO emacs --batch --eval '(byte-recompile-directory "~/.emacs.d" 0)'
