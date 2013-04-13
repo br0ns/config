@@ -84,9 +84,9 @@
 (global-set-key (kbd "C-S-<down>")       'move-text-down)
 
 ;; Clever newlines
-(global-set-key (kbd "<C-return>")       'open-line-below)
+(global-set-key (kbd "<S-return>")       'open-line-below)
 (global-set-key (kbd "<M-return>")       'open-line-above)
-(global-set-key (kbd "<C-S-return>")     'new-line-in-between)
+(global-set-key (kbd "<M-S-return>")     'new-line-in-between)
 
 ;; Replace sexp by result of evaluation
 (global-set-key (kbd "C-c C-e")          'fc-eval-and-replace)
