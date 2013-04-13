@@ -130,6 +130,7 @@ vim
 virtualbox-guest-additions-iso
 virtualbox-ose
 virtualbox-ose-dkms
+virtualbox-ose-fuse
 vlc
 whois
 wine
