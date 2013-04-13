@@ -107,8 +107,8 @@ $DO git pull origin master
 $DO make
 make install
 cd $HOME
-$DO echo "\$(SML_LIB)/basis/basis.mlb" > .shackl
-$DO echo "$HOME/code/sml/mylib/MyLib.mlb" >> .shackl
+$DO sh -c "echo \$\(SML_LIB\)/basis/basis.mlb > .shackl"
+$DO sh -c "echo $HOME/code/sml/mylib/MyLib.mlb >> .shackl"
 echo 'DONE!'
 
 # modify sml-mode to work with do-notation
