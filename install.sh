@@ -29,6 +29,9 @@ yes | apt-get install linux-headers-$(uname -r)
 # install packages
 yes | apt-get install $(cat $CONF/packagelist)
 
+# set default dns to google
+echo "prepend domain-name-servers 8.8.8.8;" >> /etc/dhcp/dhclient.conf
+
 # clean slate
 $DO rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh \
     .hindsight
