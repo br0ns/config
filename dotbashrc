@@ -203,5 +203,6 @@ PATH=$HOME/.ghc/bin:$PATH
 PATH=$HOME/.cabal/bin:$PATH
 PATH=$HOME/pwnies/tools/bin:$PATH
 PATH=/opt/ida-6.4:$PATH
+PATH=/opt/opt/tor-browser_en-US/:$PATH
 PATH=$HOME/bin:$PATH
 export PYTHONPATH=$HOME/pwnies/tools/lib

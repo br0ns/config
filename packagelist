@@ -34,6 +34,7 @@ fuse
 g++
 gcc-multilib
 gconf-editor
+gdbserver
 gimp
 git
 g++-multilib
@@ -70,6 +71,7 @@ libx11-dev
 libxft-dev
 libxml2-dev
 libxrandr-dev
+libxslt1-dev
 linux-source
 lzop
 mercurial
@@ -108,6 +110,9 @@ python-urwid
 qemu
 rkhunter
 rlwrap
+ruby
+ruby-dev
+rubygems
 rzip
 scalpel
 screen
