@@ -40,8 +40,7 @@ $DO rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh \
     .hindsight
 
 # install links
-$DO mkdir -vp .ssh .xmonad .hindsight/conf .config/terminator scratchpads \
-    downloads bin code
+$DO mkdir -vp .ssh .xmonad .hindsight/conf downloads bin code
 $DO ln -vsTf $CONF/dotbashrc .bashrc
 $DO ln -vsTf $CONF/dotgitconfig .gitconfig
 $DO ln -vsTf $CONF/dotemacs.d/init.el .emacs
