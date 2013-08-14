@@ -52,7 +52,7 @@ $DO ln -vsTf $CONF/xmonad.hs .xmonad/xmonad.hs
 $DO ln -vsTf $CONF/urxvt .config/.urxvt
 $DO ln -vsTf $CONF/xmonad-lib .xmonad/lib
 
-$DO xrdb .Xresources
+$DO xrdb .Xdefaults
 
 # install hindsight
 $DO cp -rv $CONF/hindsight/modules .hindsight/modules
