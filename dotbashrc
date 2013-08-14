@@ -116,7 +116,7 @@ else \
 fi)'
 
 # Test user type:
-if [[ ${USER} == $(logname) ]]; then
+if [[ ${USER} == ${LOGNAME} ]]; then
     # Test connection type:
     if [ -n "${SSH_CONNECTION}" ]; then
         # Connected on remote machine, via ssh (good).
@@ -180,7 +180,7 @@ alias nasm='nasm -I $HOME/pwnies/tools/pwn/include/nasm/'
 alias hexdump='hexdump -Cv'
 alias emacsnw='/usr/bin/emacs -nw'
 function emacs () {
-  /usr/bin/emacs -bg black -D $@ </dev/null >/dev/null 2>/dev/null &
+  (/usr/bin/emacs -bg black -D $@ </dev/null >/dev/null 2>/dev/null &)
 }
 function odl () { objdump -dMintel "$1" | less; }
 function oDl () { objdump -DMintel "$1" | less; }
@@ -201,8 +201,8 @@ source /usr/share/autojump/autojump.bash
 # path
 PATH=$HOME/.ghc/bin:$PATH
 PATH=$HOME/.cabal/bin:$PATH
-PATH=$HOME/pwnies/tools/bin:$PATH
+PATH=$HOME/pwnies/pwntools/bin:$PATH
 PATH=/opt/ida-6.4:$PATH
-PATH=/opt/opt/tor-browser_en-US/:$PATH
+PATH=/opt/tor-browser_en-US/:$PATH
 PATH=$HOME/bin:$PATH
-export PYTHONPATH=$HOME/pwnies/tools/lib
+export PYTHONPATH=$HOME/pwnies/pwntools/lib

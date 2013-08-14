@@ -3,20 +3,6 @@
 
 (defvar nav-temporary-goal-column 0)
 
-;; (defun forward-blank-line ()
-;;   (interactive)
-;;   (let ((inhibit-changing-match-data t))
-;;     (skip-syntax-forward " >")
-;;     (unless (search-forward-regexp "^\\s *$" nil t)
-;;       (goto-char (point-max)))))
-
-;; (defun backward-blank-line ()
-;;   (interactive)
-;;   (let ((inhibit-changing-match-data t))
-;;     (skip-syntax-backward " >")
-;;     (unless (search-backward-regexp "^\\s *$" nil t)
-;;       (goto-char (point-min)))))
-
 (defun forward-blank-line (&optional arg)
   "Move cursor forward to the beginning of next text block.
 A text block is separated by 2 empty lines (or line with just whitespace).

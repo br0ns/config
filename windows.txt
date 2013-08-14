@@ -4,20 +4,15 @@ Windows XP
    .Net framework
   == Programs
    Visual Studio 2008
-   Emacs
    Python
-   IDA
-   Immunity
+   IDA Pro
+   Immunity Debugger
    OllyDbg
    Masm
-   MinGW
    WinSCP
    Putty
    PE Explorer
    Cygwin
-   procmon
-   python
-  == To find
-   Hex editor
-   .Net decompiler
-
+   Sysinternals Suite
+   Red Gate Reflector
+   010 Editor

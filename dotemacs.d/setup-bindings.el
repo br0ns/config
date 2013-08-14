@@ -57,8 +57,10 @@
 (global-set-key (kbd "C-}")              'forward-sexp)
 (global-set-key (kbd "M-{")              'smart-backward)
 (global-set-key (kbd "M-}")              'smart-forward)
-(global-set-key (kbd "M-<left>")         'viper-backward-word)
-(global-set-key (kbd "M-<right>")        'viper-forward-word)
+(global-set-key (kbd "C-<left>")         '(lambda()
+                                            (interactive)
+                                            (forward-same-syntax -1)))
+(global-set-key (kbd "C-<right>")        'forward-same-syntax)
 
 ;; "Free" combinations
 ;; M-[
@@ -127,10 +129,6 @@
 ;; Misc
 (global-set-key (kbd "M-SPC")            'hippie-expand)
 (global-set-key (kbd "C-q")              'comment-or-uncomment-region-or-line)
-(global-set-key (kbd "C-s")              'phi-search)
-;; (global-set-key (kbd "M-%")              'phi-replace)
-(global-set-key (kbd "C-w")              'kill-region-or-line)
-(global-set-key (kbd "M-w")              'kill-ring-save-region-or-line)
 (global-set-key (kbd "C-z")              'ido-switch-buffer)
 (global-set-key (kbd "M-d")              'duplicate-current-line-or-region)
 (global-set-key (kbd "C-S-a")            'align-all-strings)

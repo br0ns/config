@@ -147,7 +147,7 @@ myTopics =
   , "anon"
   ]
 
-myTerminal = "terminator"
+myTerminal = "urxvt"
 myBrowser = "chromium-browser"
 edit s = spawn ("emacs " ++ s)
 term = spawn myTerminal
@@ -166,9 +166,7 @@ myTopicConfig = TopicConfig
                       appBrowser "http://calendar.google.com")
        , ("multimedia", spawn "sonata")
        , ("procrastination", newBrowser
-                             "fitocracy.com \
-                             \facebook.com \
-                             \xkcd.com \
+                             "xkcd.com \
                              \smbc-comics.com \
                              \phdcomics.com/comics.php")
        , ("virtualbox", spawn "virtualbox")
@@ -182,7 +180,7 @@ myTopicConfig = TopicConfig
                    term)
        , ("preml", edit "~/code/sml/preml/notes.org" >>
                    term)
-       , ("treasure-hunt", edit "~/study/pcs12/treasure-hunt/chal" >>
+       , ("treasure-hunt", edit "~/pwnies/treasure-hunt/chal" >>
                            term)
        , ("hindsight", edit "~/code/hindsight/src/TODO.org" >>
                        term)
@@ -197,16 +195,17 @@ myTopicConfig = TopicConfig
   }
 
 setWorkspaceDirs layout =
-  set "pwnies"   "~/pwnies"            $
-  set "download" "~/downloads"         $
-  set "mylib"    "~/code/sml/mylib"    $
-  set "preml"    "~/code/sml/preml"    $
-  set "study"    "~/study"             $
-  set "bitcoin"  "~/code/python/mtgox" $
-  set "sml"      "~/code/sml"          $
-  set "haskell"  "~/code/haskell"      $
-  set "python"   "~/code/python"       $
-  set "config"   "~/config"            $
+  set "treasure-hunt"   "~/pwnies/treasure-hunt"            $
+  set "pwnies"          "~/pwnies"                          $
+  set "download"        "~/downloads"                       $
+  set "mylib"           "~/code/sml/mylib"                  $
+  set "preml"           "~/code/sml/preml"                  $
+  set "study"           "~/study"                           $
+  set "bitcoin"         "~/code/python/mtgox"               $
+  set "sml"             "~/code/sml"                        $
+  set "haskell"         "~/code/haskell"                    $
+  set "python"          "~/code/python"                     $
+  set "config"          "~/config"                          $
   workspaceDir "~" layout
   where set ws dir = onWorkspace ws (workspaceDir dir layout)
 
@@ -265,7 +264,7 @@ myKeys =
   , ("M-d", changeDir myXPConfig)
   , ("M-n", addWorkspacePrompt myXPConfig)
   , ("M-m", addWorkspaceMoveWindowPrompt myXPConfig)
-  , ("M-<Backspace>", killAll >> myRemoveWorkspace)
+  , ("M-C-S-<Backspace>", killAll >> myRemoveWorkspace)
   , ("M-r", renameWorkspace myXPConfig)
   , ("M-s", do dir <- liftIO $ formatCalendarTime defaultTimeLocale (myScratchpadDir ++ "/%Y-%m-%d-%H:%M:%S")  `fmap` (getClockTime >>= toCalendarTime)
                liftIO $ createDirectory dir
@@ -276,11 +275,12 @@ myKeys =
   , ("M-'", submap . mySearchMap $ myPromptSearch)
   , ("M-C-'", submap . mySearchMap $ mySelectSearch)
   -- Scratchpad
-  , ("M-S-<Space>", scratchpadSpawnActionCustom "gnome-terminal --disable-factory --name scratchpad")
+  , ("M-S-<Space>", scratchpadSpawnActionCustom "urxvt -name scratchpad")
+  , ("M-C-<Space>", scratchpadSpawnActionCustom "urxvt -name scratchpad -e ipython -c 'from pwn import *' --no-confirm-exit -i")
   -- Global window
   , ("M-S-g", toggleGlobal)
   -- Focus urgent
-  , ("M-C-<Space>", focusUrgent)
+  , ("M-u", focusUrgent)
   -- Notifications
   , ("M-8", spawn "notify-send -t 4000 Network \"$(ip -4 -o addr show | cut -d' ' -f2,7)\" --icon=dialog-information")
   , ("M-9", spawn "notify-send -t 2000 Battery \"$(acpi)\" --icon=dialog-information")

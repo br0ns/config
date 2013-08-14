@@ -1,0 +1,11 @@
+#!/bin/bash
+
+FOLDERS="chaos code config literature pwnies software study texmf vms"
+
+for f in $FOLDERS ; do
+  echo "=== Backing up $f ==="
+  hindsight snapshot $f ~/$f
+done
+
+echo "=== Sealing database ==="
+hindsight seal

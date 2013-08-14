@@ -58,16 +58,23 @@
 (defun move-text-internal (arg)
   (cond
    ((and mark-active transient-mark-mode)
-    (if (> (point) (mark))
-        (exchange-point-and-mark))
-    (let ((column (current-column))
-          (text (delete-and-extract-region (point) (mark))))
-      (forward-line arg)
-      (move-to-column column t)
-      (set-mark (point))
-      (insert text)
-      (exchange-point-and-mark)
-      (setq deactivate-mark nil)))
+    (let ((do-flip (> (point) (mark))))
+      (let ((column (current-column))
+            (text (delete-and-extract-region (point) (mark))))
+        (when do-flip
+          (exchange-point-and-mark)
+          )
+        (forward-line arg)
+        (move-to-column column t)
+        (set-mark (point))
+        (insert text)
+        (exchange-point-and-mark)
+        (setq deactivate-mark nil)
+        (when do-flip
+          (exchange-point-and-mark)
+          )
+        ))
+    )
    (t
     (let ((column (current-column)))
       (beginning-of-line)
@@ -76,7 +83,8 @@
         (when (or (< arg 0) (not (eobp)))
           (transpose-lines arg))
         (forward-line -1))
-      (move-to-column column t)))))
+      (move-to-column column t))))
+  )
 
 ;;;###autoload
 (defun move-text-down (arg)

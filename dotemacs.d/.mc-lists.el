@@ -5,13 +5,18 @@
       '(
         abbrev-prefix-mark
         c-electric-delete-forward
+        c-electric-paren
+        c-electric-semi&comma
         find-tag
+        forward-same-syntax
         increase-indentation
+        indent-for-tab-command
         indent-new-comment-line
         isearch-backward-regexp
         isearch-exit
         isearch-forward-regexp
         isearch-repeat-backward
+        kill-region
         kill-region-or-line
         kill-ring-save-region-or-line
         nav-backward-line

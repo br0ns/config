@@ -26,6 +26,9 @@ yes | apt-get update
 # install source headers
 yes | apt-get install linux-headers-$(uname -r)
 
+# remove libreoffice
+yes | apt-get remove 'libreoffice.*'
+
 # install packages
 yes | apt-get install $(cat $CONF/packagelist)
 
@@ -44,16 +47,19 @@ $DO ln -vsTf $CONF/dotgitconfig .gitconfig
 $DO ln -vsTf $CONF/dotemacs.d/init.el .emacs
 $DO ln -vsTf $CONF/dotemacs.d .emacs.d
 $DO ln -vsTf $CONF/dotgdbinit .gdbinit
-$DO ln -vsTf $CONF/dotXresources .Xresources
+$DO ln -vsTf $CONF/dotXdefaults .Xdefaults
 $DO ln -vsTf $CONF/ssh.conf .ssh/config
 $DO ln -vsTf $CONF/xmonad.hs .xmonad/xmonad.hs
-$DO ln -vsTf $CONF/terminator.conf .config/terminator/config
+$DO ln -vsTf $CONF/urxvt .config/.urxvt
 $DO ln -vsTf $CONF/xmonad-lib .xmonad/lib
 
 $DO xrdb .Xresources
 
 # install hindsight
-$DO cp -rv $CONF/hindsight-modules .hindsight/modules
+$DO cp -rv $CONF/hindsight/modules .hindsight/modules
+$DO ln -vsTf $CONF/hindsight/hindsight bin/hindsight
+$DO ln -vsTf $CONF/hindsight/hindsight-backup bin/hindsight-backup
+$DO ln -vsTf $CONF/hindsight/hindsight-mount bin/hindsight-mount
 
 # update cabal
 $DO cabal update

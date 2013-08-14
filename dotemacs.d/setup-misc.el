@@ -33,13 +33,6 @@
 ;; Allow pasting selection outside of Emacs
 (setq x-select-enable-clipboard t)
 
-;; Don't auto refresh buffers
-(global-auto-revert-mode nil)
-
-;; Also auto refresh dired, but be quiet about it
-(setq global-auto-revert-non-file-buffers t)
-(setq auto-revert-verbose nil)
-
 ;; Show keystrokes in progress
 (setq echo-keystrokes 0.1)
 
@@ -101,6 +94,11 @@
 ;; Keep autosave list here
 (setq auto-save-list-file-prefix
       (expand-file-name "auto-save-list/.saves-" emacs-file-dir))
+
+;; Save every n keystrokes
+(setq auto-save-interval 20)
+;; Save every n idle seconds
+(setq auto-save-timeout 10)
 
 ;; Set title when window configuration changes
 (defun set-title ()
@@ -165,12 +163,6 @@
   "Use with isearch hook to end search at first char of match."
   (when isearch-forward (goto-char isearch-other-end)))
 
-;; Phi-search
-(require 'phi-search)
-
-;; Phi-replace
-(require 'phi-replace)
-
 ;; Multiple cursers
 (require 'multiple-cursors)
 (add-hook 'before-save-hook 'mc/keyboard-quit)
@@ -189,9 +181,13 @@
 ;; Expand region
 (require 'expand-region)
 
+;; Thing at point
+(require 'thingatpt)
+
 ;; Save a list of recent files visited
 (recentf-mode 1)
-(setq recentf-max-saved-items 100) ;; just 20 is too recent
+ ;; just 20 is too recent
+(setq recentf-max-saved-items 100)
 
 ;; Undo/redo window configuration with C-c <left>/<right>
 (winner-mode 1)
@@ -268,9 +264,9 @@
 ;; Make zooming affect frame instead of buffers
 (require 'zoom-frm)
 
-;; Load viper for the viper-(forward|backward)-word functions
-(setq viper-mode nil)
-(require 'viper)
+;; Operate on current line if no region
+(require 'whole-line-or-region)
+(whole-line-or-region-mode)
 
 ;; "Workspaces" for Emacs
 (require 'perspective)
