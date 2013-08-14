@@ -26,6 +26,9 @@ import XMonad.Hooks.UrgencyExtra
 import XMonad.Layout.TopicExtra as TE
 import XMonad.Layout.WorkspaceDirAlt
 import XMonad.Util.ScratchpadExtra
+import XMonad.Util.ScratchpadAlt (scratchpadSpawnActionCustom,
+                                  scratchpadManageHook,
+                                  scratchpadFilterOutWorkspace)
 
 ----- Hooks
 import XMonad.Hooks.FadeInactive (fadeIf, fadeOutLogHook)
@@ -68,9 +71,6 @@ import XMonad.Prompt.Workspace (Wor(Wor))
 
 ----- Util
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
-import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom,
-                               scratchpadManageHook,
-                               scratchpadFilterOutWorkspace)
 import XMonad.Util.Run (safeSpawn)
 import XMonad.Util.NamedWindows (getName)
 
@@ -240,7 +240,7 @@ deleteIfEmpty dir = do contents <- getDirectoryContents dir
 
 main = do
   spawn "xcompmgr"
-  liftIO $ createDirectory myScratchpadDir
+--  liftIO $ createDirectory myScratchpadDir
   checkTopicConfig myTopics myTopicConfig
   xmonad $ br0nsConfig
 
@@ -275,8 +275,8 @@ myKeys =
   , ("M-'", submap . mySearchMap $ myPromptSearch)
   , ("M-C-'", submap . mySearchMap $ mySelectSearch)
   -- Scratchpad
-  , ("M-S-<Space>", scratchpadSpawnActionCustom "urxvt -name scratchpad")
-  , ("M-C-<Space>", scratchpadSpawnActionCustom "urxvt -name scratchpad -e ipython -c 'from pwn import *' --no-confirm-exit -i")
+  , ("M-S-<Space>", scratchpadSpawnActionCustom "term" "urxvt -name scratchpad-term")
+  , ("M-C-<Space>", scratchpadSpawnActionCustom "python" "urxvt -name scratchpad-python -e bash -c \"ipython -c 'from pwn import *' --no-confirm-exit -i\"")
   -- Global window
   , ("M-S-g", toggleGlobal)
   -- Focus urgent

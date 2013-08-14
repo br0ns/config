@@ -12,6 +12,7 @@ Xft.hintstyle:              hintslight
 
 emacs.font:                 Liberation Mono-7
 
+URxvt.geometry:             156x49
 URxvt.depth:                32
 URxvt.transparent:          false
 URxvt.fading:               0
