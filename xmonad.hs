@@ -240,7 +240,7 @@ deleteIfEmpty dir = do contents <- getDirectoryContents dir
 
 main = do
   spawn "xcompmgr"
---  liftIO $ createDirectory myScratchpadDir
+  liftIO $ createDirectory myScratchpadDir
   checkTopicConfig myTopics myTopicConfig
   xmonad $ br0nsConfig
 
