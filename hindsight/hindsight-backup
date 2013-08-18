@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FOLDERS="chaos code config literature pwnies software study texmf vms"
+FOLDERS="chaos code config literature pwnies study texmf"
 
 for f in $FOLDERS ; do
   echo "=== Backing up $f ==="
