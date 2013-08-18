@@ -7,6 +7,7 @@ auctex
 audacity
 autojump
 binwalk
+brasero
 build-essential
 bzr
 chkrootkit
@@ -30,6 +31,7 @@ extlinux
 ffmpeg
 figlet
 firmware-iwlwifi
+flashplugin-nonfree
 fonts-liberation
 foremost
 fuse
@@ -42,6 +44,8 @@ g++-multilib
 gnome-do
 golly
 gphoto2
+gtk2-engines-murrine
+gtk3-engines-unico
 haskell-mode
 haskell-platform
 hexedit
