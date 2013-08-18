@@ -153,6 +153,11 @@ ln -fsv $PWD/xfce4-suspend /usr/bin
 # make GDB work properly
 echo "kernel.yama.ptrace_scope = 0" > /etc/sysctl.d/10-ptrace.conf
 
+# install graybird gtk theme
+wget https://github.com/shimmerproject/Greybird/tarball/master -O theme
+tar xfv theme -C /usr/share/themes
+rm -vf theme
+
 # reload wireless kernel module
 modprobe -r iwlwifi ; modprobe iwlwifi
 
