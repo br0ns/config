@@ -18,7 +18,10 @@ $DO gpg $CONF/secret.tar.gpg || exit
 cd $CONF
 $DO git submodule init
 $DO git submodule update
-cd $HOME
+HOME="/home/$SUDO_USER"
+
+# add non-free repository
+grep non-free /etc/apt/sources.list >/dev/null || echo "deb http://http.debian.net/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
 
 # update
 yes | apt-get update
@@ -49,8 +52,9 @@ $DO ln -vsTf $CONF/dotgdbinit .gdbinit
 $DO ln -vsTf $CONF/dotXdefaults .Xdefaults
 $DO ln -vsTf $CONF/ssh.conf .ssh/config
 $DO ln -vsTf $CONF/xmonad.hs .xmonad/xmonad.hs
-$DO ln -vsTf $CONF/urxvt .config/.urxvt
+$DO ln -vsTf $CONF/urxvt .urxvt
 $DO ln -vsTf $CONF/xmonad-lib .xmonad/lib
+$DO ln -vsTf $CONF/dotxscreensaver .xscreensaver
 
 $DO xrdb .Xdefaults
 
@@ -60,18 +64,29 @@ $DO ln -vsTf $CONF/hindsight/hindsight bin/hindsight
 $DO ln -vsTf $CONF/hindsight/hindsight-backup bin/hindsight-backup
 $DO ln -vsTf $CONF/hindsight/hindsight-mount bin/hindsight-mount
 
+# install secret stuff
+cd $CONF
+$DO tar xfv secret.tar
+$DO rm secret.tar
+$DO cp -v secret/id_rsa $HOME/.ssh/
+$DO ssh-keygen -f $HOME/.ssh/id_rsa -y > $HOME/.ssh/id_rsa.pub
+$DO cp -va secret/dotgnupg $HOME/.gnupg
+$DO cp -v secret/hindsight-key $HOME/.hindsight/conf/key
+cd
+
 # update cabal
 $DO cabal update
 $DO cabal install cabal-install
 
 # install xmonad
-cp -rv $CONF/xmonad/usr /
+mkdir -p .config/autostart
+cp $CONF/xmonad.desktop .config/autostart
 ln -fsv $PWD/.cabal/bin/xmonad /usr/bin/xmonad
 $DO git clone https://github.com/reenberg/xmonad.git code/xmonad 2>/dev/null
 cd code/xmonad
 $DO git pull
 $DO cabal install
-cd $HOME
+cd
 
 # install XMonadContrib
 $DO git clone https://github.com/reenberg/XMonadContrib.git code/XMonadContrib \
@@ -79,7 +94,7 @@ $DO git clone https://github.com/reenberg/XMonadContrib.git code/XMonadContrib \
 cd code/XMonadContrib
 $DO git pull
 $DO cabal install
-cd $HOME
+cd
 
 # packages needed for my xmonad configuration
 $DO cabal install regex-pcre
@@ -91,10 +106,10 @@ chmod u+s .xmonad/blink
 # install SML dev env
 # install mylib
 echo 'Installing MyLib...'
-$DO git clone git@github.com:mortenbp/mylib.git code/sml/mylib 2>/dev/null
+$DO git clone git@github.com:mortenbp/mylib.git code/sml/mylib
 cd code/sml/mylib
 $DO git pull origin master
-cd $HOME
+cd
 echo 'DONE!'
 
 # install preml
@@ -104,7 +119,7 @@ cd code/sml/preml
 $DO git pull origin master
 $DO make
 make install
-cd $HOME
+cd
 echo 'DONE!'
 
 # install shackl
@@ -114,32 +129,31 @@ cd code/sml/shackl
 $DO git pull origin master
 $DO make
 make install
-cd $HOME
+cd
 $DO sh -c "echo \$\(SML_LIB\)/basis/basis.mlb > .shackl"
 $DO sh -c "echo $HOME/code/sml/mylib/MyLib.mlb >> .shackl"
 echo 'DONE!'
 
 # modify sml-mode to work with do-notation
 cd /usr/share/emacs23/site-lisp/sml-mode
-mv sml-defs.el sml-defs.el.bak
-cp $HOME/code/sml/preml/sml-defs.el .
-emacs --batch --eval '(byte-compile-file "sml-defs.el")'
-cd $HOME
+# mv sml-defs.el sml-defs.el.bak
+# cp $HOME/code/sml/preml/sml-defs.el .
+# emacs --batch --eval '(byte-compile-file "sml-defs.el")'
+cd
 
 # byte compile Emacs' files
 $DO emacs --batch --eval '(byte-recompile-directory "~/.emacs.d" 0)'
 
+# configure slim
+cp $CONF/slim.conf /etc
+
+# "install" xfce4-suspend
+ln -fsv $PWD/xfce4-suspend /usr/bin
+
 # make GDB work properly
 echo "kernel.yama.ptrace_scope = 0" > /etc/sysctl.d/10-ptrace.conf
 
-# install secret stuff
-cd $CONF
-$DO tar xfv secret.tar
-$DO rm secret.tar
-$DO cp -v secret/id_rsa $HOME/.ssh/
-$DO ssh-keygen -f $HOME/.ssh/id_rsa -y > $HOME/.ssh/id_rsa.pub
-$DO cp -va secret/dotgnupg $HOME/.gnupg
-$DO cp -v secret/hindsight-key $HOME/.hindsight/conf/key
-cd $HOME
+# reload wireless kernel module
+modprobe -r iwlwifi ; modprobe iwlwifi
 
 echo 'ALL DONE!'

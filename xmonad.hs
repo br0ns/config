@@ -12,7 +12,7 @@ import XMonad.StackSet as W
 import qualified Data.Map as M
 import Data.Maybe (isNothing, isJust, catMaybes)
 import Data.List (isPrefixOf, partition, (\\))
-import Control.Monad (liftM2, when)
+import Control.Monad (liftM2, when, unless)
 import System.Directory
 import System.Locale
 import System.Time
@@ -93,6 +93,7 @@ myTabbedTheme =
 
 myManageHook =
   [ className =? "Do"         --> doIgnore
+  , className =? "Xfce4-notifyd" --> doIgnore
   , className =? "Pidgin"     --> doShift "im"
   , className =? "XChat"      --> doShift "im"
   , className =? "Bitcoin"    --> doShift "bitcoin"
@@ -159,7 +160,7 @@ myTopicConfig = TopicConfig
   { topicDirs = M.fromList []
   , topicActions =
        M.fromList $
-       [ ("im", safeSpawn myTerminal ["-x", "ssh", "lolbox.pwnies.dk", "-t", "screen", "-dr", "irc"])
+       [ ("im", safeSpawn myTerminal ["-e", "ssh", "lolbox.pwnies.dk", "-t", "screen", "-dr", "irc"])
        -- [ ("im", term)
        , ("web", browser "")
        , ("organise", appBrowser "http://gmail.com" >>
@@ -239,8 +240,10 @@ deleteIfEmpty dir = do contents <- getDirectoryContents dir
                     `catch` \(_e :: IOError) -> return ()
 
 main = do
+  spawn "xset b off"
   spawn "xcompmgr"
-  liftIO $ createDirectory myScratchpadDir
+  liftIO $ do x <- doesDirectoryExist myScratchpadDir
+              unless x (createDirectory myScratchpadDir)
   checkTopicConfig myTopics myTopicConfig
   xmonad $ br0nsConfig
 
@@ -276,7 +279,7 @@ myKeys =
   , ("M-C-'", submap . mySearchMap $ mySelectSearch)
   -- Scratchpad
   , ("M-S-<Space>", scratchpadSpawnActionCustom "term" "urxvt -name scratchpad-term")
-  , ("M-C-<Space>", scratchpadSpawnActionCustom "python" "bash -c \"urxvt -name scratchpad-python -e ipython -c 'from pwn import *' --no-confirm-exit -i\"")
+  , ("M-C-<Space>", scratchpadSpawnActionCustom "python" "PYTHONPATH=/home/br0ns/pwnies/pwntools/ urxvt -name scratchpad-python -e ipython -c 'from pwn import *' --no-confirm-exit -i")
   -- Global window
   , ("M-S-g", toggleGlobal)
   -- Focus urgent
