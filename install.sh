@@ -24,16 +24,13 @@ HOME="/home/$SUDO_USER"
 grep non-free /etc/apt/sources.list >/dev/null || echo "deb http://http.debian.net/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
 
 # update
-yes | apt-get update
+apt-get -y update
 
 # install source headers
-yes | apt-get install linux-headers-$(uname -r)
-
-# remove libreoffice
-yes | apt-get remove 'libreoffice.*'
+apt-get -y install linux-headers-$(uname -r)
 
 # install packages
-yes | apt-get install $(cat $CONF/packagelist)
+apt-get -y install $(cat $CONF/packagelist) || exit
 
 # set default dns to google
 echo "prepend domain-name-servers 8.8.8.8;" >> /etc/dhcp/dhclient.conf
