@@ -18,7 +18,6 @@ curl
 darcs
 debootstrap
 deluge
-devede
 dietlibc-dev
 dtrx
 emacs
@@ -84,7 +83,7 @@ mingw-w64
 mlton
 mono-complete
 moreutils
-mplayer
+mplayer2
 mysql-client
 mysql-server
 nasm
