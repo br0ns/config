@@ -19,6 +19,7 @@ cd $CONF
 $DO git submodule init
 $DO git submodule update
 HOME="/home/$SUDO_USER"
+cd
 
 # add non-free repository
 grep non-free /etc/apt/sources.list >/dev/null || echo "deb http://http.debian.net/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
