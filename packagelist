@@ -19,6 +19,7 @@ darcs
 debootstrap
 deluge
 dietlibc-dev
+dmz-cursor-theme
 dtrx
 emacs
 emacs-goodies-el
@@ -140,6 +141,7 @@ sml-mode
 smlnj
 socat
 steghide
+strace
 subversion
 surf
 tcpflow
@@ -160,4 +162,3 @@ wireshark
 xcompmgr
 xfce4
 xfce4-power-manager
-dmz-cursor-theme
