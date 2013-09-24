@@ -7,9 +7,6 @@
 (require 'color-theme-tango)
 (color-theme-tango)
 
-;; Set font
-(set-frame-font "Liberation Mono-7")
-
 ;; Unbind Pesky Sleep Button
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])

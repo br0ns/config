@@ -115,26 +115,37 @@ else \
   echo ""; \
 fi)'
 
-# Test user type:
-if [[ ${USER} == ${LOGNAME} ]]; then
-    # Test connection type:
-    if [ -n "${SSH_CONNECTION}" ]; then
-        # Connected on remote machine, via ssh (good).
-        PS1="${PS1}\[${Green}\]\h\[${NC}\] "
-    elif [[ "${DISPLAY%%:0*}" != "" ]]; then
-        # Connected on remote machine, not via ssh (bad).
-        PS1="${PS1}\[${ALERT}\]\h\[${NC}\] "
-    fi
-    PS1="${PS1}\[${BBlue}\]\w\[${NC}\]"
+# this doesn't seem to work on my new debian install -- leaving it here for when
+# i have time to fix it
+# # Test user type:
+# if [[ ${USER} == ${LOGNAME} ]]; then
+#     # Test connection type:
+#     if [ -n "${SSH_CONNECTION}" ]; then
+#         # Connected on remote machine, via ssh (good).
+#         PS1="${PS1}\[${Green}\]\h\[${NC}\] "
+#     elif [[ "${DISPLAY%%:0*}" != "" ]]; then
+#         # Connected on remote machine, not via ssh (bad).
+#         PS1="${PS1}\[${ALERT}\]\h\[${NC}\] "
+#     fi
+#     PS1="${PS1}\[${BBlue}\]\w\[${NC}\]"
+# else
+#     # Im someone else, so always print host
+#     PS1="${PS1}\[${Blue}\]\h\[${NC}\] "
+#     if [[ ${USER} == "root" ]]; then
+#         # User is root
+#         PS1="${PS1}\[${BRed}\]\w\[${NC}\]"
+#     else
+#         PS1="${PS1}\[${BYellow}\]\w\[${NC}\]"
+#     fi
+# fi
+
+if [[ ${USER} == "root" ]]; then
+   PS1="${PS1}\[${Yellow}\]\h\[${NC}\]:\[${ALERT}\]\w\[${NC}\]"
 else
-    # Im someone else, so always print host
-    PS1="${PS1}\[${Blue}\]\h\[${NC}\] "
-    if [[ ${USER} == "root" ]]; then
-        # User is root
-        PS1="${PS1}\[${BRed}\]\w\[${NC}\]"
-    else
-        PS1="${PS1}\[${BYellow}\]\w\[${NC}\]"
-    fi
+   if [ -n "${SSH_CONNECTION}" ]; then
+      PS1="${PS1}\[${Yellow}\]\h\[${NC}\]:"
+   fi
+   PS1="${PS1}\[${BBlue}\]\w\[${NC}\]"
 fi
 
 PS1="${PS1}> "
@@ -180,7 +191,7 @@ alias nasm='nasm -I $HOME/pwnies/tools/pwn/include/nasm/'
 alias hexdump='hexdump -Cv'
 alias emacsnw='/usr/bin/emacs -nw'
 function emacs () {
-  (/usr/bin/emacs -bg black -D $@ </dev/null >/dev/null 2>/dev/null &)
+  (/usr/bin/emacs -D $@ </dev/null >/dev/null 2>/dev/null &)
 }
 function odl () { objdump -dMintel "$1" | less; }
 function oDl () { objdump -DMintel "$1" | less; }

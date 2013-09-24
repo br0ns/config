@@ -10,7 +10,11 @@ Xft.hintstyle:              hintslight
 *background:                #000000
 *foreground:                #ffffff
 
-emacs.font:                 Liberation Mono-7
+emacs.font:                 Liberation Mono-8
+emacs.background:           Black
+emacs.menuBar:              off
+emacs.toolBar:              off
+emacs.verticalScrollBars:   off
 
 URxvt.geometry:             156x49
 URxvt.depth:                32
@@ -21,13 +25,13 @@ URxvt.loginShell:           true
 URxvt.saveLines:            65535
 URxvt.internalBorder:       0
 URxvt.cursorBlink:          false
-URxvt*font:                 xft:Liberation Mono-7
+URxvt*font:                 xft:Liberation Mono-8
 URxvt.scrollBar:            false
 URxvt.cursorUnderline:      false
 URxvt.pointerBlank:         true
 URxvt*letterSpace:          -1
-URxvt*scrollTtyOutput:      true
-URxvt*scrollWithBuffer:     false
+URxvt*scrollTtyOutput:      false
+URxvt*scrollWithBuffer:     true
 URxvt*scrollTtyKeypress:    true
 
 ! Perl extensions

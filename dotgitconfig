@@ -1,3 +1,5 @@
 [user]
 	name = Morten Brøns-Pedersen
 	email = f@ntast.dk
+[push]
+	default = simple
