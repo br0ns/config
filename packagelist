@@ -23,6 +23,7 @@ dietlibc-dev
 dmz-cursor-theme
 dosbox
 dtrx
+electrum
 emacs
 emacs-goodies-el
 erlang
@@ -36,12 +37,14 @@ figlet
 firmware-iwlwifi
 flashplugin-nonfree
 flex
+fontmatrix
 fonts-liberation
 foremost
 fuse
 g++
 gcc-multilib
 gdb
+gdb-multiarch
 gdbserver
 gimp
 git
@@ -69,6 +72,7 @@ libc6-dev-i386
 libdistorm64-dev
 libgmp-dev
 libgpgme11-dev
+liblzma-dev
 libmagic-dev
 libmysqlclient-dev
 libnacl-dev
@@ -92,6 +96,7 @@ mlton
 mono-complete
 moreutils
 mplayer2
+mtd-tools
 mysql-client
 mysql-server
 nasm
@@ -109,6 +114,7 @@ p7zip
 password-gorilla
 php5
 php5-dev
+php5-mysql
 pngcheck
 privoxy
 pwgen
@@ -121,6 +127,7 @@ python-mode
 python-paramiko
 python-pcapy
 python-pdftools
+python-ptrace
 python-pyparsing
 python-scapy
 python-scipy
@@ -151,6 +158,7 @@ sml-mode
 smlnj
 socat
 splint
+squashfs-tools
 steghide
 strace
 subversion

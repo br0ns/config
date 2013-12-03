@@ -169,7 +169,8 @@ myTopicConfig = TopicConfig
        , ("procrastination", newBrowser
                              "xkcd.com \
                              \smbc-comics.com \
-                             \phdcomics.com/comics.php")
+                             \phdcomics.com/comics.php" >>
+                             spawn "export http_proxy=fa.ntast.dk:8888 ; surf https://www.fitocracy.com")
        , ("virtualbox", spawn "virtualbox")
        , ("reading", spawn "evince")
        , ("emacs", edit "~/config/dotemacs.d/setup-bindings.el")

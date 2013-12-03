@@ -3,6 +3,9 @@
 (blink-cursor-mode -1)
 (set-fringe-mode 0)
 
+;; Set font
+(set-default-font "Liberation Mono-8")
+
 ;; Set colors
 (require 'color-theme-tango)
 (color-theme-tango)
@@ -322,5 +325,9 @@
   (smooth-scroll-up)
   )
 
+;; Edit with Emacs Chromium extension
+;; Start server when running with --daemon
+(when (and (require 'edit-server nil t) (daemonp))
+  (edit-server-start))
 
 (provide 'setup-misc)

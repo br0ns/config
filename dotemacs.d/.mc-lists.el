@@ -7,6 +7,8 @@
         c-electric-delete-forward
         c-electric-paren
         c-electric-semi&comma
+        evil-numbers/dec-at-pt
+        evil-numbers/inc-at-pt
         find-tag
         forward-same-syntax
         increase-indentation
@@ -25,9 +27,12 @@
         nav-previous-line
         py-electric-backspace
         py-electric-colon
+        py-electric-comment
         py-electric-delete
         py-newline-and-indent
         toggle-quotes
+        whole-line-or-region-kill-region
+        whole-line-or-region-yank
         ))
 
 (setq mc/cmds-to-run-once

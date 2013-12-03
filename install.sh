@@ -68,6 +68,11 @@ $DO tar xfv secret.tar
 $DO rm secret.tar
 $DO cp -v secret/id_rsa $HOME/.ssh/
 $DO ssh-keygen -f $HOME/.ssh/id_rsa -y > $HOME/.ssh/id_rsa.pub
+$DO mkdir $HOME/.ssh/keys
+$DO cp -v secret/sshkeys/* $HOME/.ssh.keys
+for k in $HOME/.ssh/* ; do
+  $DO ssh-keygen -f $k -y > ${k}.pub
+done
 $DO cp -va secret/dotgnupg $HOME/.gnupg
 $DO cp -v secret/hindsight-key $HOME/.hindsight/conf/key
 cd
@@ -130,6 +135,38 @@ make install
 cd
 $DO sh -c "echo \$\(SML_LIB\)/basis/basis.mlb > .shackl"
 $DO sh -c "echo $HOME/code/sml/mylib/MyLib.mlb >> .shackl"
+echo 'DONE!'
+
+# install firmware-mod-kit
+echo 'Installing Firmware Modkit..'
+cd /opt
+git clone https://code.google.com/p/firmware-mod-kit/
+cd firmware-mod-kit/src
+./configure
+make
+cd
+echo 'DONE!'
+
+# install binwalk
+echo 'Installing Binwalk...'
+cd /tmp
+svn checkout http://binwalk.googlecode.com/svn/trunk/ binwalk
+cd binwalk/src
+./easy_install.sh
+cd
+rm -rf /tmp/binwalk
+echo 'DONE!'
+
+# install Botox
+echo 'Installing Botox...'
+cd /tmp
+svn checkout http://botox.googlecode.com/svn/trunk/ botox
+cd botox/src
+./configure
+make
+cp botox /usr/local/bin
+cd
+rm -rf /tmp/botox
 echo 'DONE!'
 
 # modify sml-mode to work with do-notation
