@@ -6,13 +6,15 @@ arj
 auctex
 audacity
 autojump
+avconv
+binutils-arm-linux-gnueabi
 binwalk
 bison
 brasero
 build-essential
 bzr
 chkrootkit
-chromium-browser
+chromium
 cloc
 connect-proxy
 curl
@@ -32,7 +34,6 @@ execstack
 exif
 extlinux
 fcrackzip
-ffmpeg
 figlet
 firmware-iwlwifi
 flashplugin-nonfree
@@ -42,6 +43,7 @@ fonts-liberation
 foremost
 fuse
 g++
+gcc-4.3-arm-linux-gnueabi
 gcc-multilib
 gdb
 gdb-multiarch
@@ -89,6 +91,7 @@ libxml2-dev
 libxrandr-dev
 libxslt1-dev
 linux-source
+lshw
 lzop
 mercurial
 mingw-w64
@@ -116,6 +119,7 @@ php5-dev
 php5-mysql
 pngcheck
 privoxy
+pv
 pwgen
 python-crypto
 python-ctypeslib
@@ -181,7 +185,3 @@ wireshark
 xcompmgr
 xfce4
 xfce4-power-manager
-lshw
-gcc-4.3-arm-linux-gnueabi
-binutils-arm-linux-gnueabi
-pv
