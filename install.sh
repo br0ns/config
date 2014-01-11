@@ -39,7 +39,7 @@ deb http://www.emdebian.org/debian squeeze main
 EOF
 
 # update
-# apt-get -y update
+apt-get -y update
 
 # install source headers
 apt-get -y install linux-headers-$(uname -r)
