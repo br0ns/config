@@ -44,6 +44,9 @@ apt-get -y update
 # install source headers
 apt-get -y install linux-headers-$(uname -r)
 
+# install emdebian keyring
+apt-get install emdebian-archive-keyring
+
 # install packages
 apt-get -y install $(cat $CONF/packagelist) || exit
 
