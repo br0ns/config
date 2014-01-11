@@ -51,7 +51,7 @@
 ##    title is displayed).  This make tab bar look nicer.
 ##
 ## Added by StephenB:
-## 
+##
 ## 7. Tabs can be named with Shift+Up (Enter to confirm, Escape to
 ##    cancel).
 ##
@@ -747,7 +747,7 @@ sub on_resize_all_windows {
    # But for my personal version of the NeXT scrollbars, the following
    # seems to properly calculate the number of columns of text that
    # are missing.
-   # (12 is the magic number I need to calculate.  This is apparently 
+   # (12 is the magic number I need to calculate.  This is apparently
    # the width of the scroll bar.  Maybe.)
    # TODO: take lineSpace and letterSpace into account.
    my $sb_width = 12;
@@ -823,7 +823,7 @@ sub tab_osc_seq_perl {
 	$tab->{name} = $new_name;
 	$self->refresh;
     }
-	
+
     1;
 }
 
@@ -834,7 +834,7 @@ package urxvt::ext::tabbedex::tab;
 # simply proxies all interesting calls back to the tabbedex class.
 
 {
-   for my $hook qw(osc_seq_perl start destroy user_command key_press property_notify add_lines) {
+   for my $hook (qw(osc_seq_perl start destroy user_command key_press property_notify add_lines)) {
       eval qq{
          sub on_$hook {
             my \$parent = \$_[0]{term}{parent}

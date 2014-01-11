@@ -13,6 +13,7 @@ import qualified Data.Map as M
 import Data.Maybe (isNothing, isJust, catMaybes)
 import Data.List (isPrefixOf, partition, (\\))
 import Control.Monad (liftM2, when, unless)
+import Control.Exception (catch)
 import System.Directory
 import System.Locale
 import System.Time
@@ -165,7 +166,7 @@ myTopicConfig = TopicConfig
        , ("web", browser "")
        , ("organise", appBrowser "http://gmail.com" >>
                       appBrowser "http://calendar.google.com")
-       , ("multimedia", spawn "sonata")
+       , ("multimedia", appBrowser "http://localhost:7000")
        , ("procrastination", newBrowser
                              "xkcd.com \
                              \smbc-comics.com \
@@ -190,6 +191,14 @@ myTopicConfig = TopicConfig
        , ("inkscape", spawn "inkscape")
        , ("gimp", spawn "gimp")
        , ("config", edit "~/config/install.sh ~/config/packagelist")
+       , ("bitcoin", newBrowser "https://www.mtgox.com/ \
+                                \http://bitcoinity.org/markets \
+                                \https://www.btcguild.com/ \
+                                \http://bitcoindifficulty.com/ \
+                                \http://bitcoinwisdom.com/bitcoin/difficulty \
+                                \http://www.alloscomp.com/bitcoin/calculator \
+                                \http://mining.thegenesisblock.com/" >>
+                     spawn "multibit")
        ]
   , defaultTopicAction = const $ return ()
   , defaultTopic = "web"
@@ -203,7 +212,6 @@ setWorkspaceDirs layout =
   set "mylib"           "~/code/sml/mylib"                  $
   set "preml"           "~/code/sml/preml"                  $
   set "study"           "~/study"                           $
-  set "bitcoin"         "~/code/python/mtgox"               $
   set "sml"             "~/code/sml"                        $
   set "haskell"         "~/code/haskell"                    $
   set "python"          "~/code/python"                     $
@@ -217,7 +225,7 @@ br0nsConfig =
        { modMask = mod4Mask
        , manageHook = manageHook desktopConfig <+>
                       composeAll myManageHook <+>
-                      scratchpadManageHook (W.RationalRect 0.2 0.2 0.6 0.6)
+                      scratchpadManageHook (W.RationalRect 0.05 0.05 0.9 0.9)
        , layoutHook = smartBorders $
                       setWorkspaceDirs myLayout
        , borderWidth = 0
@@ -243,6 +251,7 @@ deleteIfEmpty dir = do contents <- getDirectoryContents dir
 main = do
   spawn "xset b off"
   spawn "xcompmgr"
+  spawn "autocutsel -fork"
   liftIO $ do x <- doesDirectoryExist myScratchpadDir
               unless x (createDirectory myScratchpadDir)
   checkTopicConfig myTopics myTopicConfig

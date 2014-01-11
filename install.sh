@@ -12,7 +12,7 @@ DO="sudo -u $SUDO_USER"
 CONF=$(dirname $(readlink -f $0))
 
 # decrypt secret stuff
-$DO gpg $CONF/secret.tar.gpg || exit
+$DO gpg --yes $CONF/secret.tar.gpg || exit
 
 # make sure all submodules are pulled
 cd $CONF
@@ -21,11 +21,25 @@ $DO git submodule update
 HOME="/home/$SUDO_USER"
 cd
 
-# add non-free repository
-grep non-free /etc/apt/sources.list >/dev/null || echo "deb http://http.debian.net/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
+# add additional repositories
+grep "additional repositores" /etc/apt/sources.list > /dev/null || \
+    cat >> /etc/apt/sources.list <<EOF
+
+# additional repositories
+deb http://http.debian.net/debian/ jessie main contrib non-free
+deb-src http://http.debian.net/debian/ jessie main contrib non-free
+
+deb http://ftp.dk.debian.org/debian/ squeeze main contrib non-free
+deb-src http://ftp.dk.debian.org/debian/ squeeze main contrib non-free
+
+deb http://ftp.dk.debian.org/debian/ wheezy main contrib non-free
+deb-src http://ftp.dk.debian.org/debian/ wheezy main contrib non-free
+
+deb http://www.emdebian.org/debian squeeze main
+EOF
 
 # update
-apt-get -y update
+# apt-get -y update
 
 # install source headers
 apt-get -y install linux-headers-$(uname -r)
@@ -34,7 +48,8 @@ apt-get -y install linux-headers-$(uname -r)
 apt-get -y install $(cat $CONF/packagelist) || exit
 
 # set default dns to google
-echo "prepend domain-name-servers 8.8.8.8;" >> /etc/dhcp/dhclient.conf
+grep "8.8.8.8" /etc/dhcp/dhclient.conf > /dev/null || \
+    echo "prepend domain-name-servers 8.8.8.8;" >> /etc/dhcp/dhclient.conf
 
 # clean slate
 $DO rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh \
@@ -48,7 +63,6 @@ $DO ln -vsTf $CONF/dotemacs.d/init.el .emacs
 $DO ln -vsTf $CONF/dotemacs.d .emacs.d
 $DO ln -vsTf $CONF/dotgdbinit .gdbinit
 $DO ln -vsTf $CONF/dotXdefaults .Xdefaults
-$DO ln -vsTf $CONF/ssh.conf .ssh/config
 $DO ln -vsTf $CONF/xmonad.hs .xmonad/xmonad.hs
 $DO ln -vsTf $CONF/urxvt .urxvt
 $DO ln -vsTf $CONF/xmonad-lib .xmonad/lib
@@ -66,15 +80,24 @@ $DO ln -vsTf $CONF/hindsight/hindsight-mount bin/hindsight-mount
 cd $CONF
 $DO tar xfv secret.tar
 $DO rm secret.tar
-$DO cp -v secret/id_rsa $HOME/.ssh/
+
+# ssh config
+$DO ln -vsTf $CONF/secret/ssh.conf $HOME/.ssh/config
+
+# main ssh key
+$DO ln -vsTf $CONF/secret/id_rsa $HOME/.ssh/id_rsa
 $DO ssh-keygen -f $HOME/.ssh/id_rsa -y > $HOME/.ssh/id_rsa.pub
+
+# other keys
 $DO mkdir $HOME/.ssh/keys
-$DO cp -v secret/sshkeys/* $HOME/.ssh.keys
-for k in $HOME/.ssh/* ; do
-  $DO ssh-keygen -f $k -y > ${k}.pub
+for k in secret/sshkeys/* ; do
+  $DO ln -vsTf $CONF/$k $HOME/.ssh/keys/$(basename $k)
+  $DO ssh-keygen -f $CONF/$k -y > $HOME/.ssh/keys/$(basename $k).pub
 done
-$DO cp -va secret/dotgnupg $HOME/.gnupg
-$DO cp -v secret/hindsight-key $HOME/.hindsight/conf/key
+
+$DO ln -vsTf $CONF/secret/dotgnupg $HOME/.gnupg
+$DO ln -vsTf $CONF/secret/hindsight-key $HOME/.hindsight/conf/key
+$DO ln -vsTf $CONF/secret/ssh.conf $HOME/.ssh/config
 cd
 
 # update cabal

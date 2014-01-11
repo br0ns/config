@@ -98,7 +98,6 @@ moreutils
 mplayer2
 mtd-tools
 mysql-client
-mysql-server
 nasm
 netcat-openbsd
 network-manager
@@ -138,6 +137,7 @@ python-sqlalchemy
 python-twisted
 python-urwid
 qemu
+qemu-user-static
 rawstudio
 realpath
 rkhunter
@@ -181,3 +181,7 @@ wireshark
 xcompmgr
 xfce4
 xfce4-power-manager
+lshw
+gcc-4.3-arm-linux-gnueabi
+binutils-arm-linux-gnueabi
+pv

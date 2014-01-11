@@ -16,7 +16,7 @@ emacs.menuBar:              off
 emacs.toolBar:              off
 emacs.verticalScrollBars:   off
 
-URxvt.geometry:             156x49
+URxvt.geometry:             202x67
 URxvt.depth:                32
 URxvt.transparent:          false
 URxvt.fading:               0
