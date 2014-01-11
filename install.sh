@@ -133,6 +133,7 @@ gcc $CONF/blink.c -o .xmonad/blink
 chmod u+s .xmonad/blink
 
 # install SML dev env
+mkdir code/sml
 # install mylib
 echo 'Installing MyLib...'
 $DO git clone git@github.com:mortenbp/mylib.git code/sml/mylib
