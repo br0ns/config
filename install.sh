@@ -22,7 +22,7 @@ HOME="/home/$SUDO_USER"
 cd
 
 # add additional repositories
-grep "additional repositores" /etc/apt/sources.list > /dev/null || \
+grep -q "additional repositories" /etc/apt/sources.list || \
     cat >> /etc/apt/sources.list <<EOF
 
 # additional repositories
@@ -48,7 +48,7 @@ apt-get -y install linux-headers-$(uname -r)
 apt-get -y install $(cat $CONF/packagelist) || exit
 
 # set default dns to google
-grep "8.8.8.8" /etc/dhcp/dhclient.conf > /dev/null || \
+grep -q "8.8.8.8" /etc/dhcp/dhclient.conf || \
     echo "prepend domain-name-servers 8.8.8.8;" >> /etc/dhcp/dhclient.conf
 
 # clean slate
