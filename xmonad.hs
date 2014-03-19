@@ -149,7 +149,7 @@ myTopics =
   , "anon"
   ]
 
-myTerminal = "urxvt"
+myTerminal = "xterm"
 myBrowser = "chromium-browser"
 edit s = spawn ("emacs " ++ s)
 term = spawn myTerminal
@@ -161,7 +161,7 @@ myTopicConfig = TopicConfig
   { topicDirs = M.fromList []
   , topicActions =
        M.fromList $
-       [ ("im", safeSpawn myTerminal ["-e", "ssh", "lolbox.pwnies.dk", "-t", "screen", "-dr", "irc"])
+       [ ("im", safeSpawn myTerminal ["-e", "ssh", "irssi@yesimparanoid.com", "-t", "screen", "-dr", "irc"])
        -- [ ("im", term)
        , ("web", browser "")
        , ("organise", appBrowser "http://gmail.com" >>
@@ -169,9 +169,10 @@ myTopicConfig = TopicConfig
        , ("multimedia", appBrowser "http://localhost:7000")
        , ("procrastination", newBrowser
                              "xkcd.com \
+                             \facebook.com \
                              \smbc-comics.com \
-                             \phdcomics.com/comics.php" >>
-                             spawn "export http_proxy=fa.ntast.dk:8888 ; surf https://www.fitocracy.com")
+                             \phdcomics.com/comics.php \
+                             \www.fitocracy.com")
        , ("virtualbox", spawn "virtualbox")
        , ("reading", spawn "evince")
        , ("emacs", edit "~/config/dotemacs.d/setup-bindings.el")
@@ -288,8 +289,8 @@ myKeys =
   , ("M-'", submap . mySearchMap $ myPromptSearch)
   , ("M-C-'", submap . mySearchMap $ mySelectSearch)
   -- Scratchpad
-  , ("M-S-<Space>", scratchpadSpawnActionCustom "term" "urxvt -name scratchpad-term")
-  , ("M-C-<Space>", scratchpadSpawnActionCustom "python" "PYTHONPATH=/home/br0ns/pwnies/pwntools/ urxvt -name scratchpad-python -e ipython -c 'from pwn import *' --no-confirm-exit -i")
+  , ("M-S-<Space>", scratchpadSpawnActionCustom "term" "xterm -name scratchpad-term")
+  , ("M-C-<Space>", scratchpadSpawnActionCustom "python" "PYTHONPATH=/home/br0ns/pwnies/pwntools/ xterm -name scratchpad-python -e ipython -c 'from pwn import *' --no-confirm-exit -i")
   -- Global window
   , ("M-S-g", toggleGlobal)
   -- Focus urgent
