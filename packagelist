@@ -5,6 +5,7 @@ arc
 arj
 auctex
 audacity
+autocutsel
 autojump
 binutils-arm-linux-gnueabi
 binwalk
@@ -162,6 +163,7 @@ smlnj
 socat
 splint
 squashfs-tools
+sshfs
 steghide
 strace
 subversion
@@ -177,6 +179,7 @@ vim
 virtualbox
 virtualbox-dkms
 virtualbox-guest-additions-iso
+virtualbox-qt
 vlc
 whois
 wine
@@ -184,3 +187,4 @@ wireshark
 xcompmgr
 xfce4
 xfce4-power-manager
+xfce4-session
