@@ -50,9 +50,9 @@ apt-get -y install linux-headers-$(uname -r)
 # install packages
 apt-get -y install $(cat $CONF/packagelist) || exit
 
-# set default dns to google
+# add googles dns server
 grep -q "8.8.8.8" /etc/dhcp/dhclient.conf || \
-    echo "prepend domain-name-servers 8.8.8.8;" >> /etc/dhcp/dhclient.conf
+    echo "append domain-name-servers 8.8.8.8, 8.8.4.4;" >> /etc/dhcp/dhclient.conf
 
 # clean slate
 $DO rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh \
@@ -66,6 +66,7 @@ $DO ln -vsTf $CONF/dotemacs.d/init.el .emacs
 $DO ln -vsTf $CONF/dotemacs.d .emacs.d
 $DO ln -vsTf $CONF/dotgdbinit .gdbinit
 $DO ln -vsTf $CONF/dotXdefaults .Xdefaults
+$DO ln -vsTf $CONF/dotXdefaults .Xresources
 $DO ln -vsTf $CONF/xmonad.hs .xmonad/xmonad.hs
 $DO ln -vsTf $CONF/urxvt .urxvt
 $DO ln -vsTf $CONF/xmonad-lib .xmonad/lib
