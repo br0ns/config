@@ -7,6 +7,7 @@
         c-electric-delete-forward
         c-electric-paren
         c-electric-semi&comma
+        duplicate-current-line-or-region
         evil-numbers/dec-at-pt
         evil-numbers/inc-at-pt
         find-tag
@@ -21,6 +22,8 @@
         kill-region
         kill-region-or-line
         kill-ring-save-region-or-line
+        kmacro-end-or-call-macro
+        kmacro-start-macro-or-insert-counter
         nav-backward-line
         nav-forward-line
         nav-next-line
@@ -29,9 +32,11 @@
         py-electric-colon
         py-electric-comment
         py-electric-delete
+        py-indent-line
         py-newline-and-indent
         toggle-quotes
         whole-line-or-region-kill-region
+        whole-line-or-region-kill-ring-save
         whole-line-or-region-yank
         ))
 
@@ -44,6 +49,7 @@
         isearch-delete-char
         isearch-other-control-char
         isearch-printing-char
+        kill-rectangle
         mc/mark-all-in-region
         mc/mark-next-like-this-skip
         mc/mark-next-lines
