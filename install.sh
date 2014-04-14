@@ -197,6 +197,11 @@ cd
 rm -rf /tmp/botox
 echo 'DONE!'
 
+# install PEDA
+echo 'Installing PEDA...'
+$DO git clone git@github.com:mortenbp/peda.git code/peda 2>/dev/null
+echo 'DONE!'
+
 # modify sml-mode to work with do-notation
 cd /usr/share/emacs23/site-lisp/sml-mode
 # mv sml-defs.el sml-defs.el.bak
