@@ -30,6 +30,8 @@
         nav-forward-line
         nav-next-line
         nav-previous-line
+        open-line-above
+        open-line-below
         py-electric-backspace
         py-electric-colon
         py-electric-comment
