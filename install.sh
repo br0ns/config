@@ -5,6 +5,8 @@ if [ $UID -ne 0 ] || [ -z "$SUDO_USER" ] ; then
     exit
 fi
 
+set -x
+
 # at this point we're running through sudo
 # commands that should run as the user must be prefixed with $DO
 DO="sudo -u $SUDO_USER"
