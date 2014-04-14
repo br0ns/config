@@ -283,8 +283,7 @@ myKeys =
   , ("M-s", do dir <- liftIO $ formatCalendarTime defaultTimeLocale (myScratchpadDir ++ "/%Y-%m-%d-%H:%M:%S")  `fmap` (getClockTime >>= toCalendarTime)
                liftIO $ createDirectory dir
                newScratchpad
-               changeDir_ dir
-               term)
+               changeDir_ dir)
   -- Search
   , ("M-'", submap . mySearchMap $ myPromptSearch)
   , ("M-C-'", submap . mySearchMap $ mySelectSearch)
