@@ -7,6 +7,7 @@
         c-electric-delete-forward
         c-electric-paren
         c-electric-semi&comma
+        c-indent-line-or-region
         duplicate-current-line-or-region
         evil-numbers/dec-at-pt
         evil-numbers/inc-at-pt
@@ -19,6 +20,7 @@
         isearch-exit
         isearch-forward-regexp
         isearch-repeat-backward
+        js-insert-and-indent
         kill-region
         kill-region-or-line
         kill-ring-save-region-or-line
