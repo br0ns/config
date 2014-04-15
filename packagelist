@@ -84,6 +84,7 @@ libnacl-dev
 libpcap-dev
 libpcre3-dev
 libreadline-dev
+libsm6:i386
 libsnappy-dev
 libsqlite3-dev
 libssl-dev
