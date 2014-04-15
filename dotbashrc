@@ -259,7 +259,7 @@ function addpkg () {
     echo -n "s"
   fi
   echo
-  if [ $added -ne 0 ] ; then
+  if [ $added -gt 0 ] ; then
     (
       cd ~/config
       ./packagelist.sh
