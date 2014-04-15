@@ -136,6 +136,7 @@ python-scapy
 python-scipy
 python-setuptools
 python-socksipy
+python-software-properties
 python-soya
 python-sqlalchemy
 python-twisted
