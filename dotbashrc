@@ -204,6 +204,65 @@ function RM () {
     shred -vu "$1"
   fi
 }
+function promptyn () {
+  if [ $# -eq 2 ] ; then
+    if [ $2 -eq 1 ] ; then
+      p="[Y/n]"
+    else
+      p="[y/N]"
+    fi
+  else
+    p="[y/n]"
+  fi
+  while true; do
+    read -p "$1 $p " yn
+    if [ "x$yn" == "xy" ] || \
+       [ "x$yn" == "xyes" ] || \
+       [ "x$yn" == "xY" ] || \
+       [ "x$yn" == "xYes" ] || \
+       [ "x$yn" == "xYES" ] || \
+       [[ "x$yn" == "x" && $# -eq 2 && $2 -eq 1 ]] ; then
+      return 1;
+    fi
+    if [ "x$yn" == "xn" ] || \
+       [ "x$yn" == "xno" ] || \
+       [ "x$yn" == "xN" ] || \
+       [ "x$yn" == "xNo" ] || \
+       [ "x$yn" == "xNO" ] || \
+       [[ "x$yn" == "x" && $# -eq 2 && $2 -eq 0 ]] ; then
+      return 0;
+    fi
+    echo "Please answer yes or no"
+  done
+}
+function addpkg () {
+  added=0
+  pkgs=$(history 10 | while read line ; do
+    echo "$line" | sed -n "s/.*apt-get.*install\([0-9a-zA-Z\-\._ ]*\).*/\1/p" | tr ' ' '\n' | \
+    while read pkg ; do
+      [ "x$pkg" == "x" ] && continue
+      grep -q "^$pkg$" ~/config/packagelist
+      if [ $? -ne 0 ] ; then
+        echo $pkg
+      fi
+    done
+  done | sort -u)
+  for pkg in $pkgs; do
+    promptyn "Add '$pkg' to package list?" 1
+    if [ $? -eq 1 ] ; then
+      added=$(($added + 1))
+      echo "$pkg" >> ~/config/packagelist
+    fi
+  done
+  echo -n "Added $added package"
+  if [ $added -ne 1 ] ; then
+    echo -n "s"
+  fi
+  echo
+  if [ $added -ne 0 ] ; then
+    ~/config/packagelist.sh
+  fi
+}
 m > /dev/null
 
 # autojump
