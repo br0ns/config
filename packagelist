@@ -73,6 +73,7 @@ libboost-all-dev
 libbsd-dev
 libc6-dev-i386
 libdistorm64-dev
+libfreetype6:i386
 libglib2.0-0:i386
 libgmp-dev
 libgpgme11-dev
