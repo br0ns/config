@@ -1,4 +1,4 @@
 sort packagelist | sponge packagelist
 git add packagelist
-git commit -m "secret"
+git commit -m "packagelist"
 git push

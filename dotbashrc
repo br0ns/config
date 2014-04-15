@@ -260,7 +260,10 @@ function addpkg () {
   fi
   echo
   if [ $added -ne 0 ] ; then
-    ~/config/packagelist.sh
+    (
+      cd ~/config
+      ./packagelist.sh
+    )
   fi
 }
 m > /dev/null
