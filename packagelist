@@ -57,6 +57,7 @@ golly
 gperf
 gphoto2
 gtk2-engines-murrine
+gtk2-engines-murrine:i386
 gtk3-engines-unico
 haskell-mode
 haskell-platform
@@ -77,6 +78,7 @@ libfontconfig1:i386
 libfreetype6:i386
 libglib2.0-0:i386
 libgmp-dev
+libgnomeui-0:i386
 libgpgme11-dev
 liblzma-dev
 libmagic-dev
