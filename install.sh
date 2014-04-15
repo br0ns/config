@@ -40,6 +40,9 @@ deb-src http://ftp.dk.debian.org/debian/ wheezy main contrib non-free
 deb http://www.emdebian.org/debian squeeze main
 EOF
 
+# add i386
+dpkg --add-architecture i386
+
 # install emdebian keyring
 apt-get install emdebian-archive-keyring
 
