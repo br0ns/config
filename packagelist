@@ -93,6 +93,7 @@ libx11-dev
 libxft-dev
 libxml2-dev
 libxrandr-dev
+libxrender1:i386
 libxslt1-dev
 linux-source
 lshw
