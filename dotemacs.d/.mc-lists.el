@@ -26,6 +26,7 @@
         kill-ring-save-region-or-line
         kmacro-end-or-call-macro
         kmacro-start-macro-or-insert-counter
+        mouse-yank-at-click
         nav-backward-line
         nav-forward-line
         nav-next-line
