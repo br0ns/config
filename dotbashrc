@@ -195,7 +195,14 @@ function emacs () {
 }
 function odl () { objdump -dMintel "$1" | less; }
 function oDl () { objdump -DMintel "$1" | less; }
-function hdl () { hexdump "$1" | less; }
+function hdl () {
+  if [ $# -eq 0 ] ; then
+    hexdump | less
+  else
+    hexdump "$1" | less
+  fi
+}
+function rel () { readelf -a "$1" | less; }
 function RM () {
   if [ -d "$1" ]; then
     find "$1" -type f -exec shred -vu "{}" \;
