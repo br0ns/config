@@ -53,6 +53,7 @@ gimp
 git
 g++-multilib
 gnome-do
+golang-mode
 golly
 gperf
 gphoto2
