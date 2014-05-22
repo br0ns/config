@@ -37,6 +37,7 @@
         py-electric-colon
         py-electric-comment
         py-electric-delete
+        py-hungry-delete-backwards
         py-indent-line
         py-newline-and-indent
         toggle-quotes
