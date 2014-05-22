@@ -171,8 +171,8 @@
 (global-set-key (kbd "C-x C-y")          'browse-kill-ring)
 
 ;; zoom-frm.el
-(global-set-key (kbd "C--")              'zoom-frm-out)
-(global-set-key (kbd "C-+")              'zoom-frm-in)
+(global-set-key (kbd "s--")              'zoom-frm-out)
+(global-set-key (kbd "s-=")              'zoom-frm-in)
 (global-set-key (kbd "C-0")              'zoom-frm-unzoom)
 
 ;; smex.el
