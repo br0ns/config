@@ -282,9 +282,9 @@ source /usr/share/autojump/autojump.bash
 PATH=$HOME/.ghc/bin:$PATH
 PATH=$HOME/.cabal/bin:$PATH
 PATH=$HOME/pwnies/pwntools/bin:$PATH
-PATH=/opt/ida-6.4:$PATH
+PATH=/opt/ida-6.6:$PATH
 PATH=/opt/tor-browser_en-US:$PATH
 PATH=/opt/firmware-mod-kit:$PATH
 PATH=/opt/binwalk/src/bin:$PATH
 PATH=$HOME/bin:$PATH
-export PYTHONPATH=$HOME/pwnies/pwntools/lib
+export PYTHONPATH=$HOME/projects/pwntools/lib
