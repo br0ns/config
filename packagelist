@@ -44,6 +44,7 @@ fonts-liberation
 foremost
 fuse
 g++
+gcc
 gcc-4.3-arm-linux-gnueabi
 gcc-multilib
 gdb
@@ -193,6 +194,7 @@ virtualbox-dkms
 virtualbox-guest-additions-iso
 virtualbox-qt
 vlc
+wget
 whois
 wine
 wireshark
