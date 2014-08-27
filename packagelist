@@ -104,6 +104,7 @@ libxrender1:i386
 libxslt1-dev
 linux-source
 lshw
+ltrace
 lzop
 mercurial
 mingw-w64
