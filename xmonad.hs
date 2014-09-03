@@ -150,12 +150,12 @@ myTopics =
   ]
 
 myTerminal = "xterm"
-myBrowser = "chromium-browser"
+myBrowser = "chromium"
 edit s = spawn ("emacs " ++ s)
 term = spawn myTerminal
-browser s = spawn ("chromium-browser " ++ s)
-newBrowser s = spawn ("chromium-browser --new-window " ++ s)
-appBrowser s = spawn ("chromium-browser --app=\"" ++ s ++ "\"")
+browser s = spawn ("chromium " ++ s)
+newBrowser s = spawn ("chromium --new-window " ++ s)
+appBrowser s = spawn ("chromium --app=\"" ++ s ++ "\"")
 
 myTopicConfig = TopicConfig
   { topicDirs = M.fromList []
