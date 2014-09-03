@@ -231,6 +231,9 @@ wget https://github.com/shimmerproject/Greybird/tarball/master -O theme
 tar xfv theme -C /usr/share/themes
 rm -vf theme
 
+# install network configurations
+cp $CONF/secret/system-connections/* /etc/NetworkManager/system-connections
+
 # reload wireless kernel module
 modprobe -r iwlwifi ; modprobe iwlwifi
 
