@@ -233,6 +233,7 @@ rm -vf theme
 
 # install network configurations
 cp $CONF/secret/system-connections/* /etc/NetworkManager/system-connections
+cp -r $CONF/secret/certs /etc/openvpn
 
 # reload wireless kernel module
 modprobe -r iwlwifi ; modprobe iwlwifi

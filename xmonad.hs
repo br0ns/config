@@ -76,7 +76,8 @@ import XMonad.Util.Run (safeSpawn)
 import XMonad.Util.NamedWindows (getName)
 
 myLayout = ResizableTall 1 (3/100) (5/7) [] |||
-           Full
+           Tabbed.tabbedBottom Tabbed.CustomShrink myTabbedTheme
+           -- Full
 
 -- Don't show text in tabs.
 instance Tabbed.Shrinker Tabbed.CustomShrink where
@@ -261,8 +262,9 @@ main = do
   xmonad $ br0nsConfig
 
 myKeys =
+  [ ("M-<shift>", sendMessage NextLayout)
   -- Rebind mod-q
-  [ ("M-S-<Esc>", spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi")
+  , ("M-S-<Esc>", spawn "/home/br0ns/.cabal/bin/xmonad --recompile && /home/br0ns/.cabal/bin/xmonad --restart")
   -- GSSelect
   , ("M-g", goToSelected myGSConfig)
   -- Workspace navigation
