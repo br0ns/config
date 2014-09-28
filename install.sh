@@ -231,6 +231,12 @@ wget https://github.com/shimmerproject/Greybird/tarball/master -O theme
 tar xfv theme -C /usr/share/themes
 rm -vf theme
 
+# make qt use gtk theme
+cat > .config/Trolltech.conf <<EOF
+[Qt]
+style=GTK+
+EOF
+
 # install network configurations
 cp $CONF/secret/system-connections/* /etc/NetworkManager/system-connections
 cp -r $CONF/secret/certs /etc/openvpn
