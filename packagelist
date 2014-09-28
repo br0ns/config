@@ -141,6 +141,7 @@ python-mode
 python-paramiko
 python-pcapy
 python-pdftools
+python-pip
 python-ptrace
 python-pyparsing
 python-scapy
