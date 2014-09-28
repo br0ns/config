@@ -16,6 +16,7 @@ emacs.menuBar:              off
 emacs.toolBar:              off
 emacs.verticalScrollBars:   off
 
+XTerm*bellIsUrgent:         true
 XTerm*metaSendsEscape:      true
 XTerm*scrollttyoutput:      false
 XTerm*ScrollTTYKeypress:    true
