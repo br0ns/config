@@ -60,6 +60,7 @@ gphoto2
 gtk2-engines-murrine
 gtk2-engines-murrine:i386
 gtk3-engines-unico
+gtk-qt-engine
 haskell-mode
 haskell-platform
 hexedit
