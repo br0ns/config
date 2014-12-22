@@ -21,7 +21,10 @@ XTerm*metaSendsEscape:      true
 XTerm*scrollttyoutput:      false
 XTerm*ScrollTTYKeypress:    true
 
-XTerm*faceName:             Liberation Mono
+!XTerm*faceName:             Liberation Mono
+XTerm*faceName:             DejaVu Sans Mono
+!XTerm*faceName:             Courier-9
+
 XTerm*faceSize:             8
 ! Unreadable:
 XTerm*faceSize1:            8

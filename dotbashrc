@@ -197,9 +197,9 @@ function odl () { objdump -dMintel "$1" | less; }
 function oDl () { objdump -DMintel "$1" | less; }
 function hdl () {
   if [ $# -eq 0 ] ; then
-    hexdump | less
+    phd --color always | less -R
   else
-    hexdump "$1" | less
+    phd --color always "$1" | less -R
   fi
 }
 function rel () { readelf -a "$1" | less; }
@@ -281,7 +281,7 @@ source /usr/share/autojump/autojump.bash
 # path
 PATH=$HOME/.ghc/bin:$PATH
 PATH=$HOME/.cabal/bin:$PATH
-PATH=$HOME/pwnies/pwntools/bin:$PATH
+PATH=$HOME/projects/pwntools/bin:$PATH
 PATH=/opt/ida-6.6:$PATH
 PATH=/opt/tor-browser_en-US:$PATH
 PATH=/opt/firmware-mod-kit:$PATH
@@ -289,3 +289,6 @@ PATH=/opt/binwalk/src/bin:$PATH
 PATH=$HOME/bin:$PATH
 PATH=/sbin/:$PATH
 export PYTHONPATH=$HOME/projects/pwntools/
+
+# colors
+export TERM=xterm-256color
