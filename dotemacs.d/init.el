@@ -13,6 +13,10 @@
 ;; No splash screen
 (setq inhibit-startup-message t)
 
+;; Set path to configuration
+(setq setup-dir
+      (expand-file-name "setup" user-emacs-directory))
+
 ;; Set path to dependencies
 (setq site-lisp-dir
       (expand-file-name "site-lisp" user-emacs-directory))
@@ -22,7 +26,7 @@
       (expand-file-name "~/.emacs.files"))
 
 ;; Set up load path
-(add-to-list 'load-path user-emacs-directory)
+(add-to-list 'load-path setup-dir)
 (add-to-list 'load-path site-lisp-dir)
 
 ;; Add external projects to load path
