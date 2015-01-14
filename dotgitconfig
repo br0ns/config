@@ -3,3 +3,33 @@
 	email = f@ntast.dk
 [push]
 	default = simple
+[init]
+	templatedir = ~/.git_template
+[alias]
+	st = status -sb
+	di = diff
+	ds = diff --staged
+	co = checkout
+	cb = checkout -b
+	home = checkout master
+	update = add -v -u
+	up = !git update
+	ci = commit
+	cp = cherry-pick
+	br = branch
+	s = show
+	f = fetch
+	fa = fetch --all
+	m = merge
+	rb = rebase
+	pr = pull --rebase
+	l = log
+	lg = log --stat --relative-date
+	lgf = log --follow
+	lgs = log --no-merges --pretty=\"format:%C(yellow)%h %C(blue)%an %C(green)%cr%C(reset) %s\"
+	graph = log --graph --oneline --all --decorate
+	gr = !git graph
+	save = stash save --include-untracked
+	pop = stash pop
+	track = checkout --track
+	undo = reset --hard

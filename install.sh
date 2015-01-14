@@ -67,6 +67,7 @@ $DO rm -vrf .bashrc .emacs .emacs.d .gdbinit .Xresources .gnupg .xmonad .ssh \
 $DO mkdir -vp .ssh .xmonad .hindsight/conf downloads bin code
 $DO ln -vsTf $CONF/dotbashrc .bashrc
 $DO ln -vsTf $CONF/dotgitconfig .gitconfig
+$DO ln -vsTf $CONF/dotgit_template .git_template
 $DO ln -vsTf $CONF/dotemacs.d/init.el .emacs
 $DO ln -vsTf $CONF/dotemacs.d .emacs.d
 $DO ln -vsTf $CONF/dotgdbinit .gdbinit
@@ -204,7 +205,7 @@ echo 'DONE!'
 
 # install PEDA
 echo 'Installing PEDA...'
-$DO git clone git@github.com:mortenbp/peda.git code/peda 2>/dev/null
+$DO git clone git@github.com:mortenbp/peda.git projects/forks/peda 2>/dev/null
 echo 'DONE!'
 
 # modify sml-mode to work with do-notation

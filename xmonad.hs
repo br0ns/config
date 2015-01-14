@@ -139,6 +139,7 @@ myTopics =
   , "haskell"
   , "python"
     -- Projects
+  , "pwntools"
   , "mylib"
   , "preml"
   , "hindsight"
@@ -169,7 +170,7 @@ myTopicConfig = TopicConfig
        , ("web", browser "")
        , ("organise", appBrowser "http://gmail.com" >>
                       appBrowser "http://calendar.google.com")
-       , ("multimedia", appBrowser "http://localhost:7000")
+       , ("multimedia", appBrowser "https://soundcloud.com/explore/hardcore%2Btechno")
        , ("procrastination", newBrowser
                              "xkcd.com \
                              \facebook.com \
@@ -187,6 +188,8 @@ myTopicConfig = TopicConfig
                    term)
        , ("preml", edit "~/code/sml/preml/notes.org" >>
                    term)
+       , ("pwntools", newBrowser "https://github.com/Gallopsled/pwntools" >>
+                      term)
        , ("treasure-hunt", edit "~/pwnies/treasure-hunt/chal" >>
                            term)
        , ("hindsight", edit "~/code/hindsight/src/TODO.org" >>
@@ -210,16 +213,17 @@ myTopicConfig = TopicConfig
   }
 
 setWorkspaceDirs layout =
-  set "treasure-hunt"   "~/pwnies/treasure-hunt"            $
-  set "pwnies"          "~/pwnies"                          $
-  set "download"        "~/downloads"                       $
-  set "mylib"           "~/code/sml/mylib"                  $
-  set "preml"           "~/code/sml/preml"                  $
-  set "study"           "~/study"                           $
-  set "sml"             "~/code/sml"                        $
-  set "haskell"         "~/code/haskell"                    $
-  set "python"          "~/code/python"                     $
-  set "config"          "~/config"                          $
+  set "treasure-hunt"   "~/pwnies/treasure-hunt"                               $
+  set "pwnies"          "~/pwnies"                                             $
+  set "pwntools"        "~/projects/pwntools/pwnlib"                           $
+  set "download"        "~/downloads"                                          $
+  set "mylib"           "~/code/sml/mylib"                                     $
+  set "preml"           "~/code/sml/preml"                                     $
+  set "study"           "~/study"                                              $
+  set "sml"             "~/code/sml"                                           $
+  set "haskell"         "~/code/haskell"                                       $
+  set "python"          "~/code/python"                                        $
+  set "config"          "~/config"                                             $
   workspaceDir "~" layout
   where set ws dir = onWorkspace ws (workspaceDir dir layout)
 

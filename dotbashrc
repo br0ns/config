@@ -98,10 +98,17 @@ function parse_git_dirty {
 function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
 }
+function parse_git_stash_list {
+  git stash list --no-color 2>/dev/null | wc -l | sed s/0//
+}
 
 PS1='$(git branch &>/dev/null;\
 # in a git repo
 if [ $? -eq 0 ]; then \
+    n=$(git stash list --no-color 2>/dev/null | wc -l | tr -d "\\n") ; \
+    if [ "$n" -ne "0" ] ; then \
+        echo -ne "\[${BRed}\]${n}\[${NC}\]:" ; \
+    fi ; \
     echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
   if [ "$?" -eq "0" ]; then \
     # Clean repository - nothing to commit
@@ -173,12 +180,15 @@ fi
 MANSECT=2:3:1:4:5:6:7:8:9
 
 # "aliases"
+alias e='emacsclient -t'
+alias ec='emacsclient -c'
+alias g=git
 alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CF'
 alias lla='ls -lA'
 alias mkdir='mkdir -pv'
-function mkdircd () { mkdir -p "$@" && eval cd "\"\$$#\""; }
+function mkdircd () { mkdir -pv "$@" && eval cd "\"\$$#\""; }
 alias ..='cd ..'
 alias ,='pushd'
 alias m='pushd .'
@@ -189,10 +199,18 @@ alias sml='rlwrap sml'
 alias strings='strings -a'
 alias nasm='nasm -I $HOME/pwnies/tools/pwn/include/nasm/'
 alias hexdump='hexdump -Cv'
+function python () {
+  if [[ "$1" == "doit.py" ]] ; then
+    command python "$@" LOG_FILE=doit.log
+  else
+    command python "$@"
+  fi
+}
 alias emacsnw='/usr/bin/emacs -nw'
 function emacs () {
   (/usr/bin/emacs -D $@ </dev/null >/dev/null 2>/dev/null &)
 }
+alias doit='emacs doit.py'
 function odl () { objdump -dMintel "$1" | less; }
 function oDl () { objdump -DMintel "$1" | less; }
 function hdl () {
@@ -281,13 +299,14 @@ source /usr/share/autojump/autojump.bash
 # path
 PATH=$HOME/.ghc/bin:$PATH
 PATH=$HOME/.cabal/bin:$PATH
-PATH=$HOME/projects/pwntools/bin:$PATH
+PATH=$HOME/projects/pwntools/pwnlib/commandline:$PATH
 PATH=/opt/ida-6.6:$PATH
 PATH=/opt/tor-browser_en-US:$PATH
 PATH=/opt/firmware-mod-kit:$PATH
 PATH=/opt/binwalk/src/bin:$PATH
 PATH=$HOME/bin:$PATH
 PATH=/sbin/:$PATH
+PATH=/usr/sbin/:$PATH
 export PYTHONPATH=$HOME/projects/pwntools/
 
 # colors

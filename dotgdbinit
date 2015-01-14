@@ -1,7 +1,5 @@
-source ~/code/peda/peda.py
+source ~/projects/forks/peda/peda.py
 peda set option pagesize 0
-
-source ~/code/libheap/libheap.py
 
 # Settings
 set disassembly-flavor intel
